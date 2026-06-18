@@ -1,0 +1,9 @@
+{
+  "name": "neurocode-ai-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serverless AI router backend for NeuroCode (Gemini -> GPT -> Claude -> offline fallback)",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
