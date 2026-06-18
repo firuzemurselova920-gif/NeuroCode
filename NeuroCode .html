@@ -15,14 +15,15 @@ body{overflow-x:hidden}
   --bg:#0B0F19;--bg2:#10141f;--bg3:#161b29;--bg4:#1e2536;
   --t1:#ffffff;--t2:#c7d0e0;--t3:#8a93ab;--t4:#5a6378;
   --b:rgba(255,255,255,.08);--b2:rgba(255,255,255,.16);
-  --blue:#3b82f6;--violet:#8b5cf6;--green:#10b981;
+  --blue:#2563eb;--blue2:#3b82f6;--violet:#6366f1;--green:#10b981;
   --amber:#f59e0b;--rose:#f43f5e;--cyan:#22d3ee;
   --indigo:#3b82f6;--teal:#14b8a6;
-  --grad:linear-gradient(135deg,#3b82f6 0%,#8b5cf6 100%);
+  --grad:linear-gradient(135deg,#2563eb 0%,#3b82f6 55%,#60a5fa 100%);
   --r:22px;--r2:16px;--r3:12px;
   --shadow:0 1px 2px rgba(0,0,0,.5);
   --shadow2:0 4px 20px rgba(0,0,0,.45);
-  --shadow-glow:0 0 0 1px rgba(59,130,246,.35),0 0 28px -6px rgba(59,130,246,.6);
+  --shadow-glow:0 0 0 1px rgba(59,130,246,.4),0 0 32px -4px rgba(59,130,246,.55);
+  --shadow-glow-strong:0 0 0 1px rgba(59,130,246,.55),0 8px 40px -6px rgba(37,99,235,.65),0 0 60px -12px rgba(96,165,250,.5);
   --glass:rgba(255,255,255,.06);
   --glass-strong:rgba(255,255,255,.11);
   --font:'Inter',system-ui,sans-serif;
@@ -136,16 +137,17 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 .ch-stat-lbl{font-size:10px;opacity:.8;margin-top:1px}
 
 /* SECTIONS GRID */
-.sections-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:20px}
-.section-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--b);border-radius:var(--r2);padding:14px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;min-width:0}
-.section-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-glow);border-color:var(--indigo)}
-.section-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--indigo));opacity:0;transition:opacity .18s}
+.sections-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:18px;margin-bottom:20px}
+.section-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--b);border-radius:var(--r);padding:22px;cursor:pointer;transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease,border-color .22s ease;position:relative;overflow:hidden;min-width:0}
+.section-card:hover{transform:translateY(-4px) scale(1.012);box-shadow:var(--shadow-glow-strong);border-color:rgba(96,165,250,.45)}
+.section-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--indigo));opacity:0;transition:opacity .22s}
 .section-card:hover::before{opacity:1}
-.sc-icon{font-size:24px;margin-bottom:8px}
-.sc-name{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sc-progress{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:8px}
+.sc-icon{font-size:32px;margin-bottom:12px;transition:transform .22s cubic-bezier(.16,1,.3,1)}
+.section-card:hover .sc-icon{transform:scale(1.08)}
+.sc-name{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--font-display)}
+.sc-progress{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:12px}
 .sc-progress-fill{height:100%;border-radius:2px;transition:width .5s ease}
-.sc-done{font-size:10px;color:var(--t4);margin-top:5px}
+.sc-done{font-size:11px;color:var(--t4);margin-top:6px}
 .section-card.locked{opacity:.55;cursor:not-allowed;background:var(--bg3)}
 .section-card.locked:hover{transform:none;box-shadow:none;border-color:var(--b)}
 .section-card.locked .sc-name{color:var(--t3)}
@@ -191,6 +193,14 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 .qlimit-pill{padding:5px 11px;border-radius:99px;border:1.5px solid var(--b);background:var(--bg2);color:var(--t3);font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .13s}
 .qlimit-pill:hover{border-color:var(--indigo);color:var(--t1)}
 .qlimit-pill.active{background:var(--grad);color:#fff;border-color:transparent}
+.level-pill{padding:7px 13px;border-radius:99px;border:1.5px solid var(--b);background:var(--bg2);color:var(--t3);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s}
+.level-pill:hover{border-color:var(--b2);color:var(--t1);transform:translateY(-1px)}
+.level-pill.active{color:#fff;border-color:transparent;box-shadow:var(--shadow-glow)}
+.level-pill.lvl-easy.active{background:linear-gradient(135deg,#059669,#10b981)}
+.level-pill.lvl-medium.active{background:linear-gradient(135deg,#d97706,#f59e0b)}
+.level-pill.lvl-hard.active{background:linear-gradient(135deg,#2563eb,#3b82f6)}
+.level-pill.lvl-expert.active{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.level-pill[data-val=""].active{background:var(--grad)}
 .qlimit-timer-note{font-size:10px;color:var(--t4);margin-left:auto;white-space:nowrap}
 .star-rating{display:flex;gap:4px;justify-content:center;margin-bottom:10px;font-size:26px;line-height:1}
 .star{color:var(--bg3)}
@@ -381,7 +391,7 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 /* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:var(--r2);border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:var(--font);transition:all .13s;white-space:nowrap;text-decoration:none;overflow:hidden}
 .btn-primary{background:var(--grad);color:#fff;box-shadow:var(--shadow-glow)}
-.btn-primary:hover{opacity:.94;transform:translateY(-1px);box-shadow:0 6px 22px rgba(67,56,202,.38)}
+.btn-primary:hover{opacity:.96;transform:translateY(-1px);box-shadow:var(--shadow-glow-strong)}
 .btn-secondary{background:var(--glass-strong);color:var(--t2);border:1px solid var(--b)}
 .btn-secondary:hover{background:var(--bg4);color:var(--t1)}
 .btn-danger{background:rgba(220,38,38,.1);color:#dc2626;border:1.5px solid rgba(220,38,38,.2)}
@@ -632,6 +642,7 @@ const S={
   courseFilter:'all',
   demoCenter:null,    // for screen==='demo': which center the free demo previews
   guestQuiz:false,    // true while a logged-out guest is taking the limited preview quiz
+  levelFilter:null,   // null|'easy'|'medium'|'hard'|'expert' — restricts next quiz to one level
 };
 
 // ── CENTERS ──────────────────────────────────────
@@ -905,24 +916,30 @@ function shuffle(a){
 }
 
 // ── AI CALL ───────────────────────────────────────
-async function callAI(prompt,system=''){
-  const body={
-    model:'claude-sonnet-4-6',max_tokens:1000,
-    messages:[{role:'user',content:prompt}],
-  };
-  if(system)body.system=system;
+// ── GEMINI AI ─────────────────────────────────────
+const GEMINI_API_KEY = "BURAYA_API_KEY";
+const GEMINI_MODEL   = "gemini-2.5-flash";
+
+async function callAI(prompt, system=''){
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(body),
-    });
-    const d=await r.json();
-    return (d.content&&d.content.map?d.content.map(function(c){return c.text||'';}).filter(Boolean).join('\n'):'')||'Cavab alınmadı.';
+    const body = {
+      contents: [{ role:'user', parts:[{ text: system ? system+'\n\n'+prompt : prompt }] }]
+    };
+    const r = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+      { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) }
+    );
+    if(!r.ok){ const t=await r.text(); console.warn('Gemini HTTP',r.status,t.slice(0,200)); return 'AI xidməti müvəqqəti əlçatan deyil.'; }
+    const d = await r.json();
+    const text = (d?.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');
+    return text || 'Cavab alınmadı.';
   }catch(e){
+    console.warn('callAI error:',e.message);
     return 'Bağlantı xətası. İnternet bağlantınızı yoxlayın.';
   }
 }
+
+
 
 
 // ════════════════════════════════════════════════
@@ -1113,6 +1130,17 @@ const QDB={
 'brain.problem':[
   {q:"Bir müəssisədə ransomware hücumu baş verir. İlk addım nə olmalıdır?",o:["Dərhal pul ödə","Şəbəkəni dərhal izolyasiya et — lateral yayılmanı dayandır, sonra backup vəziyyətini yoxla, pul ödəmə","Antivirusu aktiv et","Bütün kompüterləri söndür"],a:1,e:"İnsident cavab: Contain → Identify → Eradicate → Recover. İlk addım: yayılmanı dayandırmaq. Pul ödəmə tövsiyə olunmur.",d:'hard'},
   {q:"Bir çayın hər il daşması problemi həll edilir. Ən effektiv sistemik yanaşma:",o:["Damba tikintisi","Daşmanın drenaj sistemi + şəhər planlaması + meşəsizləşdirmənin azaldılması + erkən xəbərdarlıq sistemi — multi-prong approach","Əhalini köçürmək","Hər il su boşaltmaq"],a:1,e:"Sistemik düşüncə: bir problemi bir müdaxilə ilə həll etmək çox vaxt başqa problem yaradır. Multisistemik yanaşma daha davamlıdır.",d:'expert'},
+  {q:"'Means-end analysis' problem həlli strategiyası nəyə əsaslanır?",o:["Təsadüfi sınaqlara","Hazırkı vəziyyət ilə hədəf vəziyyət arasındaki fərqi azaldan addımları ardıcıl tapmağa","Yalnız əzbər formullara","Başqasının köməyinə"],a:1,e:"Means-end analysis: problemi alt-məqsədlərə bölüb, hər addımda hazırkı vəziyyəti hədəfə yaxınlaşdıran hərəkəti seçmək — klassik koqnitiv problem-həll strategiyası",d:"hard"},
+  {q:"Bir komanda layihə müddətini bacarmır. 'Daha çox adam əlavə et' həllinin riski nədir?",o:["Heç bir risk yoxdur","Brooks's Law: ünsiyyət xərcləri eksponensial artır, yeni adamların öyrənmə əyrisi qısa müddətdə məhsuldarlığı azalda bilər","Həmişə sürəti artırır","Yalnız böyük layihələrdə risk var"],a:1,e:"Brooks's Law (Mythical Man-Month): gecikmiş layihəyə adam əlavə etmək çox vaxt onu daha da gecikdirir — koordinasiya xərci artır",d:"expert"},
+  {q:"'Funksional sabitlik' (functional fixedness) problemli necə maneə yaradır?",o:["Heç maneə yaratmır","Əşyanı yalnız adi istifadə formasında görmək, alternativ istifadəni görməyi çətinləşdirir","Yalnız riyaziyyatda baş verir","Yaradıcılığı artırır"],a:1,e:"Klassik Duncker candle problem: insanlar qutuya yalnız 'qab' kimi baxır, onu 'altlıq' kimi istifadə etmə ehtimalını görmür — yaradıcı problem həllinin əsas maneəsi",d:"expert"},
+  {q:"Bir şirkətin müştəri itkisi problemi var. 'Root cause analysis' (kök səbəb analizi) ilə 'symptom treatment' (simptom müalicəsi) fərqi:",o:["Eynidir","Root cause: əsl səbəbi tapıb aradan götürmək; symptom treatment: görünən əlaməti müvəqqəti azaltmaq, problem qayıdır","Symptom treatment daha effektivdir","Root cause həmişə daha sürətlidir"],a:1,e:"5 Whys metodu kimi alətlər səthi simptomdan keçib əsl kök səbəbə çatmağa kömək edir — əks halda problem təkrar-təkrar yaranır",d:"hard"},
+  {q:"İki kəndirin uzunluğu fərqlidir, hərəsi yandırılanda 60 dəqiqəyə yanır (qeyri-bərabər sürətlə). Yalnız bu iki kəndir və kibritlə 45 dəqiqə ölçün.",o:["Mümkün deyil","Bir kəndiri hər iki ucundan, digərini bir ucundan eyni vaxtda yandır — birinci sönəndə (30 dəq) ikincinin digər ucunu da yandır, sönəndə 45 dəq keçib","Hər ikisini bir ucdan yandır","Saat lazımdır"],a:1,e:"Klassik lateral thinking tapmacası: hər iki ucdan yandırma vaxtı yarıya bölür (60→30 dəq), qalan parça bir ucdan yansa daha 15 dəq çəkər, cəmi 45",d:"expert"},
+  {q:"'Satisficing' ilə 'optimizing' qərar strategiyaları arasındaki fərq:",o:["Eynidir","Satisficing: kifayət qədər yaxşı həll tapıb dayanmaq; optimizing: mümkün ən yaxşı həlli axtarmaq (vaxt/resurs xərcli)","Optimizing həmişə sürətlidir","Satisficing yalnız zəif qərarlar üçündür"],a:1,e:"Herbert Simon: real dünyada məhdud vaxt/məlumatla 'kifayət qədər yaxşı' (satisficing) çox vaxt rasional strategiyadır, mütləq optimal axtarış praktiki deyil",d:"expert"},
+  {q:"Bir məktəbdə nizam-intizam problemi yalnız cəza ilə həll edilməyə çalışılır, amma təkrarlanır. Sistemik problem nədir?",o:["Cəza kifayət qədər ağır deyil","Cəza simptomu (davranışı) hədəfləyir, davranışın kök səbəbini (ev şəraiti, akademik çətinlik, sosial təcrid) araşdırmır","Şagirdlər dəyişməz","Müəllimlər səhv edir"],a:1,e:"Davranış idarəetməsində sırf cəza-əsaslı yanaşma simptomatik müalicədir — davamlı dəyişiklik üçün kök səbəbin (funksional davranış analizi) araşdırılması lazımdır",d:"hard"},
+  {q:"'Analiz-iflic' (analysis paralysis) nə vaxt yaranır?",o:["Qərar tez veriləndə","Çox seçim/məlumat olduqda qərar vermə prosesi əngəllənir, hərəkətsizlik yaranır","Yalnız az məlumat olduqda","Heç vaxt yaranmır"],a:1,e:"Seçim həddindən artıq olduqda (choice overload) koqnitiv yük artır, qərar vermə gecikir və ya tamamilə dayanır — Barry Schwartz-ın 'paradox of choice' nəzəriyyəsi",d:"hard"},
+  {q:"Bir tikinti layihəsində büdcə artıq xərclənib, amma layihə 60% bitməyib. Davam etmək qərarı necə qiymətləndirilməlidir?",o:["Artıq xərclənən pula görə davam etmək lazımdır","Yalnız bundan sonrakı (qalan) xərc-fayda nisbətinə əsasən, keçmiş xərci nəzərə almadan","Heç vaxt dayandırmaq olmaz","Layihəni başlanğıcdan yenidən başlamaq"],a:1,e:"Sunk cost-u nəzərə almadan qərar vermək rasionaldır: yalnız gələcək marjinal xərc/fayda hesaba alınmalıdır, artıq xərclənmiş pul geri qayıtmır",d:"expert"},
+  {q:"'Divergent thinking' ilə 'convergent thinking' problem-həllinin hansı mərhələlərinə uyğun gəlir?",o:["Eyni mərhələyə","Divergent: çoxlu mümkün həll yaratmaq (ideyalaşdırma); convergent: ən yaxşı həlli seçib detallaşdırmaq (qərar)","Convergent əvvəl gəlir","Divergent yalnız sənətdə işlənir"],a:1,e:"Effektiv problem həlli adətən divergent (geniş ideyalaşdırma) ilə başlayır, sonra convergent (filtrasiya, seçim) mərhələsinə keçir — creative problem solving modeli",d:"hard"},
+  {q:"Şəhərdə tıxac problemi yalnız 'daha çox yol tikmək' ilə həll edilməyə çalışılır, amma tıxac geri qayıdır. Bu fenomenin adı:",o:["Təsadüf","İnduced demand (induksiya olunmuş tələb) — daha çox yol həcmi daha çox sürücünü cəlb edir, tezliklə yenidən doldurulur","Statistika xətası","Yol keyfiyyəti problemi"],a:1,e:"Induced demand: infrastruktur tutumunu artırmaq özü-özlüyündə tələbi artırır (daha çox insan maşınla getməyə başlayır), nəticə kompensasiya olunur — klassik sistemli əks-effekt",d:"expert"},
 ],
 
 // ── AÇIQ TAPŞIRIQLAR ────────────────────────────
@@ -1452,6 +1480,19 @@ const _brain_attn = [
 
 const _brain_logic = [
 {q:"Sistem 1 vs Sistem 2 düşüncəsini (Kahneman) müqayisə edin:",o:["Birincisi daha güclüdür","Sistem 1: sürətli, avtomatik, intuisiyalı; Sistem 2: yavaş, analitik, bilinçli. Hər ikisi zəruri","İkincisi həmişə üstündür","İkisi eynidir"],a:1,e:"Kahneman 'Thinking Fast and Slow': Sistem 1 (heuristic, fast) + Sistem 2 (deliberate, slow). Cognitive biases əsasən Sistem 1-dən qaynaqlanır",d:"hard"},
+{q:"'Konfirmasiya qərəzi' (confirmation bias) məntiqi mühakiməni necə təhrif edir?",o:["Heç təhrif etmir","Mövcud inanca uyğun məlumatı axtarıb, zidd dəlili görməzdən gəlmə meylini yaradır","Yalnız elmi sahədə baş verir","Düşüncəni gücləndirir"],a:1,e:"Confirmation bias: insanlar fərziyyələrini təsdiqləyən dəlili axtarır, rədd edən dəlili minimuma endirir — bu, elmi metodun əksinədir",d:"hard"},
+{q:"'Bütün quşlar uça bilər. Pinqvin quşdur. Deməli pinqvin uça bilər.' Bu silogizmin problemi:",o:["Forma səhvdir","Böyük premis yanlışdır — bütün quşlar uça bilmir","Kiçik premis yanlışdır","Heç bir problem yoxdur"],a:1,e:"Forma düzgündür (deduktiv etibarlı), amma premisin özü empirik yanlışdır — etibarlı arqument həqiqətən doğru olmaya bilər",d:"medium"},
+{q:"'Post hoc ergo propter hoc' məntiqi səhvi nəyi bildirir?",o:["Hər zaman doğrudur","Bir hadisə digərindən əvvəl baş verdiyinə görə onun səbəbi olduğunu fərz etmək","Yalnız tarixdə baş verir","Statistik termindir"],a:1,e:"'Bundan sonra, buna görə' — ardıcıllığı səbəbiyyətlə qarışdırmaq, klassik məntiqi yanılma",d:"hard"},
+{q:"Bağışlanabilir 'straw man' (saman adam) arqumenti necə tanınır?",o:["Güclü əks-arqumentdir","Rəqibin mövqeyini zəiflədilmiş/təhrif edilmiş formada təqdim edib onu rədd etmək","Yalnız siyasi debatda olur","Həmişə effektivdir"],a:1,e:"Straw man fallacy: əsl arqumenti deyil, onun zəiflədilmiş versiyasını hücuma almaq — görünüşdə qalib gəlmək, əslində heç nəyi sübut etməmək",d:"hard"},
+{q:"Ardıcıllığı tamamlayın: 2, 6, 12, 20, 30, ?",o:["40","42","36","44"],a:1,e:"Fərqlər: 4,6,8,10,12 (artan cüt ədədlər) → 30+12=42. Və ya n(n+1) formulu: 1×2,2×3,3×4...6×7=42",d:"medium"},
+{q:"'Yanlış dilemma' (false dilemma) məntiqi səhvi nə zaman baş verir?",o:["Həmişə düzgün məntiqdə","Yalnız iki seçim var kimi təqdim edilir, halbuki digər alternativlər mövcuddur","Yalnız riyaziyyatda olur","Heç vaxt baş vermir"],a:1,e:"Black-and-white thinking: mürəkkəb məsələni süni şəkildə iki qütbə endirmək, aralıq seçimləri görməzdən gəlmək",d:"hard"},
+{q:"Bir qrup insanın 70%-i pizzaya üstünlük verir. Bu, hər bir fərdi üzv haqqında nə deyir?",o:["Hər kəs pizza sevir","Heç nə qəti — fərdi seçim qrup ortalamasından fərqli ola bilər (ecological fallacy riski)","Heç kim pizza sevmir","30% pizza sevmir, bu kəsindir"],a:1,e:"Ecological fallacy: qrup səviyyəli statistikadan fərdi səviyyəyə birbaşa nəticə çıxarmaq səhvdir",d:"expert"},
+{q:"'Survivorship bias' (sağ qalanlar qərəzi) hansı situasiyada yaranır?",o:["Heç vaxt yaranmır","Uğursuz nümunələr gözə görünmədiyi üçün yalnız uğurlu nümunələr təhlil edilərkən","Yalnız müharibə tarixçiliyində","Statistik termin deyil"],a:1,e:"Klassik nümunə: yalnız sağ qalan müəssisələri öyrənib 'uğur sirri' axtarmaq — bağlanan müəssisələr gözardı edilir, nəticə təhrif olunur",d:"expert"},
+{q:"Məntiqi ardıcıllıq: Bütün ressamlar yaradıcıdır. Bəzi yaradıcılar musiqiçidir. Bundan nə nəticə çıxır?",o:["Bütün ressamlar musiqiçidir","Heç bir qəti nəticə çıxmır","Bütün musiqiçilər ressamdır","Heç bir ressam musiqiçi deyil"],a:1,e:"İki 'bəzi/bütün' premisindən üçüncü kateqoriya haqqında qəti nəticə çıxarmaq olmaz — klassik invalid syllogism nümunəsi",d:"expert"},
+{q:"'Anchoring bias' (lövbər effekti) qərar qəbuluna necə təsir edir?",o:["Heç bir təsiri yoxdur","İlk təqdim olunan rəqəm/məlumat sonrakı mühakimələri qeyri-mütənasib şəkildə formalaşdırır","Yalnız maliyyədə olur","Qərarı yaxşılaşdırır"],a:1,e:"Tversky & Kahneman: ilk verilən rəqəm (hətta əlaqəsiz olsa belə) sonrakı qiymətləndirməni 'lövbərləyir' — danışıqlarda, qiymət qoymada güclü effekt",d:"expert"},
+{q:"Sual: 'Şəhərdə bütün taksilər yaşıl və ya sarıdır. Bu taksi yaşıl deyil. Nə nəticə çıxır?'",o:["Taksi sarıdır","Heç nə demək olmaz","Taksi yaşıl deyil, sarıdır da deyil","Taksi mövcud deyil"],a:0,e:"Disjunctive syllogism: P∨Q, ¬P ⊢ Q. İki seçimdən biri istisna olunarsa, qalan seçim doğrudur",d:"medium"},
+{q:"'Sunk cost fallacy' (batırılmış xərc yanılması) məntiqi mühakimədə necə özünü göstərir?",o:["Heç göstərmir","Artıq sərf olunmuş resursa görə (geri qaytarıla bilməsə də) davam etməyə davam etmək qərarı","Yalnız investisiyada olur","Düzgün qərar strategiyasıdır"],a:1,e:"Rasional qərar yalnız gələcək xərc/faydaya əsaslanmalıdır — keçmiş, geri qaytarılmayan xərc qərara təsir etməməlidir, amma psixoloji olaraq edir",d:"expert"},
+{q:"'Korrelyasiya səbəbiyyət demək deyil' prinsipini ən yaxşı izah edən nümunə:",o:["İki dəyişən birgə artarsa, biri digərinə səbəb olur","Hər il yay aylarında həm dondurma satışı, həm batma halları artır — istilik hər ikisinin ortaq səbəbidir","Korrelyasiya həmişə təsadüfidir","Səbəbiyyət korrelyasiyasız mövcud olmur"],a:1,e:"Confounding variable (qarışan dəyişən) nümunəsi: hər iki dəyişəni izah edən üçüncü amil (istilik) əsl səbəbdir, biri digərinə səbəb olmur",d:"hard"},
 ];
 
 // ── OPEN TASKS ────────────────────────────────────────────────────
@@ -1505,6 +1546,13 @@ const _geo=[
 {q:"Mütləq yüksəklik (absolute altitude) ilə nisbi yüksəklik (relative altitude) fərqi:",o:["Eynidir","Mütləq: dəniz səviyyəsindən hündürlük; nisbi: ətraf ərazi ilə müqayisəli hündürlük","Nisbi daha vacibdir","Mütləq coğrafiyada işlənmir"],a:1,e:"Topografiya: Everest mütləq hündürlüyü 8849m. Nisbi hündürlük: fərqli baza nöqtəsinə görə dəyişir",d:"medium"},
 {q:"İqlim qurşaqlarının əmələ gəlməsindəki əsas amil:",o:["Dənizə yaxınlıq","Günəş radiasiyasının en dairəsinə görə fərqli bucaqla düşməsi","Relyef","Bitki örtüyü"],a:1,e:"Günəş radiasiyasının en dairəsinə görə paylanması iqlim qurşaqlarının əsasıdır",d:"easy"},
 {q:"Şəhər istilik adası (Urban Heat Island) effekti nədir?",o:["Şəhərlərdəki su çatışmazlığı","Şəhər mərkəzlərinin ətraf kənd ərazilərindən daha isti olması — beton, asfalt, istilik buraxan sənaye","Şəhər daşqınları","Hava çirkliliyi"],a:1,e:"UHI: impervious surfaces (asfalt, beton) günəş enerjisini udub buraxır; yaşıl ərazilər isə serinləşdirir",d:"medium"},
+{q:"Xəzər dənizinin səviyyəsinin dəyişməsi (son onilliklərdə) hansı geosiyasi/ekoloji nəticələrə səbəb olur?",o:["Heç bir nəticəyə səbəb olmur","Sahilboyu infrastruktur, balıqçılıq, neft platformaları və 5 ölkə arasında sərhəd/resurs bölgüsü məsələlərinə təsir edir","Yalnız turizmə təsir edir","Səviyyə həmişə sabitdir"],a:1,e:"Xəzər qapalı su hövzəsidir, səviyyəsi çay axını, buxarlanma və iqlim dəyişikliyindən asılıdır — 5 sahilyanı ölkə (Azərbaycan, Rusiya, Qazaxıstan, Türkmənistan, İran) üçün strateji əhəmiyyətə malikdir",d:"hard"},
+{q:"Azərbaycanın 9 iqlim tipindən bu qədər müxtəlifliyin əsas səbəbi:",o:["Yalnız enliyə görə","Kiçik ərazidə Böyük Qafqaz, Kiçik Qafqaz dağ sistemləri və Xəzər dənizinin birgə təsiri — relyef müxtəlifliyi mikroiqlimlər yaradır","Yalnız Xəzər dənizinə görə","Azərbaycanda iqlim müxtəlifliyi yoxdur"],a:1,e:"Azərbaycan kiçik ərazidə (87600 km²) nəm subtropikdən yarımsəhraya, dağ tundrasına qədər 9 iqlim tipinə malikdir — bu, dağ relyefi və dəniz təsirinin kombinasiyasıdır",d:"expert"},
+{q:"'Plate tectonics' (litosfer lövhələri) nəzəriyyəsinə görə Qafqaz dağlarının əmələ gəlmə mexanizmi:",o:["Vulkanik partlayış","Ərəbistan və Avrasiya lövhələrinin toqquşması nəticəsində yerin qabığının qatlanması (orogenez)","Eroziya","Buzlaşma"],a:1,e:"Qafqaz dağ sistemi Ərəbistan lövhəsinin Avrasiya lövhəsinə doğru hərəkəti nəticəsində yaranan kontinental toqquşma zonasıdır — davam edən tektonik aktivlik səbəbindən seysmik zonadır",d:"expert"},
+{q:"Bir çayın 'su rejimi' termini nəyi əhatə edir?",o:["Yalnız suyun rəngini","Çayın il ərzində su səviyyəsi/axımının dəyişmə xarakterini (qarın əriməsi, yağıntı, buxarlanma ilə əlaqəli)","Çayın uzunluğunu","Çayın adını"],a:1,e:"Su rejimi: çayın qidalanma mənbəyinə (qar, yağıntı, yeraltı su) görə fərqli mövsümi davranış göstərir — Azərbaycan çayları əksər halda qar-yağıntı qarışıq rejimə malikdir",d:"medium"},
+{q:"'Demoqrafik keçid' (demographic transition) modelinin mərhələləri inkişaf etməkdə olan ölkələrdə hansı nümunəni göstərir?",o:["Əhali həmişə sabitdir","Yüksək doğum+yüksək ölüm → yüksək doğum+azalan ölüm (sürətli artım) → azalan doğum+aşağı ölüm (sabitləşmə)","Əhali həmişə azalır","Yalnız sənayeləşmiş ölkələrə aiddir"],a:1,e:"Demoqrafik keçid modeli sosial-iqtisadi inkişafla əhali artım sürətinin necə dəyişdiyini izah edir — sağlamlıq yaxşılaşdıqda ölüm tez azalır, doğum gecikmə ilə azalır, bu fərq sürətli əhali artımı yaradır",d:"expert"},
+{q:"Azərbaycanın neft-qaz kəmərlərinin (BTC, TANAP) geosiyasi əhəmiyyəti hansı coğrafi faktorla bağlıdır?",o:["Yalnız uzunluğu ilə","Xəzər hövzəsi resurslarını Rusiya ərazisindən keçmədən Avropaya çatdıran alternativ tranzit dəhlizi yaratması","Yalnız iqlimlə bağlıdır","Heç bir geosiyasi əhəmiyyəti yoxdur"],a:1,e:"BTC (Bakı-Tbilisi-Ceyhan) kəməri coğrafi mövqeyini strateji üstünlüyə çevirir — enerji tranzitində alternativ marşrut yaratmaqla regional güc balansına təsir edir",d:"hard"},
+{q:"'Karst relyefi' necə formalaşır və hansı təhlükələrə səbəb ola bilər?",o:["Vulkanik fəaliyyətdən","Əhəng daşının su tərəfindən kimyəvi həll olması — yeraltı mağaralar, çökmə (sinkhole) riski yaradır","Külək eroziyasından","Buzlaşmadan"],a:1,e:"Karst relyefi karbonatlı qayaların (əhəng daşı) həllolma prosesi ilə formalaşır — yeraltı boşluqlar yer üzü çökmələrinə (sinkhole) səbəb ola bilir, tikinti planlaşdırmasında nəzərə alınmalıdır",d:"expert"},
 ];
 (function(){for(var _i=0;_i<_geo.length;_i++)QDB["dim.geo"].push(_geo[_i]);})();
 
@@ -1515,6 +1563,13 @@ const _info=[
 {q:"Bubbl sort O(n²), merge sort O(n log n). 1000 element üçün praktik fərq:",o:["Eyni","Bubble: ~500,000 əməliyyat; Merge: ~10,000 — merge açıq şəkildə üstündür","Bubble daha sürətlidir","Fərq kiçikdir"],a:1,e:"n=1000: n²=1M, n·log₂n≈10,000. Bu fərq böyük datassetdə kritik olur",d:"hard"},
 {q:"SQL 'JOIN' əməliyyatı nə üçün istifadə edilir?",o:["Sıralama","İki və ya daha çox cədvəli ortaq sütun vasitəsilə birləşdirmək","Silmə","Indeksləşdirmə"],a:1,e:"SQL JOIN: relational database-in əsası. INNER/LEFT/RIGHT/FULL JOIN cədvəlləri birləşdirir",d:"medium"},
 {q:"Object-Oriented Programming-in əsas prinsipləri:",o:["Funksiyalar toplusu","Encapsulation, Inheritance, Polymorphism, Abstraction","Sürət, sadəlik","Yalnız sinifflər"],a:1,e:"OOP 4 pillar: Encapsulation (məlumatı gizlət), Inheritance (varis), Polymorphism (çoxformalıq), Abstraction",d:"medium"},
+{q:"'Recursion' (rekursiya) ilə 'iteration' (təkrar dövrə) arasında fundamental fərq nədir?",o:["Eynidir, yalnız sintaksis fərqi","Rekursiya funksiyanın özünü çağırması ilə işləyir (call stack istifadə edir); iteration dövrə (loop) strukturu ilə işləyir","Iteration həmişə daha sürətlidir","Rekursiya yalnız riyaziyyatda işlənir"],a:1,e:"Rekursiya hər çağırışda yeni stack frame yaradır (yaddaş xərci var), iteration isə sabit yaddaşla dövr edir — hər ikisi eyni problemi həll edə bilər, performans/oxunaqlılıq baxımından fərqlənir",d:"hard"},
+{q:"'Big O notation'da O(1), O(log n), O(n), O(n²) sıralaması nəyi göstərir?",o:["Kodun sətir sayını","Alqoritmin icra vaxtının giriş ölçüsü (n) artdıqca necə böyüdüyünü — O(1) ən sürətli, O(n²) ən yavaş böyümə sürətidir","Yaddaş istifadəsini yalnız","Proqramlaşdırma dilini"],a:1,e:"Big O notasiyası alqoritmin 'scalability'ni (miqyaslanma) təsvir edir — kiçik n üçün fərq az olsa da, böyük datasetlərdə O(n²) alqoritmlər praktiki olmayan dərəcədə yavaşlayır",d:"expert"},
+{q:"Verilənlər bazasında 'normalization' (normallaşdırma) prosesinin əsas məqsədi:",o:["Sürəti artırmaq","Data təkrarlanmasını (redundancy) azaltmaq və data bütövlüyünü (integrity) qorumaq","Cədvəl sayını azaltmaq","Şifrələmə"],a:1,e:"Normalization (1NF, 2NF, 3NF) cədvəlləri elə strukturlaşdırır ki, eyni məlumat çoxsaylı yerdə təkrarlanmasın — bu, yeniləmə zamanı uyğunsuzluq riskini azaldır",d:"expert"},
+{q:"'API' (Application Programming Interface) anlayışını ən sadə formada izah edin:",o:["Proqramın istifadəçi interfeysidir","İki proqram təminatının bir-biri ilə müəyyən qaydalarla 'danışmasına' imkan verən vasitə/protokol","Yalnız vebsayt dizaynıdır","Komputerin əməliyyat sistemidir"],a:1,e:"API iki sistem arasında strukturlaşdırılmış sorğu-cavab əlaqəsi təmin edir — tətbiqin daxili işləməsini gizlədərək, müəyyən funksiyalara nəzarətli giriş verir",d:"medium"},
+{q:"'Hash funksiyası' məlumat strukturlarında niyə vacibdir?",o:["Yalnız şifrələmə üçündür","Sabit ölçülü 'iz' (hash) yaradaraq sürətli axtarış (O(1) orta halda) imkanı verir — hash table-ların əsasıdır","Yalnız parol saxlamaq üçündür","Heç bir praktiki tətbiqi yoxdur"],a:1,e:"Hash funksiyası dəyəri sabit ölçülü ünvanlara map edir — bu, axtarış, daxiletmə, silmə əməliyyatlarını orta halda O(1) sürətə çatdırır, hash table-ların əsas gücüdür",d:"expert"},
+{q:"'Variable scope' (dəyişən əhatə dairəsi) — qlobal və lokal dəyişən fərqi nə üçün proqramlaşdırmada vacibdir?",o:["Heç bir əhəmiyyəti yoxdur","Lokal dəyişənlər yalnız müəyyən funksiya/blok daxilində mövcuddur — bu, namespace çirklənməsini önləyir və kod oxunaqlılığını artırır","Qlobal dəyişənlər həmişə daha yaxşıdır","Yalnız böyük proqramlarda fərq edir"],a:1,e:"Scope idarəetməsi proqramın hissələrinin bir-birinə nəzərdə tutulmadan təsir etməsinin qarşısını alır — yaxşı proqramlaşdırma praktikası lokal scope-u üstün tutur",d:"hard"},
+{q:"'Boolean logic' əsaslarında AND, OR, NOT operatorlarının kombinasiyası proqramlaşdırmada nə üçün vacibdir?",o:["Yalnız riyaziyyatda işlənir","Şərti ifadələrin (conditional) əsasıdır — proqramın qərar vermə məntiqi bu operatorların kombinasiyası ilə qurulur","Yalnız verilənlər bazasında işlənir","Heç bir praktiki tətbiqi yoxdur"],a:1,e:"Boolean məntiq if/else strukturlarının təməlidir — mürəkkəb şərtlər (AND/OR/NOT kombinasiyaları) proqramın davranışını dəqiq idarə etməyə imkan verir",d:"medium"},
 ];
 (function(){for(var _i=0;_i<_info.length;_i++)QDB["dim.info"].push(_info[_i]);})();
 
@@ -1535,6 +1590,15 @@ const _exam=[
 {q:"[BLOK 1 - Pedaqogika] 'Scaffolding' anlayışı ilk kimə aiddir?",o:["Viqotski","Bruner, Wood, Ross (1976) — ZPD-ni tədrisə tətbiq","Piaje","Skinner"],a:1,e:"Scaffolding terminini Viqotski yox, Wood, Bruner & Ross (1976) yaratdı; Viqotskinin ZPD-sinə əsaslanaraq",d:"medium"},
 {q:"[BLOK 2 - Qiymətləndirmə] Rubrika qiymətləndirmənin hansı keyfiyyətini artırır?",o:["Sürəti","Etibarlılığı (reliability) — müxtəlif qiymətçilər eyni işi eyni standartda qiymətləndirir","Sualların sayını","Şagirdlərin motivasiyasını"],a:1,e:"Inter-rater reliability: rubrika olmasa fərqli müəllimlər eyni cavaba fərqli qiymət verir",d:"medium"},
 {q:"[BLOK 3 - Metodika] 'Think-pair-share' strategiyasının üç mərhələsi:",o:["Oxu-yaz-söylə","Fərdi düşün → cüt müzakirə → sinfə paylaş","Müşahidə-analiz-nəticə","Test-tətbiq-qiymət"],a:1,e:"Lyman (1981) TPS: individual think time → partner discussion → whole class share. Hər şagirdin iştirakını artırır",d:"easy"},
+{q:"[BLOK 1 - Pedaqogika] Bloom taksonomiyasının 2001-ci il yenidən baxılmış versiyasında ən vacib struktur dəyişiklik nə idi?",o:["Heç bir dəyişiklik olmadı","İsim formaları (Knowledge) feli formalara (Remembering) dəyişdi, 'Synthesis' silinib 'Create' əlavə edildi və zirvəyə qoyuldu","Yalnız adlar dəyişdi","Səviyyə sayı azaldı"],a:1,e:"Anderson & Krathwohl (2001): köhnə isim-əsaslı taksonomiya (Knowledge, Comprehension...) feli proseslərə (Remembering, Understanding...) çevrildi, 'Create' ən yüksək koqnitiv səviyyə kimi əlavə edildi",d:"expert"},
+{q:"[BLOK 2 - Qiymətləndirmə] 'Formativ' və 'summativ' qiymətləndirmənin əsas funksional fərqi:",o:["Yalnız vaxt fərqidir","Formativ: öyrənmə PROSESİNDƏ, düzəliş üçün; summativ: öyrənmə SONUNDA, son nəticəni qeydə almaq üçün","İkisi eynidir","Summativ həmişə daha vacibdir"],a:1,e:"Formativ qiymətləndirmə 'learning üçün assessment', summativ isə 'learning-in assessment'i — funksiyaları fərqlidir, biri düzəliş, digəri hesabatlıq məqsədi daşıyır",d:"medium"},
+{q:"[BLOK 3 - Metodika] 'Flipped classroom' (tərsinə çevrilmiş sinif) modelinin əsas məntiqi:",o:["Sinif otağını fiziki çevirmək","Nəzəri material evdə (video/oxu) öyrənilir, sinif vaxtı tətbiq/müzakirə/problem həllinə həsr olunur","Müəllim heç nə öyrətmir","Şagirdlər evdə imtahan verir"],a:1,e:"Flipped classroom Bloom taksonomiyasının aşağı səviyyələrini (bilik, anlama) ev tapşırığına, yüksək səviyyələrini (tətbiq, analiz) sinif vaxtına köçürür — müəllimin dəstəyi ən çox lazım olan yerdə olur",d:"hard"},
+{q:"[BLOK 1 - Pedaqogika] Erikson-un psixososial inkişaf mərhələlərində məktəb yaşı dövrünün (6-12 yaş) əsas konflikti:",o:["Etibar vs etibarsızlıq","Səylilik vs aşağılıq hissi (industry vs inferiority) — bacarıq qazanma, məhsuldarlıq hissinin formalaşması","Kimlik vs rol çaşqınlığı","Yaxınlıq vs təcrid"],a:1,e:"Erikson-un 4-cü mərhələsi: uşaq yeni bacarıqlar öyrənərək kompetensiya hissi qazanır, yoxsa uğursuzluqla aşağılıq hissi inkişaf edir — məktəb təcrübəsi bu mərhələyə güclü təsir edir",d:"expert"},
+{q:"[BLOK 2 - Qiymətləndirmə] 'Authentic assessment' (autentik qiymətləndirmə) ənənəvi testlərdən nəyə görə fərqlənir?",o:["Daha asandır","Real-dünya kontekstində, tətbiq oluna bilən bacarıqları ölçür — sadəcə bilik xatırlamağı deyil","Daha sürətlidir","Yalnız şifahi olur"],a:1,e:"Autentik qiymətləndirmə (portfolio, layihə, performans tapşırığı) şagirdin real situasiyada bilikdən istifadə bacarığını ölçür, izolə edilmiş fakt yadda saxlamadan fərqli",d:"hard"},
+{q:"[BLOK 3 - Metodika] 'Spiral kurikulum' (Bruner) anlayışının əsas prinsipi:",o:["Mövzular bir dəfə öyrədilir","Əsas konseptlər il ərzində təkrar-təkrar, hər dəfə daha mürəkkəb səviyyədə tədris olunur","Mövzular əlifba sırası ilə öyrədilir","Kurikulum dairəvi formada yazılır"],a:1,e:"Bruner-ın spiral kurikulumu: əsas ideyalar müxtəlif yaş səviyyələrində, getdikcə dərinləşən mürəkkəblik ilə təkrar müraciət olunur — uzunmüddətli konseptual bağlantı qurur",d:"hard"},
+{q:"[BLOK 1 - Pedaqogika] 'Konstruktivizm' təlim nəzəriyyəsinin əsas iddiası:",o:["Bilik müəllimdən şagirdə birbaşa ötürülür","Şagird biliyi öz təcrübəsi və əvvəlki anlayışları əsasında fəal şəkildə qurur, passiv qəbul etmir","Bilik yalnız kitabdan əldə edilir","Şagirdlər heç bir əvvəlcədən bilik gətirmir"],a:1,e:"Konstruktivizm (Piaget, Vygotsky əsaslı): öyrənmə passiv köçürmə deyil, aktiv quruculuq prosesidir — şagird yeni məlumatı mövcud koqnitiv strukturlarla əlaqələndirir",d:"expert"},
+{q:"[BLOK 2 - Qiymətləndirmə] Test sualının 'discrimination index' (ayırdetmə indeksi) nəyi ölçür?",o:["Sualın çətinliyini","Sualın yüksək performanslı və aşağı performanslı şagirdləri nə dərəcədə fərqləndirdiyini","Sualın uzunluğunu","Sualın populyarlığını"],a:1,e:"Discrimination index: əgər güclü şagirdlər düzgün, zəif şagirdlər səhv cavablayırsa indeks yüksəkdir — sualın keyfiyyətini qiymətləndirən psixometrik göstərici",d:"expert"},
+{q:"[BLOK 3 - Metodika] 'Sokratik sorğulama' (Socratic questioning) metodunun əsas məqsədi:",o:["Şagirdi çaşdırmaq","Açıq suallar vasitəsilə şagirdi öz mühakiməsini dərinləşdirməyə, fərziyyələrini sorgulamağa yönəltmək","Düzgün cavabı dərhal vermək","Sürətli imtahan keçirmək"],a:1,e:"Sokratik metod cavab vermək əvəzinə, ardıcıl açıq suallarla şagirdi öz məntiqi prosesini araşdırmağa, fərziyyələrini özü sınamağa təhrik edir — tənqidi düşüncəni inkişaf etdirir",d:"hard"},
 ];
 (function(){for(var _i=0;_i<_exam.length;_i++)QDB["miq.exam"].push(_exam[_i]);})();
 
@@ -1653,7 +1717,8 @@ QDB['dim.syntax']=[
 ];
 
 // ── DİM: ORFOQRAFİYA ──────────────────────────────
-QDB['dim.orfq']=[
+if(!QDB['dim.orfq'])QDB['dim.orfq']=[];
+QDB['dim.orfq'].push(
   {q:"'Azərbaycan' sözündə böyük hərf yazılması hansı qaydaya əsaslanır?",
    o:["Xüsusi isimlərdə: yer adları, ölkə adları həmişə böyük hərflə yazılır",
       "Sifətlər böyük yazılır","Cümlə əvvəlindədir","Vurğu böyük hərflə göstərilir"],a:0,
@@ -1674,10 +1739,25 @@ QDB['dim.orfq']=[
   {q:"Sözlərin hecalara bölünməsini göstərin: 'müəllim'",
    o:["müəl-lim","mü-əl-lim","müəl-l-im","mü-ə-llim"],a:1,
    e:"Heca bölgüsü: mü-əl-lim (3 heca). Qayda: ardıcıl samitlər ayrılır, sait öncəki hecaya aid edilir",d:"medium"},
-];
+  {q:"'Qeyri-' önşəkilçisi ilə yaranan sözlərin yazılışı (qeyri-adi, qeyri-müəyyən) hansı qaydaya tabedir?",
+   o:["Həmişə bitişik: qeyriadi","Həmişə defislə: qeyri-adi, qeyri-müəyyən","Həmişə ayrı: qeyri adi","Vəziyyətə görə dəyişir"],a:1,
+   e:"'qeyri-' inkarlıq önşəkilçisi əsas sözlə həmişə defislə yazılır — bu, Azərbaycan dilinin sabit orfoqrafiya qaydalarından biridir",d:"medium"},
+  {q:"'Görüş' və 'görüş yeri' birləşməsindəki söz birləşmələrinin yazılışı hansı prinsiplə müəyyənləşir?",
+   o:["Həmişə bitişik yazılır","Tərkib hissələri öz mənasını saxlayırsa ayrı, vahid yeni məna yaranırsa bitişik yazılır","Həmişə ayrı yazılır","Defislə yazılır"],a:1,
+   e:"Mürəkkəb sözlərin orfoqrafiyası semantik bütövlüyə əsaslanır — 'görüş yeri' iki müstəqil sözdür (ayrı), 'görüşyeri' kimi sabit termin olsaydı bitişik olardı",d:"hard"},
+  {q:"'Misal üçün', 'məsələn' kimi ara sözlərdən sonra hansı durğu işarəsi işlədilir?",
+   o:["Heç bir işarə","Vergül","Nöqtəli vergül","Qoşa nöqtə"],a:1,e:"Ara sözlər (məsələn, deməli, doğrudur ki) cümlədə vergüllə ayrılır — bu, oxunaqlılığı artırır və ara sözün funksiyasını vizual işarələyir",d:"easy"},
+  {q:"'E-poçt', 'SMS-lər', 'CD-dən' kimi qısaltma+şəkilçi birləşmələrinin yazılışı:",
+   o:["Şəkilçi bitişik yazılır, defis lazım deyil","Qısaltmadan sonra şəkilçi defislə əlavə olunur","Şəkilçi tamamilə ayrı yazılır","Qısaltmalara şəkilçi əlavə edilmir"],a:1,
+   e:"Böyük hərflə yazılan qısaltmalara (abbreviaturalara) şəkilçi defislə əlavə olunur — bu, qısaltmanın oxunaqlılığını qoruyur: SMS-lər, CD-dən",d:"hard"},
+  {q:"Mürəkkəb cümlədə tabesizlik bağlayıcısı ('və', 'amma', 'lakin') ilə bağlı vergül qaydası:",
+   o:["Bağlayıcıdan əvvəl həmişə vergül qoyulur","'Və' bağlayıcısından əvvəl adətən vergül qoyulmur, 'amma/lakin' kimi ziddiyyət bağlayıcılarından əvvəl qoyulur","Heç vaxt vergül qoyulmur","Bağlayıcı növü əhəmiyyətsizdir"],a:1,
+   e:"Birləşdirici bağlayıcılar ('və') adətən vergülsüz, ziddiyyət bildirən bağlayıcılar ('amma', 'lakin', 'ancaq') isə vergüllə ayrılır — bu fərq DİM-də tez-tez yoxlanılır",d:"expert"}
+);
 
 // ── DİM: DURĞU İŞARƏLƏRİ ─────────────────────────
-QDB['dim.punct']=[
+if(!QDB['dim.punct'])QDB['dim.punct']=[];
+QDB['dim.punct'].push(
   {q:"'Kitabı, dəftəri, qələmi götür' cümləsindəki vergülün funksiyası:",
    o:["Həmcins üzvləri (sadalama) bir-birindən ayırır",
       "Xitabdan əvvəl işlənir","Budaq cümləni ayırır","Ədat önündə işlənir"],a:0,
@@ -1702,10 +1782,20 @@ QDB['dim.punct']=[
    o:["Doğrudur — sual işarəsi həmişə sonda","Yanlışdır — hər budaq cümlə sual olduqda hər birinin sonuna qoyula bilər",
       "Yanlışdır — sual işarəsi heç vaxt işlənmir","Doğrudur — bir cümlədə iki sual işarəsi olmaz"],a:1,
    e:"Tabeli mürəkkəb cümlədə hər budaq cümlənin öz sualı olarsa: 'Nə vaxt gəldin? nə vaxt getdin?' — hər birinin sonuna qoyula bilər",d:"expert"},
-];
+  {q:"'Ana, bura gəl!' cümləsindəki vergülün funksiyası:",
+   o:["Xitabı (müraciəti) ayırır","Sadalamada işlənir","Tabesiz cümləni ayırır","Mübtəda-xəbər arasında"],a:0,
+   e:"Xitab vergülü: müraciət edilən şəxs/əşya adı (Ana) cümlənin qalan hissəsindən vergüllə ayrılır",d:"easy"},
+  {q:"'Bilirəm ki, sən doğru deyirsən' cümləsindəki vergülün yerləşməsi hansı qaydaya görədir?",
+   o:["'Ki' bağlayıcısından əvvəl vergül qoyulur, çünki budaq cümləni əsas cümlədən ayırır","Heç bir qayda yoxdur","Vergül 'ki'dən sonra qoyulmalıdır","Vergül lazım deyil"],a:0,
+   e:"Tabeli mürəkkəb cümlədə 'ki' bağlayıcısından əvvəl, əgər budaq cümlə izah edirsə, vergül qoyulur — bu, oxunaqlılığı təmin edir",d:"medium"},
+  {q:"Mürəkkəb sadalamada (alt-elementləri olan siyahıda) nöqtəli vergül (;) nə vaxt vergülə üstün tutulur?",
+   o:["Heç vaxt","Siyahı elementlərinin özü daxilində vergül varsa, qarışıqlığın qarşısını almaq üçün","Yalnız rəqəmli siyahılarda","Yalnız ingilis dilində"],a:1,
+   e:"Nöqtəli vergül mürəkkəb siyahı elementlərini (öz daxilində vergül olan) bir-birindən aydın ayırmaq üçün istifadə olunur — iyerarxik aydınlıq təmin edir",d:"expert"}
+);
 
 // ── DİM: MƏTN TƏHLİLİ ────────────────────────────
-QDB['dim.text_a']=[
+if(!QDB['dim.text_a'])QDB['dim.text_a']=[];
+QDB['dim.text_a'].push(
   {q:"Aşağıdakı parçadan əsas fikri müəyyən edin:\n'Texnologiya insan həyatını asanlaşdırır. Lakin eyni zamanda insanlar arasındakı birbaşa ünsiyyəti azaldır. Biz ekrana baxarkən yanımızdakı insan görünməz olur.'",
    o:["Texnologiya pisdir","Texnologiya həm müsbət, həm mənfi aspektlərə malikdir — faydası ilə birlikdə sosial izolyasiya yaratma riski daşıyır",
       "Ekran baxmaq pis vərdişdir","İnsanlar bir-birini sevmir"],a:1,
@@ -1726,10 +1816,23 @@ QDB['dim.text_a']=[
    o:["Mətndən kənara çıxmaq","Nəticə mətndəki faktlara əsaslanmalı, amma mətndə birbaşa deyilməməlidir",
       "Öz fikirlərini yazmaq","Ən uzun cümləni seçmək"],a:1,
    e:"Çıxarılan nəticə: 1) mətndəki dəlillərdən törənməlidir; 2) mətndə birbaşa söylənilməməlidir. Bu iki şərt inferensial oxunun özəyidir",d:"expert"},
-];
+  {q:"Bir mətndə müəllif eyni fikri fərqli sözlərlə bir neçə dəfə təkrarlayır (parafraza). Bu üslub texnikasının funksiyası:",
+   o:["Mətni uzatmaq üçündür, məzmun əhəmiyyəti yoxdur","Əsas ideyanı vurğulamaq və oxucunun yadında qalmasını təmin etmək","Yalnız səhv təkrardır","Heç bir funksiyası yoxdur"],a:1,
+   e:"Təkrar (repetition) ritorik vasitədir — əhəmiyyətli ideyaları fərqli formalarda təqdim etməklə vurğu yaradır, oxucunun diqqətini cəmləyir",d:"medium"},
+  {q:"Mətndə 'lakin', 'amma', 'halbuki' kimi ziddiyyət bağlayıcılarının sıx istifadəsi nəyi göstərə bilər?",
+   o:["Müəllifin yazı bacarığı zəifdir","Mətn mürəkkəb, çoxqatlı arqumentasiya və qarşı-tərəfləri nəzərə alan analitik struktur daşıyır","Mətn səhv yazılıb","Heç bir məna daşımır"],a:1,
+   e:"Tez-tez ziddiyyət bağlayıcıları analitik, nüanslı mətnin əlamətidir — müəllif sadə bir tərəfli fikir deyil, mürəkkəb münasibətləri izah edir",d:"hard"},
+  {q:"Bir mətndə statistik məlumat 'təəccüblü dərəcədə yüksək' kimi subyektiv epitetlə təqdim olunur. Tənqidi oxucu bu birləşməyə necə yanaşmalıdır?",
+   o:["Rəqəmi olduğu kimi qəbul etmək","Subyektiv epiteti (təəccüblü) rəqəmin özündən ayırd etmək — rəqəm fakt, epitet müəllifin şərhidir","Rəqəmi şübhə ilə qarşılamaq","Epiteti faktın hissəsi kimi qəbul etmək"],a:1,
+   e:"Fakt-şərh ayrımı: rəqəmin özü (fakt) obyektivdir, ona əlavə olunan dəyərləndirici sözlər (təəccüblü, dramatik) isə müəllifin subyektiv interpretasiyasıdır",d:"expert"},
+  {q:"Mətndə müəllif öz tezisini dəstəkləmək üçün yalnız bir nümunə göstərir, lakin onu 'bütün hallarda' kimi ümumiləşdirir. Bu, hansı məntiqi problemi yaradır?",
+   o:["Heç bir problem yoxdur","Həddindən artıq ümumiləşdirmə (hasty generalization) — tək nümunədən universal nəticə çıxarmaq metodoloji səhvdir","Nümunə həmişə kifayətdir","Yalnız üslub məsələsidir"],a:1,
+   e:"Hasty generalization: kiçik və ya tək nümunədən geniş, universal iddia çıxarmaq — DİM mətn analizi sualları bu məntiqi boşluğu tez-tez yoxlayır",d:"expert"}
+);
 
 // ── DİM: MİNİ İMTAHAN (Mock) ──────────────────────
-QDB['dim.mock']=[
+if(!QDB['dim.mock'])QDB['dim.mock']=[];
+QDB['dim.mock'].push(
   {q:"[BLOK 1 — Azərbaycan dili] 'Gözəllik' sözündəki sözdüzəldici şəkilçi hansıdır?",
    o:["-liq/-lik","-lar/-lər","-da/-də","-ın/-in"],a:0,e:"'gözəl'(sifət) + '-lik' → 'gözəllik'(isim). Keyfiyyət bildirən sifətdən mücərrəd isim düzəldir",d:"easy"},
   {q:"[BLOK 1] 'Kitabların' sözü hansı halda işlənmişdir?",
@@ -1752,10 +1855,23 @@ QDB['dim.mock']=[
   {q:"[BLOK 4] Kvadrat tənliyin D=b²-4ac diskriminantı. D<0 olduqda:",
    o:["İki real kök","Bir real kök","Real kök yoxdur","Sonsuz kök"],a:2,
    e:"D<0 → müsbət kökaltı ifadə yoxdur → real kök yoxdur",d:"easy"},
-];
+  {q:"[BLOK 1 — Azərbaycan dili] 'Anlaşılmaz' sözündəki inkarlıq şəkilçisi hansıdır?",
+   o:["-maz/-məz","-dı/-di","-lar/-lər","-ın/-in"],a:0,e:"'anlaşıl'+'-maz' — feli sifətin inkar forması, 'olunmayan' mənasında",d:"medium"},
+  {q:"[BLOK 2 — Mətn] DİM mətn analizində 'müəllifin tonu' (author's tone) necə müəyyənləşdirilir?",
+   o:["Mətnin uzunluğuna görə","Söz seçimi, sintaktik struktur və emosional ifadələrə görə","Yalnız başlığa görə","Tonun müəyyənləşdirilməsi mümkün deyil"],a:1,e:"Ton söz seçimi (diction), cümlə strukturu və emosional ipucları vasitəsilə müəyyənləşir — DİM-də gizli ton sualları çətin hesab olunur",d:"hard"},
+  {q:"[BLOK 3 — Ədəbiyyat] Cəfər Cabbarlının dramaturgiyasında 'Sevil' əsərinin əsas mövzusu:",
+   o:["Tarixi müharibə","Qadın azadlığı və ictimai dəyişim","Təbiət təsviri","Komediya"],a:1,e:"'Sevil' (1928) qadının ailə və cəmiyyətdəki ənənəvi rolundan çıxıb müstəqilləşməsini təsvir edir — 20-ci əsr Azərbaycan dramaturgiyasının mühüm əsəri",d:"medium"},
+  {q:"[BLOK 4 — Riyaziyyat] Bir ədədin 15%-i 45-dirsə, ədədin özü neçədir?",
+   o:["300","450","600","150"],a:0,e:"15%=45 → 1%=3 → 100%=300",d:"easy"},
+  {q:"[BLOK 1] 'Kitabxanaya' sözündəki yönlük hal şəkilçisinin funksiyası:",
+   o:["Hərəkətin istiqamətini/yönəldiyi yeri bildirir","Hərəkətin yerini bildirir","Mənsubiyyəti bildirir","Hərəkətin vaxtını bildirir"],a:0,e:"-a/-ə yönlük hal: hərəkətin yönəldiyi məkan/şəxsi bildirir — 'kitabxanaya getdim'",d:"easy"},
+  {q:"[BLOK 4 — Riyaziyyat] Üçbucağın daxili bucaqlarının cəmi neçə dərəcədir, və bu, hansı həndəsi prinsipdən irəli gəlir?",
+   o:["360°, Evklid həndəsəsinin paralel postulatından","180°, Evklid həndəsəsinin paralel postulatından","90°, koordinat sistemindən","270°, kürə həndəsəsindən"],a:1,e:"Evklid (paralel) həndəsəsində üçbucağın bucaqları cəmi həmişə 180°-dir — bu, paralel xətlər postulatının birbaşa nəticəsidir (qeyri-Evklid həndəsəsində fərqlidir)",d:"hard"}
+);
 
 // ── MİQ: MİNİ İMTAHAN ────────────────────────────
-QDB['miq.exam']=[
+if(!QDB['miq.exam'])QDB['miq.exam']=[];
+QDB['miq.exam'].push(
   {q:"[BİLİK] Müəllim dərsin başında 'Bu dərsdə nəyi öyrənəcəksiniz?' sualını verir. Bu davranış hansı pedaqoji prinsipə aiddir?",
    o:["Cəzalandırma prinsipi","Şəffaflıq prinsipi — öyrənmə məqsədlərini şagirdlərə bildirmək",
       "Fərdiləşdirmə prinsipi","Motivasiya prinsipi"],a:1,
@@ -1779,8 +1895,31 @@ QDB['miq.exam']=[
   {q:"[EKSPERt] Viqotskinin ZPD konsepsiyasının 'scaffolding' ilə münasibəti nədir?",
    o:["ZPD = scaffolding","ZPD potensial inkişaf zonasını müəyyən edir; scaffolding o zonada müvəqqəti dəstəklə öyrənməni aktivləşdirir",
       "İkisi fərqli nəzəriyyədir","Scaffolding ZPD-ni ləğv edir"],a:1,
-   e:"ZPD (Viqotski) + scaffolding (Wood, Bruner): potensial zona + kalibrlənmiş, azalan dəstək = effektiv tədris",d:"expert"},
-];
+   e:"ZPD (Viqotski) + scaffolding (Wood, Bruner): potensial zona + kalibrlənmiş, azalan dəstək = effektiv tədris",d:"expert"}
+);
+
+// ── MİQ: PEDAQOJİ MƏNTİQ (əlavə) ──────────────────
+if(!QDB['miq.logic'])QDB['miq.logic']=[];
+QDB['miq.logic'].push(
+  {q:"Bir müəllim 'Bütün uğurlu şagirdlər çox oxuyur. Bu şagird çox oxuyur. Deməli o uğurludur' deyir. Bu məntiqi nəticənin problemi:",
+   o:["Tamamilə düzgündür","Affirming the consequent (nəticəni təsdiqləmə) xətası — şərtin doğru olması nəticənin də doğru olduğunu sübut etmir","Şagird uğurlu olmalıdır","Heç bir problem yoxdur"],a:1,
+   e:"Məntiqi forma: 'Əgər A, onda B. B doğrudur. Deməli A doğrudur' — bu, formal məntiqdə keçərsiz nəticədir (affirming the consequent), çünki B-nin başqa səbəbləri ola bilər",d:"expert"},
+  {q:"Pedaqoji qərarda 'əgər... onda...' formalı şərti mühakimənin əksini (converse) çıxarmaq niyə risklidir?",
+   o:["Heç bir risk yoxdur","'Əgər yağış yağarsa yer islanar' doğrudur, amma 'yer islanıbsa yağış yağıb' həmişə doğru deyil (başqa səbəblər ola bilər)","Əks həmişə doğrudur","Şərti mühakimələrin əksi yoxdur"],a:1,
+   e:"Şərti mühakimənin əksini avtomatik doğru saymaq klassik məntiqi xətadır — bu, pedaqoji səbəb-nəticə mühakiməsində (məs. 'şagird səhv etdi, deməli anlamayıb') tez-tez rast gəlinir",d:"expert"},
+  {q:"Müəllim 'Bu metod 3 sinifdə işlədi, deməli bütün siniflərdə işləyəcək' deyir. Bu ümumiləşdirmənin riski:",
+   o:["Heç bir risk yoxdur, nümunə kifayətdir","Kontekst dəyişənləri (sinif tərkibi, yaş, mövzu) nəzərə alınmadan kiçik nümunədən universal nəticə çıxarılır","Metod həmişə işləyəcək","3 sinif kifayət qədər böyük nümunədir"],a:1,
+   e:"Pedaqoji tədqiqatda kontekstual dəyişənlər (sinif ölçüsü, yaş, ilkin bilik) nəticələrə təsir edir — kiçik miqyaslı uğur universal tətbiqi zəmanət vermir",d:"hard"},
+  {q:"'Əgər şagird sual verməyibsə, deməli hər şeyi anlayıb' mühakiməsi hansı məntiqi səhvi göstərir?",
+   o:["Heç bir səhv yoxdur","Yanlış dixotomiya — sual verməmə bir neçə fərqli səbəbdən (anlama, utancaqlıq, maraqsızlıq) yarana bilər, yalnız iki seçim yoxdur","Şagird həmişə anlayır","Sual vermək məcburidir"],a:1,
+   e:"Sual verməmə çoxsəbəbli davranışdır — bunu yalnız 'tam anlama' ilə izah etmək digər mümkün izahları (səbəbləri) görməzdən gəlir",d:"hard"},
+  {q:"Pedaqoji qərarda 'hamı belə edir, deməli düzgündür' arqumentinin məntiqi adı və problemi:",
+   o:["Elmi sübut, etibarlıdır","Appeal to popularity (populyarlığa müraciət) — geniş yayılmış praktika düzgünlüyün dəlili deyil","Bu, həmişə doğru arqumentdir","Pedaqoji kontekstə aid deyil"],a:1,
+   e:"Populyarlıq düzgünlüyün sübutu deyil — bir təcrübə geniş yayılmış olsa da, effektivliyi ayrıca, müstəqil dəlillərlə təsdiqlənməlidir",d:"medium"},
+  {q:"'Şagird testdə pis nəticə göstərdi, deməli müəllim pis öyrətdi' mühakiməsindəki məntiqi problem:",
+   o:["Heç bir problem yoxdur, həmişə müəllimin günahıdır","Tək dəyişənə (müəllim) səbəb yükləmək — şagirdin performansına çoxlu fərqli amil (motivasiya, ev şəraiti, sağlamlıq) təsir edə bilər","Şagird həmişə günahkardır","Test nəticələri əhəmiyyətsizdir"],a:1,
+   e:"Mürəkkəb nəticəni (test performansı) tək səbəbə (müəllim) bağlamaq 'single cause fallacy'dir — performansa çoxsaylı amil təsir göstərir, səbəb-nəticə birmənalı deyil",d:"expert"}
+);
 
 // ── BRAIN: DİSLEKSİYA DİAQNOSTİKA ────────────────
 QDB['brain.dx']=[
@@ -1966,134 +2105,7 @@ QDB['dim.syntax']=[
 ];
 
 // ── DİM: ORFOQRAFİYA ──────────────────────────────
-QDB['dim.orfq']=[
-  {q:"'Azərbaycan' sözündə böyük hərf yazılması hansı qaydaya əsaslanır?",
-   o:["Xüsusi isimlərdə: yer adları, ölkə adları həmişə böyük hərflə yazılır",
-      "Sifətlər böyük yazılır","Cümlə əvvəlindədir","Vurğu böyük hərflə göstərilir"],a:0,
-   e:"Xüsusi isim qaydasına görə: ölkə, şəhər, insan adları böyük hərflə yazılır",d:"easy"},
-  {q:"'Sağ ol', 'xoş gəl', 'baş üstə' — bu birləşmələrin yazılış qaydası necədir?",
-   o:["Həmişə ayrı yazılır","Həmişə bitişik","Defislə","Vəziyyətə görə dəyişir"],a:0,
-   e:"Bu tipli deyimlər (frazeoloji birləşmələr) adətən komponentlər arasında boşluqla yazılır",d:"medium"},
-  {q:"'Re-' prefiksi ilə yaranan sözlərin yazılışı (restart, reorganizasiya) necədir?",
-   o:["Həmişə bitişik: restrat","Həmişə defislə: re-start","Köklə bitişik: restart, reorganizasiya",
-      "Həmişə ayrı: re start"],a:2,
-   e:"Alınma önşəkilçilər (re-, anti-, bio-) Azərbaycan dilindəki alınma sözlərlə adətən bitişik yazılır",d:"medium"},
-  {q:"'Şərqli, qərblilər, cənublular' — şimallılar sözü necə yazılır?",
-   o:["şimallılar","Şimallılar","şimallilar","şımalılar"],a:0,
-   e:"Ümumi isim kimi (tərəf bildirmir): şimallılar — kiçik hərflə. Lakin 'Şimal' xüsusi coğrafi ada görə böyük yazılır",d:"hard"},
-  {q:"'Getməliydim' sözü necə yazılır? Hansı variant doğrudur?",
-   o:["get-məli-idim","getməliydim","getməli idim","get-məliydim"],a:1,
-   e:"Xəbərlik şəkilçisi +'idim' forması: bitişik yazılır — getməliydim",d:"medium"},
-  {q:"Sözlərin hecalara bölünməsini göstərin: 'müəllim'",
-   o:["müəl-lim","mü-əl-lim","müəl-l-im","mü-ə-llim"],a:1,
-   e:"Heca bölgüsü: mü-əl-lim (3 heca). Qayda: ardıcıl samitlər ayrılır, sait öncəki hecaya aid edilir",d:"medium"},
-];
-
-// ── DİM: DURĞU İŞARƏLƏRİ ─────────────────────────
-QDB['dim.punct']=[
-  {q:"'Kitabı, dəftəri, qələmi götür' cümləsindəki vergülün funksiyası:",
-   o:["Həmcins üzvləri (sadalama) bir-birindən ayırır",
-      "Xitabdan əvvəl işlənir","Budaq cümləni ayırır","Ədat önündə işlənir"],a:0,
-   e:"Sadalama vergülü: həmcins üzvlər (kitabı, dəftəri, qələmi) bir-birindən vergüllə ayrılır",d:"easy"},
-  {q:"'Sən getdin, mən qaldım' cümləsindəki vergülün funksiyası:",
-   o:["Tabesiz mürəkkəb cümlənin hissələrini ayırır",
-      "Xitab ayırır","Feli bağlama ayırır","Tabeli budaq cümləni ayırır"],a:0,
-   e:"Bağlayıcısız tabesiz mürəkkəb cümlənin hissələri vergüllə ayrılır",d:"medium"},
-  {q:"'Qardaşım — o, həmişə dürüst insandır' cümləsindəki tire (tire) hansı funksiyanı yerinə yetirir?",
-   o:["İsmi xəbər bildirən 'var' sözünün buraxılmasını göstərir",
-      "Sadalamada işlənir","Xitabı ayırır","Mübtəda ilə xəbər arasında"],a:3,
-   e:"Mübtəda (isim/əvəzlik) + ismi xəbər arasında 'var/dır' buraxıldıqda tire işlənir",d:"hard"},
-  {q:"'Xanım (müəllim bunu da bilirdi) çox savadlıydı' cümləsindəki mötərizənin funksiyası:",
-   o:["Əlavə izah — əsas fikrə bağlı olmayan ilave məlumat",
-      "Sualı bildirir","Mücərrəd anlayışı","Sayla birlikdə işlənir"],a:0,
-   e:"Mötərizə əsas cümləyə daxil edilən, lakin sintaktik bağı zəif olan əlavə izahatı bildirir",d:"medium"},
-  {q:"'Müəllim dedi: 'Sabah imtahan var'' cümləsindəki iki nöqtənin funksiyası:",
-   o:["Birbaşa nitqin başlanmasından əvvəl işlənir",
-      "Sadalama","Mübtəda-xəbər arasında","Əvəzedilmiş söz yerinə"],a:0,
-   e:"İki nöqtə (:) müəllif sözündən sonra birbaşa nitqin başlandığını göstərir",d:"easy"},
-  {q:"Sual işarəsi mürəkkəb cümlənin yalnız sonunda qoyulur. Bu iddianın doğruluğunu yoxlayın.",
-   o:["Doğrudur — sual işarəsi həmişə sonda","Yanlışdır — hər budaq cümlə sual olduqda hər birinin sonuna qoyula bilər",
-      "Yanlışdır — sual işarəsi heç vaxt işlənmir","Doğrudur — bir cümlədə iki sual işarəsi olmaz"],a:1,
-   e:"Tabeli mürəkkəb cümlədə hər budaq cümlənin öz sualı olarsa: 'Nə vaxt gəldin? nə vaxt getdin?' — hər birinin sonuna qoyula bilər",d:"expert"},
-];
-
-// ── DİM: MƏTN TƏHLİLİ ────────────────────────────
-QDB['dim.text_a']=[
-  {q:"Aşağıdakı parçadan əsas fikri müəyyən edin:\n'Texnologiya insan həyatını asanlaşdırır. Lakin eyni zamanda insanlar arasındakı birbaşa ünsiyyəti azaldır. Biz ekrana baxarkən yanımızdakı insan görünməz olur.'",
-   o:["Texnologiya pisdir","Texnologiya həm müsbət, həm mənfi aspektlərə malikdir — faydası ilə birlikdə sosial izolyasiya yaratma riski daşıyır",
-      "Ekran baxmaq pis vərdişdir","İnsanlar bir-birini sevmir"],a:1,
-   e:"Mətnin əsas ideyası: texnologiyanın dual (ikitərəfli) təbiəti. 'Lakin' bağlayıcısı ziddiyyəti göstərir",d:"medium"},
-  {q:"'Müəllif mövqeyi' ilə 'mətnin əsas fikri' arasındakı fərq nədir?",
-   o:["Eyni şeydir","Əsas fikir mövzunu ümumiləşdirir; müəllif mövqeyi müəllifin o mövzuya subyektiv münasibəti, dəyər hökmlüdür",
-      "Müəllif mövqeyi həmişə son cümlədədir","Əsas fikir yalnız birinci abzasda olur"],a:1,
-   e:"Hər mətnin həm bir mövzusu (əsas fikir), həm də müəllifin həmin mövzuya münasibəti (mövqeyi) var",d:"hard"},
-  {q:"Mətnin 'gizli məlumatı' nədir?",
-   o:["Mətndə yazılmayan, lakin məzmundan çıxarıla bilən nəzərdə tutulmuş məna",
-      "Şifrəli mətn","Sonuncu cümlə","Mövzunun adı"],a:0,
-   e:"İmplikasiyon (gizli məlumat): müəllif birbaşa demir, lakin kontekst, ton, seçilmiş faktlar vasitəsilə oxucu nəticə çıxara bilər",d:"hard"},
-  {q:"Aşağıdakı cümlədə fakt mı, yoxsa mülahizə mi var?\n'Azərbaycanda internet istifadəçilərinin sayı 2023-cü ildə 7 milyona çatmışdır.'",
-   o:["Fakt — konkret rəqəm, yoxlanıla bilən statistik məlumat",
-      "Mülahizə — şişirdilmiş iddiadır","Hər ikisi eyni zamanda","Heç biri"],a:0,
-   e:"Fakt: konkret rəqəm statistikası, resmi mənbədən yoxlanıla bilər. Əgər 'təxminən' kimi şərt olsaydı, mülahizəyə yaxınlaşardı",d:"medium"},
-  {q:"Mətn analizi sualında 'məntiqi nəticə çıxar' tapşırığı verilir. Nəticə çıxarmaq üçün mütləq lazım olan şərt nədir?",
-   o:["Mətndən kənara çıxmaq","Nəticə mətndəki faktlara əsaslanmalı, amma mətndə birbaşa deyilməməlidir",
-      "Öz fikirlərini yazmaq","Ən uzun cümləni seçmək"],a:1,
-   e:"Çıxarılan nəticə: 1) mətndəki dəlillərdən törənməlidir; 2) mətndə birbaşa söylənilməməlidir. Bu iki şərt inferensial oxunun özəyidir",d:"expert"},
-];
-
 // ── DİM: MİNİ İMTAHAN (Mock) ──────────────────────
-QDB['dim.mock']=[
-  {q:"[BLOK 1 — Azərbaycan dili] 'Gözəllik' sözündəki sözdüzəldici şəkilçi hansıdır?",
-   o:["-liq/-lik","-lar/-lər","-da/-də","-ın/-in"],a:0,e:"'gözəl'(sifət) + '-lik' → 'gözəllik'(isim). Keyfiyyət bildirən sifətdən mücərrəd isim düzəldir",d:"easy"},
-  {q:"[BLOK 1] 'Kitabların' sözü hansı halda işlənmişdir?",
-   o:["Adlıq hal","Yiyəlik hal","Yönlük hal","Çıxışlıq hal"],a:1,e:"'-ların/-lərin' yiyəlik hal şəkilçisidir: kitab+lar+ın",d:"easy"},
-  {q:"[BLOK 2 — Mətn] Mətnin mövzusu ilə əsas fikri arasındakı əsas fərq nədir?",
-   o:["Mövzu 'nə haqqında'; əsas fikir 'müəllif nə demək istəyir' — daha geniş müəllif niyyəti",
-      "Eynidir","Mövzu daha uzundur","Əsas fikir yalnız sondadır"],a:0,
-   e:"Mövzu: ümumi sahə. Əsas fikir: müəllifin o sahəyə dair bildirmək istədiyi bütöv mesaj",d:"medium"},
-  {q:"[BLOK 2] 'Hamı bilir ki, vaxtında hazırlaşmaq uğurun açarıdır' cümləsindəki 'ki' hansı funksiyadadır?",
-   o:["Xəbər budaq cümləsi yaradır","Şərt budaq cümləsi yaradır","Zaman budaq cümləsi","Güzəşt budaq cümləsi"],a:0,
-   e:"'bilir ki' — dil feli (bilmək) + ki → xəbər budaq cümləsi: 'bilmək' nəyi bildirdiyi açıqlanır",d:"medium"},
-  {q:"[BLOK 3 — Ədəbiyyat] 'Durnalar' şeirindəki Vaqif Səmədoğlunun istifadə etdiyi əsas bədii vasitə hansıdır?",
-   o:["Təşbeh (bənzətmə)","Metafora — durnalar vətən həsrəti simvolu kimi işlədilir",
-      "Litota","Alliterasiya"],a:1,
-   e:"Simvol: durmalar = azadlıq, vətən, köçdə həsrət. Metaforik istifadə şeirin mərkəzidir",d:"hard"},
-  {q:"[BLOK 3] Klassik Azərbaycan şairi Nizami Gəncəvinin 'Xəmsə'si neçə poemadan ibarətdir?",
-   o:["3","4","5","6"],a:2,e:"Xəmsə (beşlik): Sirlər xəzinəsi, Xosrov və Şirin, Leyli və Məcnun, Yeddi gözəl, İsgəndərnamə",d:"easy"},
-  {q:"[BLOK 4 — Riyaziyyat] log₃81 = ?",
-   o:["3","4","5","2"],a:1,e:"3⁴=81 → log₃81=4",d:"easy"},
-  {q:"[BLOK 4] Kvadrat tənliyin D=b²-4ac diskriminantı. D<0 olduqda:",
-   o:["İki real kök","Bir real kök","Real kök yoxdur","Sonsuz kök"],a:2,
-   e:"D<0 → müsbət kökaltı ifadə yoxdur → real kök yoxdur",d:"easy"},
-];
-
-// ── MİQ: MİNİ İMTAHAN ────────────────────────────
-QDB['miq.exam']=[
-  {q:"[BİLİK] Müəllim dərsin başında 'Bu dərsdə nəyi öyrənəcəksiniz?' sualını verir. Bu davranış hansı pedaqoji prinsipə aiddir?",
-   o:["Cəzalandırma prinsipi","Şəffaflıq prinsipi — öyrənmə məqsədlərini şagirdlərə bildirmək",
-      "Fərdiləşdirmə prinsipi","Motivasiya prinsipi"],a:1,
-   e:"Öyrənmə məqsədlərini açıqlamaq şəffaflığı artırır, şagirdin özünü qiymətləndirməsinə zəmin yaradır",d:"medium"},
-  {q:"[ANALİZ] Formativ qiymətləndirmə ilə summativ qiymətləndirməni müqayisə edən ekspert aşağıdakı fərqi vurğulayır. Hansı ən dəqiqdir?",
-   o:["Formativ — öyrənmə zamanı istiqamətləndirici; summativ — öyrənmə dövrünün sonunda ölçücü",
-      "İkisi eyni məqsədi daşıyır","Formativ yalnız şifahi, summativ yalnız yazılıdır",
-      "Summativ daha az vacibdir"],a:0,
-   e:"Dylan Wiliam: formativ assessment 'assessment for learning', summativ 'assessment of learning'",d:"hard"},
-  {q:"[TƏTBİQ] Müəllim şagirdə 'Sən bu mövzunu öyrəndikdən sonra hansı praktik problemləri həll edə bilərsən?' sualını verir. Bloom taksonomiyasının hansı səviyyəsi?",
-   o:["Bilik","Anlama","Tətbiq","Analiz"],a:2,
-   e:"Tətbiq (Apply): öyrənilmiş biliklərin yeni, real kontekstdə istifadəsi. 'Praktik həll' = tətbiq səviyyəsi",d:"medium"},
-  {q:"[QİYMƏTLƏNDİRMƏ] Rubrika ilə sadə meyar siyahısının (checklist) əsas fərqi nədir?",
-   o:["Rubrika mövcudluq yoxlayır, checklist performans səviyyəsini","Checklist mövcudluq yoxlayır; rubrika isə performans səviyyələrini (mastery levels) əks etdirir",
-      "İkisi eynidir","Rubrika yalnız riyaziyyat üçündür"],a:1,
-   e:"Rubrika = criterion × performance level matris. Checklist: var/yox. Rubrika: başlanğıc/inkişaf/mahir/ekspert",d:"hard"},
-  {q:"[SİTUASİYA] Sinifdəki şagirdlər kooperativ qrup işi zamanı passiv qalır, dominant şagird hər şeyi edir. Ən effektiv müdaxilə:",
-   o:["Qrupu dağıt","Jigsaw metodu ilə rolları strukturlaşdır — hər üzv spesifik məsuliyyət daşıyır",
-      "Cəzalandır","Tapşırığı asanlaşdır"],a:1,
-   e:"Kagan strukturları (Jigsaw, Round Robin): individual accountability yaratmaq social loafing-ə qarşı ən effektiv müdaxilədir",d:"hard"},
-  {q:"[EKSPERt] Viqotskinin ZPD konsepsiyasının 'scaffolding' ilə münasibəti nədir?",
-   o:["ZPD = scaffolding","ZPD potensial inkişaf zonasını müəyyən edir; scaffolding o zonada müvəqqəti dəstəklə öyrənməni aktivləşdirir",
-      "İkisi fərqli nəzəriyyədir","Scaffolding ZPD-ni ləğv edir"],a:1,
-   e:"ZPD (Viqotski) + scaffolding (Wood, Bruner): potensial zona + kalibrlənmiş, azalan dəstək = effektiv tədris",d:"expert"},
-];
 
 // ── BRAIN: DİSLEKSİYA DİAQNOSTİKA ────────────────
 QDB['brain.dx']=[
@@ -2323,7 +2335,7 @@ function renderDemo(){
   const qs=(S.demoCenter==='dim')
     ? [QDB['dim.az'][0],QDB['dim.math'][0],QDB['dim.hist'][0]].filter(Boolean)
     : (QDB[qkey]||QDB['dim.az']||[]).slice(0,3);
-  const dn={easy:'Asan',medium:'Orta',hard:'Çətin',expert:'Ekspert'};
+  const dn={easy:'Başlanğıc',medium:'Standart',hard:'Ekspert',expert:'Olimpiada'};
   const dc={easy:'badge-easy',medium:'badge-medium',hard:'badge-hard',expert:'badge-expert'};
   const letters=['A','B','C','D'];
 
@@ -2660,13 +2672,13 @@ function renderDash(){
     return `<div class="section-card" data-action="nav-center" data-val="${c.id}" style="--c:${c.color}">
       <div class="sc-icon">${c.icon}</div>
       <div class="sc-name">${c.name}</div>
-      <div style="font-size:11px;color:var(--t4);margin-top:2px;white-space:normal">${c.desc}</div>
+      <div style="font-size:12px;color:var(--t4);margin-top:2px;white-space:normal;line-height:1.5">${c.desc}</div>
       ${cnt?`<div class="sc-progress"><div class="sc-progress-fill" style="width:${pct}%;background:${c.color}"></div></div><div class="sc-done">${cnt} tapşırıq</div>`:'<div class="sc-done">Başla →</div>'}
       <button class="btn btn-primary btn-sm" style="margin-top:8px;width:100%" data-action="quick-start-center" data-val="${c.id}">🎯 Testlərə başla</button>
     </div>`;
   }).join('');
   return `<div style="margin-bottom:20px">
-  <div style="font-size:20px;font-weight:800;color:var(--t1);margin-bottom:5px">Xoş gəldin, ${S.user.name||'öyrənən'}! 👋</div>
+  <div style="font-family:var(--font-display);font-size:23px;font-weight:800;color:var(--t1);margin-bottom:6px;letter-spacing:-.3px">Xoş gəldin, ${S.user.name||'öyrənən'}! 👋</div>
   <div style="font-size:13px;color:var(--t3);margin-bottom:16px">Hansı mərkəzdə çalışmaq istəyirsən?</div>
 </div>
 <div class="daily-card">
@@ -2823,11 +2835,13 @@ function renderTopicCard(sec,qs,qkey){
       <div style="font-size:12px;color:var(--t3)">${qs.length} sual · Ekspert səviyyəli analiz tapşırıqları</div>
     </div>
   </div>
-  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px">
-    ${diffCounts.easy?`<span class="badge badge-easy">🟢 ${diffCounts.easy} Asan</span>`:''}
-    ${diffCounts.medium?`<span class="badge badge-medium">🟡 ${diffCounts.medium} Orta</span>`:''}
-    ${diffCounts.hard?`<span class="badge badge-hard">🔴 ${diffCounts.hard} Çətin</span>`:''}
-    ${diffCounts.expert?`<span class="badge badge-expert">💎 ${diffCounts.expert} Ekspert</span>`:''}
+  <div style="margin-bottom:6px;font-size:11px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.5px">Səviyyə seç</div>
+  <div class="level-pills" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+    <button class="level-pill${S.levelFilter===null?' active':''}" data-action="set-level" data-val="">🎲 Qarışıq</button>
+    ${diffCounts.easy?`<button class="level-pill lvl-easy${S.levelFilter==='easy'?' active':''}" data-action="set-level" data-val="easy">🌱 Başlanğıc · ${diffCounts.easy}</button>`:''}
+    ${diffCounts.medium?`<button class="level-pill lvl-medium${S.levelFilter==='medium'?' active':''}" data-action="set-level" data-val="medium">📘 Standart · ${diffCounts.medium}</button>`:''}
+    ${diffCounts.hard?`<button class="level-pill lvl-hard${S.levelFilter==='hard'?' active':''}" data-action="set-level" data-val="hard">🎯 Ekspert · ${diffCounts.hard}</button>`:''}
+    ${diffCounts.expert?`<button class="level-pill lvl-expert${S.levelFilter==='expert'?' active':''}" data-action="set-level" data-val="expert">🏆 Olimpiada · ${diffCounts.expert}</button>`:''}
   </div>
   ${td.done?`<div style="background:var(--bg3);border-radius:9px;padding:12px 16px;margin-bottom:18px;display:flex;gap:18px">
     <div><div style="font-size:18px;font-weight:800">${td.done}</div><div style="font-size:10px;color:var(--t4)">Tamamlandı</div></div>
@@ -2965,9 +2979,15 @@ function recordRecentlyShown(topicKey, qs){
 }
 
 function startQuiz(qs,ck,tk){
-  const lim=(QUIZ_LIMIT==='all')?qs.length:Math.min(QUIZ_LIMIT,qs.length);
-  const adaptive=buildAdaptivePool(qs, tk, Math.max(1,lim));
-  QS.qs=adaptive.length?adaptive:shuffle([...qs]).slice(0,Math.max(1,lim));
+  // Level filter (Beginner/Standard/Expert/Olympiad): if the user picked a
+  // specific level, restrict the pool to that difficulty only. Falls back
+  // to the full pool if the chosen level has zero questions in this bank,
+  // so a quiz can never silently fail to start.
+  const filtered=S.levelFilter?qs.filter(q=>(q.d||'medium')===S.levelFilter):qs;
+  const pool=filtered.length?filtered:qs;
+  const lim=(QUIZ_LIMIT==='all')?pool.length:Math.min(QUIZ_LIMIT,pool.length);
+  const adaptive=buildAdaptivePool(pool, tk, Math.max(1,lim));
+  QS.qs=adaptive.length?adaptive:shuffle([...pool]).slice(0,Math.max(1,lim));
   recordRecentlyShown(tk, QS.qs);
   QS.idx=0;QS.sel=null;QS.score=0;QS.wrong=0;QS.ck=ck;QS.tk=tk;
   QS.totalTime=QS.qs.length*TIME_PER_Q;
@@ -3006,7 +3026,7 @@ function renderQuiz(){
   const pct=Math.round(QS.idx/QS.qs.length*100);
   const dl=['A','B','C','D'];
   const dc={easy:'diff-easy',medium:'diff-medium',hard:'diff-hard',expert:'diff-expert'};
-  const dn={easy:'🟢 Asan',medium:'🟡 Orta',hard:'🔴 Çətin',expert:'💎 Ekspert'};
+  const dn={easy:'🌱 Başlanğıc',medium:'📘 Standart',hard:'🎯 Ekspert',expert:'🏆 Olimpiada'};
   if(!q.o||!Array.isArray(q.o)){
     // Bu sual quiz formatında deyil (məs. essay) — növbəti suala keç
     QS.idx++;
@@ -3863,12 +3883,13 @@ function renderOpenTask(){
   try{
 
   const sec=CENTERS.open.sections[S.section];
-  const isD=S.section==='dim_open'||S.section==='dim_open';
-  const tasks=QDB['open.'+S.section]||QDB[S.section==='miq_open'?'open.miq':'open.dim']||QDB['open.dim']||[];
+  const isD=S.section==='dim_open';
+  const directKey='open.'+(S.section==='dim_open'?'dim':S.section==='miq_open'?'miq':S.section);
+  const tasks=QDB[directKey]||QDB['open.dim']||[];
   const taskHtml=tasks.map((t,i)=>`
 <div class="open-card">
   <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px">
-    <span class="badge ${isD?'badge-hard':'badge-expert'}">${isD?'DİM':'MİQ'}</span>
+    <span class="badge ${isD?'badge-hard':'badge-expert'}">${(sec&&sec.n)||'Tapşırıq'}</span>
     <span style="font-size:11px;color:var(--t4)">Tapşırıq ${i+1}</span>
   </div>
   <div class="open-q">${t.q}</div>
@@ -4141,7 +4162,7 @@ const BLOG_POSTS=[
    content:`<p>NeuroCode-də sual çətinliyi statik deyil — sisteminiz performansınıza uyğun olaraq dinamik dəyişir.</p>
    <p><strong>Qayda sadədir:</strong> 3 ardıcıl doğru cavab → çətinlik bir pillə artır (məsələn, "orta"dan "çətin"ə). 2 ardıcıl səhv → çətinlik bir pillə azalır.</p>
    <p><strong>Niyə bu vacibdir?</strong> Psixologiyada "Yaxın inkişaf zonası" (ZPD) konsepsiyası deyir ki, ən effektiv öyrənmə "nə çox asan, nə çox çətin" zonada baş verir. Çox asan suallar — darıxma və diqqətsizlik; çox çətin suallar — demotivasiya yaradır.</p>
-   <p><strong>Şəffaflıq:</strong> Hər sualın yanında çətinlik nişanı (🟢 Asan, 🟡 Orta, 🔴 Çətin, 💎 Ekspert) görünür — beləliklə, harada olduğunuzu həmişə bilirsiniz.</p>
+   <p><strong>Şəffaflıq:</strong> Hər sualın yanında səviyyə nişanı (🌱 Başlanğıc, 📘 Standart, 🎯 Ekspert, 🏆 Olimpiada) görünür — beləliklə, harada olduğunuzu həmişə bilirsiniz.</p>
    <p>NeuroTrack (Analitika) mərkəzində bu məlumatlar toplanaraq, güclü və zəif mövzularınızın vizual xəritəsini yaradır.</p>`},
 ];
 
@@ -4321,6 +4342,7 @@ document.addEventListener('click',function(e){
   case 'nav-section':{
     const ctr=el.dataset.center||S.center;
     const sec=el.dataset.section||val;
+    S.levelFilter=null;
     // Stage check for dyslexia / dyscalculia
     if(ctr==='dyslexia'){
       const n=parseInt(sec.replace('s',''))||1;
@@ -4390,6 +4412,9 @@ document.addEventListener('click',function(e){
 
   case 'set-qlimit':
     setQuizLimit(val);render();break;
+
+  case 'set-level':
+    S.levelFilter=val||null;render();break;
 
   case 'sel-opt':{
     if(QS.sel!==null)return;
@@ -4509,7 +4534,8 @@ document.addEventListener('click',function(e){
     const answer=((ta)||{value:''}).value.trim()||'';
     if(!answer){toast('Əvvəlcə cavabınızı yazın','err');return;}
     el.textContent='⌛ Yoxlanılır...';el.disabled=true;
-    const tasks=QDB[S.section==='miq_open'?'open.miq':'open.dim']||[];
+    const okKey='open.'+(S.section==='dim_open'?'dim':S.section==='miq_open'?'miq':S.section);
+    const tasks=QDB[okKey]||QDB['open.dim']||[];
     const q=(tasks[idx]||{}).q||'';
     fetchOpenCheck(q,answer,el,fb);
     break;}
@@ -4574,6 +4600,187 @@ document.addEventListener('click',function(e){
     break;}
 
   }
+
+  // ── YENİ HANDLER-LƏR (AI Test Gen, Study Plan, Dyslexia, Subitizing, AI-Nav) ──
+
+  // ── AI TEST GENERATOR ─────────────────────────
+  if(act==='ai-generate-test'){
+    var topic=((document.getElementById('tg-topic')||{}).value||'').trim();
+    var count=(document.getElementById('tg-count')||{value:'5'}).value||'5';
+    var diff=(document.getElementById('tg-diff')||{value:'hard'}).value||'hard';
+    var type=(document.getElementById('tg-type')||{value:'dim'}).value||'dim';
+    if(!topic){toast('Mövzu daxil edin','err');return;}
+    const btn=document.getElementById('tg-btn');
+    const result=document.getElementById('tg-result');
+    if(btn){btn.textContent='⌛ Yaradılır...';btn.disabled=true;}
+    const prompt=`${type.toUpperCase()} imtahanı üçün "${topic}" mövzusunda ${count} ədəd ${diff} səviyyəli sual yarat.
+
+Formatı: hər sual üçün
+Sual: [sual mətni]
+A) [variant]  B) [variant]  C) [variant]  D) [variant]
+Düzgün cavab: [hərfi]
+İzahat: [qısa izahat]
+
+Suallar primitiv 'X nədir?' tipli olmasın. Analiz, müqayisə, tətbiq, nəticə çıxarma tələb etsin.
+Azərbaycanca yaz.`;
+    callAI(prompt).then(reply=>{
+      if(btn){btn.textContent='✨ Test Yarat';btn.disabled=false;}
+      if(result){
+        result.innerHTML=`<div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--t3);margin-bottom:10px;text-transform:uppercase">AI Yaradılmış Test</div>
+          <div style="font-size:13px;color:var(--t1);line-height:1.8;white-space:pre-line">${reply}</div>
+        </div>`;
+      }
+      addXP(20,'ai_teacher','ai.generate');
+      toast('Test hazırdır! ✨','ok');
+    });
+    e.stopImmediatePropagation();
+  }
+
+  // ── AI STUDY PLAN ─────────────────────────────
+  if(act==='ai-gen-plan'){
+    var duration=(document.getElementById('sp-duration')||{value:'1ay'}).value||'1ay';
+    var exam=(document.getElementById('sp-exam')||{value:'DİM'}).value||'DİM';
+    const st=getStats();
+    const weak=Object.entries(st.topics||{})
+      .filter(([k,v])=>v.done>=2&&v.correct/v.done<0.6)
+      .map(([k,v])=>`${k}(${Math.round(v.correct/v.done*100)}%)`)
+      .join(', ')||'(hələ məlumat yoxdur)';
+    const btn=document.getElementById('sp-btn');
+    const result=document.getElementById('sp-result');
+    if(btn){btn.textContent='⌛ Plan yaradılır...';btn.disabled=true;}
+    const prompt=`${exam} imtahanına ${duration} ərzində hazırlaşmaq üçün fərdi öyrənmə planı yarat.
+
+Şagirdin zəif mövzuları: ${weak}
+Cəmi tapşırıq sayı: ${st.done||0}
+XP: ${st.xp||0}
+Seriya: ${st.streak||0} gün
+
+Plan həftə-həftə (günlük hədəflər, mövzular, resurslar) olsun.
+Realistische, motivasiyalandırıcı, spesifik ol.
+Azərbaycanca yaz.`;
+    callAI(prompt).then(reply=>{
+      if(btn){btn.textContent='📋 Plan Yarat';btn.disabled=false;}
+      if(result){
+        result.innerHTML=`<div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
+          <div style="font-size:12px;font-weight:700;color:var(--t3);margin-bottom:10px;text-transform:uppercase">Fərdi Tədris Planın</div>
+          <div style="font-size:13px;color:var(--t1);line-height:1.8;white-space:pre-line">${reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
+        </div>`;
+      }
+      toast('Plan hazırdır! 📋','ok');
+    });
+    e.stopImmediatePropagation();
+  }
+
+  // ── AI DYSLEXIA FEEDBACK ──────────────────────
+  if(act==='ai-dyslexia-feedback'){
+    const el2=e.target;
+    el2.textContent='⌛...';el2.disabled=true;
+    const st=getStats();
+    const errors=(st.errors||[]).filter(e=>e.center==='dyslexia');
+    const fb=document.getElementById('dys-ai-fb');
+    const summary=errors.slice(0,5).map(e=>`- ${e.topic||'?'}: ${e.giv} → ${e.cor}`).join('\n')||'(hələ xəta yoxdur)';
+    const prompt=`Disleksiya öyrənən şagirdin xəta analizi:
+${summary}
+
+Azərbaycanca:
+1. Xətaların nümayiş etdirdiyi spesifik çətinlik
+2. Orton-Gillingham əsaslı 3 konkret məşq tövsiyəsi
+3. Evdə tətbiq edilə bilən 2 praktik strategiya`;
+    callAI(prompt).then(reply=>{
+      el2.textContent='🤖 AI Disleksiya Tövsiyəsi Al';el2.disabled=false;
+      if(fb){
+        fb.innerHTML=`<div class="quiz-explain" style="margin-top:12px"><strong>🤖 AI Tövsiyəsi:</strong><br><br>${reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+      }
+    });
+    e.stopImmediatePropagation();
+  }
+
+  // ── SUBITIZING DRILL ──────────────────────────
+  if(act==='subit-show'){
+    const count=Math.floor(Math.random()*9)+1;
+    const dots='●'.repeat(count);
+    const disp=document.getElementById('subit-display');
+    const opts=document.getElementById('subit-opts');
+    const fb=document.getElementById('subit-fb');
+    if(disp){disp.textContent=dots;}
+    // Gizlə 500ms sonra
+    setTimeout(()=>{
+      if(disp)disp.textContent='?';
+      // Cavab seçimləri göstər
+      const options=[count];
+      while(options.length<4){
+        const n=Math.max(1,count+Math.floor(Math.random()*5)-2);
+        if(!options.includes(n))options.push(n);
+      }
+      options.sort(()=>Math.random()-.5);
+      if(opts){
+        opts.style.display='flex';
+        opts.innerHTML=options.map(o=>`
+          <button style="width:60px;height:60px;border-radius:12px;border:2px solid var(--b);background:var(--bg);font-size:22px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .13s" 
+            data-action="subit-ans" data-n="${o}" data-correct="${count}">${o}</button>`).join('');
+      }
+      if(fb)fb.innerHTML='';
+    },500);
+    e.stopImmediatePropagation();
+  }
+
+  if(act==='subit-ans'){
+    const n=parseInt(el.dataset.n);
+    const correct=parseInt(el.dataset.correct);
+    const fb=document.getElementById('subit-fb');
+    const opts=document.getElementById('subit-opts');
+    if(n===correct){
+      el.style.borderColor='#059669';el.style.background='rgba(5,150,105,.1)';
+      if(fb)fb.innerHTML='<div class="task-feedback feedback-ok" style="margin-top:10px">✅ Düzgün! Sürətlə cavab verdin!</div>';
+      addXP(5,'dyscalculia','dysc.subit');
+    }else{
+      el.style.borderColor='#dc2626';
+      var btns=opts&&opts.querySelectorAll?opts.querySelectorAll('[data-action="subit-ans"]'):null;
+      if(btns&&btns.forEach)btns.forEach(function(b){if(parseInt(b.dataset.n)===correct)b.style.borderColor='#059669';});
+      if(fb)fb.innerHTML=`<div class="task-feedback feedback-fail" style="margin-top:10px">❌ Doğru: ${correct}</div>`;
+    }
+    setTimeout(()=>{
+      const disp=document.getElementById('subit-display');
+      if(disp){disp.textContent='Növbəti';disp.dataset.action='subit-show';}
+      if(opts)opts.style.display='none';
+    },1500);
+    e.stopImmediatePropagation();
+  }
+
+  // ── AI SECTION ROUTING ──────────────────────
+  if(act==='ai-nav'){
+    const sub=el.dataset.sub;
+    S.center='ai_teacher';S.section=null;
+    if(sub==='test-gen'){
+      // override render
+      const main=document.getElementById('nd-main');
+      if(main){
+        main.innerHTML=renderAITestGenerator();
+        postRender();
+      }
+    } else if(sub==='study-plan'){
+      const main=document.getElementById('nd-main');
+      if(main){
+        main.innerHTML=renderAIStudyPlan();
+        postRender();
+      }
+    } else if(sub==='dys-adaptive'){
+      const main=document.getElementById('nd-main');
+      if(main){
+        main.innerHTML=renderDyslexiaAdaptive();
+        postRender();
+      }
+    } else if(sub==='dc-numbers'){
+      const main=document.getElementById('nd-main');
+      if(main){
+        main.innerHTML=renderDyscalculiaNumberSense();
+        postRender();
+      }
+    }
+    e.stopImmediatePropagation();
+  }
+
 });
 
 // ── AI FUNCTIONS ──────────────────────────────────
@@ -5149,6 +5356,9 @@ const _az=[
   {q:"Şagird yazısında ardıcıl iki cümlə arasında məntiqi keçid yoxdur. Bu çatışmazlığı qiymətləndirmə rubrikanın hansı ölçüsü altında qiymətləndirilir?",o:["Leksik zənginlik","Məzmun dərinliyi","Mətnin bütövlüyü/koheziyası","Orfoqrafiya"],a:2,e:"Koheziya/koherensiya: cümlələr arasındakı məntiqi bağlantı mətn bütövlüyünün əsasıdır",d:"expert"},
   {q:"Azərbaycan dilinin morfem sistemindəki ən mühüm prinsip nədir?",o:["Sözlər dəyişmir","Agglutinasiya: şəkilçilər ardıcıl, bir-birini dəyişdirməyən şəkildə kökə əlavə olunur","Söz kökü dəyişir","Şəkilçilər birləşir"],a:1,e:"Aqqlütinasiyon tip: türk dilləri üçün xarakterik. Hər şəkilçi ayrı qrammatik məna daşıyır",d:"medium"},
   {q:"Müəllim 9-cu sinif şagirdlərinə feli sifəti feli bağlamadan ayırd etdirmək üçün hansı test/sual ən effektivdir?",o:["Hərəkəti bildirir mi?","Cümlədə funksiyas nədir: ismi dəyişdirir mi, yoxsa feil/cümləni modifiye edir?","Şəkilçisinə baxaraq","Zaman bildirir mi?"],a:1,e:"Feli sifət (participial): ismi dəyişdirir (qayıdan adam); feli bağlama (converb): hərəkəti/cümləni dəyişdirir (qaçaraq gəldi)",d:"expert"},
+  {q:"MİQ namizədi şagirdə 'omonim' anlayışını izah edərkən ən effektiv pedaqoji yanaşma hansıdır?",o:["Lüğətdən tərif oxutmaq","Eyni səslənən, fərqli mənalı sözləri kontekstdə (cümlədə) göstərib mənanın necə fərqləndiyini müzakirə etmək","Yalnız siyahı vermək","Mövzunu keçmək"],a:1,e:"Kontekstual tədris: omonimlərin mənası yalnız cümlə daxilində aydınlaşır ('yaz' fəsil/yaz feli) — izolə tərif əvəzinə nümunə üzərində iş daha effektivdir",d:"medium"},
+  {q:"Şagird inşasında 'klişe' (basmaqəlib ifadə) həddindən artıq işlədilib. Müəllim hansı geri-bildirimi verməlidir?",o:["Heç bir şərh verməmək","Konkret klişeləri qeyd edib, daha orijinal, spesifik ifadə alternativləri təklif etmək","İnşanı tamamilə rədd etmək","Klişe yaxşıdır, davam etsin"],a:1,e:"Effektiv yazı feedback-i konkret nümunə göstərib alternativ təklif etməlidir — ümumi 'daha yaxşı yaz' kömək etmir",d:"medium"},
+  {q:"MİQ dil bilikləri bölməsində 'sintaktik ambiquity' (sintaktik ikimənalılıq) nümunəsi necə tədris edilir?",o:["Belə bir şey yoxdur Azərbaycan dilində","'Qoca kişinin papağı' — 'qoca' sözünün kişiyə yoxsa papağa aid olduğu ikimənalıdır, bu cür cümlələr üzərində iş aparmaq","Yalnız ingilis dilinə aiddir","Şagirdləri çaşdırmaq üçün öyrədilmir"],a:1,e:"Sintaktik ikimənalılıq sözlərin cümlədəki əlaqəsinin birdən çox şəkildə şərh edilə bilməsidir — bu fenomeni tanımaq dəqiq yazı bacarığını gücləndirir",d:"expert"},
 ];
 
 // ── MİQ: ƏDƏBİYYAT ───────────────────────────────────
@@ -5239,6 +5449,15 @@ const _attn=[
   {q:"Dikkat Eksikliği Hiperaktivite Bozukluğu (DEHB/ADHD)-da əsas neyrobioloji mexanizm:",o:["Hiperaktiv beyintdir","Dopamin/norepinefrin sistemindəki çatışmazlıq — prefrontal korteksin idarəetmə funksiyası zəifləyir","Testosteron yüksəkdir","Yuxu pozuntusudur"],a:1,e:"ADHD: dopaminerjik (PFC-striatum) sistemin dysregulation. Diqqət+impulsiv nəzarət problemi buradan irəli gəlir",d:"expert"},
   {q:"'Flow state' (axım vəziyyəti) nədir?",o:["Can sıxıntısı","Çətinlik-bacarıq balansı olduqda yaranan, diqqətin tam cəmləndiyi, vaxt hissinin itdiyi optimal hal","Enerji itimi","Yorğunluq"],a:1,e:"Csikszentmihalyi flow theory: challenge≈skill → optimal diqqət, intrinsik motivasiya, performans zirvəsi",d:"hard"},
   {q:"Sustained attention ilə selective attention-un fərqi:",o:["Eynidir","Sustained: uzun müddət bir stimulusa fokus; selective: çox stimul arasından birini seçmək","Sustained daha asandır","Selective daha çoxdur"],a:1,e:"İki fundamental diqqət növü: sustained (vigilance) zamanla azalır; selective (Cocktail party effect) filtrleme capacitesidir",d:"hard"},
+  {q:"'Divided attention' (bölünmüş diqqət) ilə multitasking arasındaki real əlaqə:",o:["Eynidir, beyin paralel işləyir","Beyin əslində tapşırıqlar arasında sürətlə keçid edir (task-switching), həqiqi paralel emal məhduddur","Multitasking daha effektivdir","Heç bir əlaqə yoxdur"],a:1,e:"Koqnitiv tədqiqatlar: 'multitasking' əslində rapid serial task-switching-dir, hər keçidin koqnitiv xərci var (switching cost)",d:"expert"},
+  {q:"Sinifdə 'diqqət yorğunluğu' (attentional fatigue) ən çox neçə dəqiqədən sonra başlayır?",o:["1-2 dəqiqə","10-20 dəqiqə (yaş və tapşırığa görə dəyişir)","2 saat","Heç vaxt başlamır"],a:1,e:"Vigilance decrement: davamlı diqqət tələb edən tapşırıqlarda performans 10-20 dəqiqədən sonra azalmağa başlayır — fasilə strategiyaları buna görə vacibdir",d:"hard"},
+  {q:"'Top-down' diqqət ilə 'bottom-up' diqqət arasındaki fərq:",o:["Eynidir","Top-down: məqsədə yönəlmiş, iradi diqqət; bottom-up: stimulun özü (parlaqlıq, hərəkət) tərəfindən cəlb edilən diqqət","Top-down yalnız uşaqlarda olur","Bottom-up həmişə daha güclüdür"],a:1,e:"Bu iki sistem paralel işləyir: top-down PFC-dən idarə olunur (iradi), bottom-up isə pariyetal-temporal şəbəkədən (refleksiv)",d:"expert"},
+  {q:"Sinif otağında 'vizual səs-küy' (çox rəngli divar, posterlər) diqqətə necə təsir edir?",o:["Həmişə müsbət təsir edir","ADHD/diqqət zəifliyi olan şagirdlərdə diqqəti dağıdaraq əsas tapşırığa fokuslanmağı çətinləşdirə bilər","Heç bir təsiri yoxdur","Yalnız kiçik yaşlarda təsir edir"],a:1,e:"Visual clutter tədqiqatları: həddindən artıq vizual stimul, xüsusilə diqqət tənzimləməsi zəif olan şagirdlərdə, koqnitiv yükü artırır",d:"hard"},
+  {q:"'Diqqətin şəbəkə modeli' (Posner) hansı 3 alt-sistemi ayırır?",o:["Görmə, eşitmə, dad","Alerting (oyaqlıq), orienting (yönləndirmə), executive control (icraedici nəzarət)","Yaddaş, dil, hərəkət","Keçmiş, indiki, gələcək"],a:1,e:"Posner & Petersen modeli: 3 ayrı neyral şəbəkə diqqətin müxtəlif aspektlərini idarə edir, hər biri fərqli beyin bölgəsi ilə əlaqəlidir",d:"expert"},
+  {q:"Şagirdin 'diqqəti yayınma' tezliyi ilə işlək yaddaş (working memory) tutumu arasındaki əlaqə:",o:["Heç bir əlaqə yoxdur","Zəif işlək yaddaş tez-tez diqqət yayınmasına səbəb olur — tapşırığı 'yadda saxlamaq' yükü diqqəti tükədir","Əlaqə yalnız əksinədir","Yaddaş diqqətdən asılı deyil"],a:1,e:"Working memory və sustained attention bir-birini qarşılıqlı təmin edir — WM tutumu azaldıqda, diqqəti saxlamaq da çətinləşir",d:"expert"},
+  {q:"'Mindfulness' (şüurlu diqqət) məşqlərinin sinifdə diqqətə təsiri haqqında tədqiqatlar nə deyir?",o:["Heç bir effekti yoxdur","Müntəzəm tətbiqdə sustained attention və emosional tənzimləməni yaxşılaşdıra bilər","Yalnız yetkinlər üçün işləyir","Diqqəti pisləşdirir"],a:1,e:"Meta-analizlər: qısa, müntəzəm mindfulness məşqləri (5-10 dəq) şagirdlərdə diqqət tənzimləməsini ölçülə bilən şəkildə yaxşılaşdırır",d:"hard"},
+  {q:"'Diqqət kapasitesi' (attentional capacity) yaşla necə dəyişir?",o:["Sabit qalır","Uşaqlıqdan yeniyetməliyə artır, PFC yetkinləşməsi ilə paralel inkişaf edir","Daim azalır","Yalnız genetik müəyyən olunur"],a:1,e:"Diqqət tənzimləməsi PFC-nin yetkinləşməsi ilə əlaqəli inkişaf xətti izləyir — bu, kiçik yaşlı şagirdlərdən daha az tələb gözləməyin elmi əsasıdır",d:"hard"},
+  {q:"Sinifdə 'seçici diqqəti' artırmaq üçün ən effektiv struktur dəyişikliyi:",o:["Daha çox material vermək","Tapşırığı vahid, aydın hədəfə endirmək, lazımsız stimulları azaltmaq","Sürəti artırmaq","Heç nə dəyişməmək"],a:1,e:"Seçici diqqət, rəqib stimulların azaldılması və hədəfin aydınlaşdırılması ilə effektiv şəkildə dəstəklənir (signal-to-noise prinsipinə bənzər)",d:"medium"},
 ];
 
 const _exec=[
@@ -5264,6 +5483,14 @@ const _dx=[
   {q:"Fonoloji farkındalıq disleksiyada niyə kritikdir?",o:["Sözləri tanımaq","Yazılı söz-səs bağlantısı qurmaq üçün; disleksiyada bu bağlantı zəifdir","Yazı gözəlliyi","Lüğət zənginliyi"],a:1,e:"Fonoloji işləmə teorisi (Shaywitz): disleksiyanın əsas defisiti fonem farkındalığındadır — hərfi/hecəni səslə bağlamaq çətindir",d:"hard"},
   {q:"'Double-deficit hypothesis' disleksiya kontekstindəki mənası:",o:["İki disleksiya növü var","Fonoloji işləmə + nominal adlandırma sürəti (RAN) hər ikisinin zəifliyi ən ağır oxu çətinliyini yaradır","İki müxtəlif beyin bölgəsi","İki müxtəlif diaqnoz"],a:1,e:"Wolf & Bowers (1999): phonological deficit + RAN deficit = double deficit — ən ağır ağırlıq",d:"expert"},
   {q:"Kompensasiya mexanizmi kimi güclü oxucuların beyin görüntüsü ilə disleksiyalı oxucuların fərqi:",o:["Heç fərq yoxdur","Disleksiyalı oxucular sağ yarımkürəni daha çox aktivləşdirir; kompensasiya olaraq sol temporal-parietal zəifliyini örtür","Sol yarımkürə daha aktiv","Frontal lob daha aktiv"],a:1,e:"fMRI araşdırmaları: disleksiyalılar sağ hemisphere stratejiyaları ilə kompensasiya edir — bu vaxtla uzunlayıcı intervensiyaya cavab verir",d:"expert"},
+  {q:"'Rapid Automatized Naming' (RAN) testi nəyi ölçür və niyə proqnostik dəyəri var?",o:["Yalnız sürəti","Tanış simvolları (rəng, rəqəm, hərf) sürətlə adlandırma qabiliyyəti — gələcək oxu sürətini güclü proqnozlaşdırır","Yalnız yaddaşı","Yalnız diqqəti"],a:1,e:"RAN aşağı performans, hələ formal oxu başlamazdan əvvəl, sonrakı disleksiya riskini proqnozlaşdırır — erkən müdaxilə üçün dəyərli marker",d:"expert"},
+  {q:"Şagird sözləri düzgün oxuyur amma çox yavaş və zəhmətlə (decoding əməliyyatı şüurludur). Bu hansı problemi göstərir?",o:["Heç bir problem yoxdur","Avtomatikləşmə (automaticity) çatışmazlığı — decoding işlək yaddaşı tükədir, anlamaq üçün resurs qalmır","Yalnız yavaş oxuyur, problemsizdir","Görmə problemi"],a:1,e:"LaBerge & Samuels automaticity teorisi: decoding avtomatikləşmədikdə bütün koqnitiv resurs ona sərf olunur, anlama (comprehension) üçün resurs qalmır",d:"expert"},
+  {q:"Orton-Gillingham metodunun 'sintetik fonika' (synthetic phonics) komponenti nəyi nəzərdə tutur?",o:["Sözləri bütöv əzbərləmək","Hərf-səs əlaqələrini ayrı-ayrı öyrədib, sonra onları sintez edərək söz oxumağı qurmaq","Yalnız şəkilli kitablar","Sözün mənasından başlamaq"],a:1,e:"Synthetic phonics: kiçik hissələrdən (fonem) böyüyə (söz) doğru, sistematik, ardıcıl tədris — Orton-Gillingham-ın əsas prinsiplərindən biri",d:"hard"},
+  {q:"Disleksiyalı şagirdlər üçün mətni 'chunking' (hissələrə bölmək) niyə effektivdir?",o:["Mətni qısaldır","İşlək yaddaş yükünü azaldır, hər hissəni emal edib davam etməyə imkan verir","Estetik görünüş üçündür","Yalnız uzun mətnlərdə işləyir"],a:1,e:"Chunking working memory yükünü idarə edilə bilən hissələrə bölür — disleksiyalı oxucularda WM tez-tez əlavə yük altında olur",d:"hard"},
+  {q:"'Morfoloji məlumatlılıq' (morphological awareness) disleksiya müdaxiləsində niyə faydalıdır?",o:["Heç bir faydası yoxdur","Söz kökü, prefiks, suffiks tanıma yolu ilə naməlum sözləri deşifrə etmə strategiyası verir — fonoloji yola alternativ yol açır","Yalnız qrammatika üçündür","Yalnız yazıda işlənir"],a:1,e:"Morfoloji yol (məs. 'oxu+yan+lar' parçalarını tanımaq) fonoloji decoding-dən asılı olmayan əlavə bir strategiya təmin edir",d:"expert"},
+  {q:"Dyslexia-friendly font (məs. OpenDyslexic) dizaynının əsas məqsədi:",o:["Estetik gözəllik","Hərflərin (b/d, p/q) vizual oxşarlığını azaltmaq, ağırlıq fərqi ilə oxunaqlılığı artırmaq","Mətni qısaltmaq","Rəngli etmək"],a:1,e:"Bu fontlar hərflərin alt hissəsini ağırlaşdıraraq güzgü-simvol konfuziyasını (b/d) azaltmağa çalışır — effektivliyi qarışıq tədqiqat nəticələrinə malikdir, amma çoxlarına kömək edir",d:"medium"},
+  {q:"Erkən müdaxilənin (early intervention) disleksiya nəticələrinə təsiri haqqında tədqiqatlar nə deyir?",o:["Heç bir təsiri yoxdur","Birinci-ikinci sinifdə başlanan müdaxilə, dördüncü sinifdən sonra başlanandan qat-qat effektivdir (Matthew effect-in qarşısını alır)","Yalnız yetkinlikdə işləyir","Müdaxilə vaxtı əhəmiyyətsizdir"],a:1,e:"Matthew effect: erkən oxu çətinliyi vaxtında həll olunmazsa, geriləmə illər keçdikcə kəskinləşir — pəncərə nə qədər erkən açılsa, nəticə bir o qədər yaxşıdır",d:"expert"},
+  {q:"Şagird sözləri tək-tək düzgün oxuyur amma cümlədəki mənanı tuta bilmir. Bu, hansı ayrı problemi göstərə bilər?",o:["Heç bir problem yoxdur, normaldır","Decoding bacarığı qorunub, amma dil anlama (language comprehension) komponenti zəifdir — Simple View of Reading modelinə görə ayrı defisit","Yalnız diqqətsizlikdir","Görmə problemi"],a:1,e:"Simple View of Reading: Reading = Decoding × Comprehension. Decoding yaxşı, comprehension zəif olarsa, bu fərqli profil — 'specific comprehension deficit' adlanır",d:"expert"},
 ];
 
 // ── BRAIN: DİSKALKULİYA (DC) ──────────────────────────
@@ -5271,6 +5498,14 @@ const _dc=[
   {q:"'Number sense' (ədəd hissi) diskalkuli araşdırmalarında nəyi bildirir?",o:["Rəqəmləri tanımaq","Miqdar anlayışı, ədədi üstünlük, xətti ədəd təsvirini intuisiya ilə qavramaq","Toplama bacarığı","Əzbərdən bilmək"],a:1,e:"Approximate Number System (ANS): anadangəlmə miqdar hissi; diskalkuli bu sistemin zəifliyidir (Butterworth, 2005)",d:"expert"},
   {q:"Matematiksəl öyrənmə çətinliklərindən danışan araşdırmacılar 'procedural' ilə 'conceptual' problemi niyə ayırd edir?",o:["Eynidir","Prosedural: alqoritm tətbiqini unutmaq; konseptual: məntiqi anlamama — müdaxilə yolları fərqlidir","Biri daha ciddidir","Yalnız prosedural var"],a:1,e:"Baroody (2003): prosedural bilik (necə) + konseptual bilik (niyə) ayrı öyrənmə sistemlərindən keçir; diskalkuli ikisini fərqli şəkildə etkiləyir",d:"expert"},
   {q:"'Concrete Manipulatives' (fiziki materiallar) diskalkuli müdaxiləsindəki rolunu açıqla:",o:["Oyun alətidir","Mücərrəd riyazi konseptlərə fiziki reprezentasiya yaradır — beyin sensomotor kanalı vasitəsilə dərin anlama qurur","Vaxt itkisidir","Yalnız körpələr üçündür"],a:1,e:"CRA hierarchyasında Concrete mərhələsi: fiziki manipulyasiya beyin çoxlu sensor kanallarını aktıvlaşdırır; disk üçün ən güclü müdaxilə nöqtəsi",d:"hard"},
+  {q:"'Subitizing' (sürətli miqdar tanıma) bacarığı diskalkuli diaqnostikasında nə üçün vacibdir?",o:["Heç bir əhəmiyyəti yoxdur","Saymadan kiçik miqdarları (1-4) dərhal tanıma qabiliyyəti — bunun zəifliyi ən erkən diskalkuli markeridir","Yalnız böyük ədədlər üçündür","Yalnız yetkinlərdə ölçülür"],a:1,e:"Subitizing erkən, sayma-əvvəli miqdar tanıma sistemidir — bu bacarığın zəifliyi məktəbəqədər yaşda belə diskalkuli riskini göstərə bilər",d:"expert"},
+  {q:"Şagird '23-dən 17 çıx' tapşırığında 23-17=14 alır (düzgün 6 əvəzinə). Mümkün xəta mənbəyi:",o:["Diqqətsizlik yalnız","Borrowing (ödünc alma) prosedurunda xəta — onluğu düzgün parçalamayıb, rəqəmləri sadəcə çıxıb (3-7 əvəzinə 7-3)",  "Toplama ilə qarışdırıb","Heç bir izah yoxdur"],a:1,e:"Bu klassik 'subtraction with regrouping' xətasıdır — şagird kiçik ədəddən böyüyü çıxarmaq əvəzinə, sadəcə fərqi alır, prosedural anlama boşluğunu göstərir",d:"hard"},
+  {q:"Diskalkuli ilə ümumi riyaziyyat çətinliyi (low math achievement) arasındaki diaqnostik fərq:",o:["Heç bir fərq yoxdur, eynidir","Diskalkuli spesifik, davamlı, IQ-dan asılı olmayan miqdar emalı defisitidir; ümumi çətinlik daha geniş, müxtəlif səbəblərdən yarana bilər","Diskalkuli daha yüngüldür","Ümumi çətinlik həmişə diskalkulidir"],a:1,e:"DSM-5 kriteriyalarına görə diskalkuli spesifik öyrənmə pozuntusudur — ümumi koqnitiv səviyyədən asılı olmayan, davamlı, neyrobioloji əsaslı defisitdir",d:"expert"},
+  {q:"'Riyazi anksiyete' (math anxiety) ilə diskalkuli arasındaki əlaqə necədir?",o:["Eyni şeydir","Riyazi anksiyete diskalkulinin nəticəsi ola bilər, amma anksiyete özü də (diskalkulisiz) performansı aşağı sala bilər — ikisi qarşılıqlı gücləndirir","Heç bir əlaqə yoxdur","Anksiyete həmişə diskalkulinin səbəbidir"],a:1,e:"Təkrarlanan uğursuzluq təcrübəsi anksiyete yaradır, anksiyete isə işlək yaddaşı tutur, performansı further azaldır — geri-bildirim dövrəsi (vicious cycle)",d:"expert"},
+  {q:"Say xəttinin (number line) diskalkuli müdaxiləsindəki əsas funksiyası:",o:["Estetik vasitədir","Ədədlər arasındaki məsafə və nisbi mövqeyi vizual-spasial şəkildə təsəvvür etməyə kömək edir","Yalnız böyük ədədlər üçündür","Hesablamanın yerini tutur"],a:1,e:"Number line training ANS-i (approximate number system) gücləndirir — tədqiqatlar bunun riyazi performansa transfer etdiyini göstərir",d:"hard"},
+  {q:"Diskalkuli şagird saat oxumaqda da çətinlik çəkir. Bu, hansı geniş prinsiplə izah olunur?",o:["Təsadüfi əlaqəsizlikdir","Saat oxumaq mücərrəd ədəd-məkan münasibətləri tələb edir — diskalkulinin əsas defisiti olan spasial-kəmiyyət inteqrasiyasına aiddir","Saat oxumaq riyaziyyatla əlaqəli deyil","Yalnız yaddaş problemi"],a:1,e:"Diskalkuli təkcə əməliyyatları deyil, hər hansı kəmiyyət-məkan münasibəti tələb edən tapşırığı (saat, pul, ölçü) əhatə edə bilir — geniş spektrli defisit",d:"expert"},
+  {q:"'Word problem' (məsələ həlli) diskalkuli şagirdlər üçün niyə bilavasitə hesablamadan daha çətindir?",o:["Mətni oxumaq çətindir yalnız","Mətni riyazi modelə çevirmək (formulation) əlavə koqnitiv addımdır — diskalkulidə bu konversiya da zəifləyir","Heç bir əlavə çətinlik yoxdur","Yalnız uzun mətnlərdə çətindir"],a:1,e:"Word problem həlli decoding+linguistic understanding+riyazi modelə çevirmə+hesablama tələb edir — diskalkuli bu zəncirin bir neçə nöqtəsində maneə yarada bilər",d:"hard"},
+  {q:"Erkən yaşda (məktəbəqədər) miqdar müqayisəsi tapşırıqlarında zəiflik göstərən uşaqlar üçün proqnoz:",o:["Heç bir proqnostik dəyəri yoxdur","Gələcək riyazi performansı statistik əhəmiyyətli dərəcədə proqnozlaşdırır — erkən skrininq və müdaxilə fürsəti yaradır","Yalnız genetik amillərlə bağlıdır","Avtomatik olaraq düzələcək"],a:1,e:"Longitudinal tədqiqatlar: məktəbəqədər miqdar müqayisəsi performansı 1-ci sinif riyaziyyat nəticələrini güclü proqnozlaşdırır — erkən müdaxilə pəncərəsi vacibdir",d:"expert"},
 ];
 
 // ── MƏTN ANALİZİ GENİŞLƏNDİRİLMİŞ ────────────────────
@@ -5284,6 +5519,13 @@ const _text_dim=[
 const _text_miq=[
   {q:"PISA tipli mətn tapşırığında 'reflect and evaluate' sual növünə nümunə:",o:["Mətnin baş qəhrəmanını tap","Müəllifin bu arqumentin dəstəyi kimi seçdiyi dəlillərin etibarlılığını qiymətləndir","Sözü lüğətdən tap","Mövzunu bir cümlə ilə yaz"],a:1,e:"PISA reflect/evaluate: oxucunun öz bilgisini/dəyərlərini mətni qiymətləndirməyə tətbiq etməsi — ən yüksək oxu səviyyəsi",d:"hard"},
   {q:"Tənqidi oxu (critical reading) adi anlayış oxusundan nəyi əlavə edir?",o:["Daha sürətli oxumaq","Müəllifin arqumentini meyarlara görə qiymətləndirmək, iddialar əsasını sorgulamaq","Daha çox sual verMəK","Bütün sözləri bilmək"],a:1,e:"Critical reading = analiz + qiymətləndirmə: 'müəllif nə deyir?' + 'niyə buna inanmalıyam?' + 'zəif tərəfləri varmı?'",d:"hard"},
+  {q:"Bir mətndə müəllif statistikanı seçici şəkildə təqdim edir (yalnız öz tezisini dəstəkləyən rəqəmləri göstərir). Bu, hansı tənqidi oxu bacarığı ilə aşkar edilir?",o:["Sürətli oxuma","Selective evidence (seçici dəlil) tanıma — müəllifin nəyi DAXİL ETMƏDİYİNİ sorgulamaq","Lüğət bilgisi","Qrammatik təhlil"],a:1,e:"Tənqidi oxucu yalnız təqdim olunan dəlili deyil, potensial olaraq buraxılmış əks-dəlilləri də nəzərə alır — confirmation bias-ın mətndəki əksi",d:"expert"},
+  {q:"İki mətn eyni hadisəni təsvir edir, amma fərqli söz seçimi ilə (məs. 'iğtişaş' vs 'etiraz aksiyası'). Bu fərq nəyi göstərir?",o:["Yalnız üslub fərqidir, məna eynidir","Framing (çərçivələmə) effekti — söz seçimi oxucunun hadisəyə baxışını formalaşdırır, 'neytral' təsvir nadir hallarda mövcuddur","Bir mətn həmişə yanlışdır","Söz seçimi əhəmiyyətsizdir"],a:1,e:"Linqvistik framing: eyni faktı təsvir edən fərqli sözlər oxucunun emosional və mənəvi qiymətləndirməsinə təsir edir — tənqidi oxu bu çərçivələməni tanımağı tələb edir",d:"expert"},
+  {q:"Bir arqumentativ mətndə 'hamı bilir ki...' ifadəsi işlədilir, heç bir mənbə göstərilmir. Tənqidi oxucu bu ifadəyə necə reaksiya verməlidir?",o:["Dərhal qəbul etmək, çünki 'hamı' deyilib","Şübhə ilə qarşılamaq — 'appeal to popularity' (populyarlığa müraciət) məntiqi yanılmasının əlaməti ola bilər, faktiki sübut deyil","Mətni tamamilə rədd etmək","Bu, həmişə düzgün arqumentdir"],a:1,e:"'Hamı bilir' ifadəsi çox vaxt sübutun olmamasını maskalayır — populyarlıq həqiqətin sübutu deyil, tənqidi oxucu konkret dəlil axtarmalıdır",d:"hard"},
+  {q:"Bir esse mətnində müəllif öz tezisinə zidd ola biləcək məlumatı qabaqcadan tanıyıb cavablandırır (anticipating counterargument). Bu, mətnin keyfiyyətinə necə təsir edir?",o:["Zəiflədir, çünki şübhə yaradır","Gücləndirir — mövzunun mürəkkəbliyini etiraf etmək və ona cavab vermək arqumentin dərinliyini və etibarlılığını göstərir","Heç bir təsiri yoxdur","Yalnız uzunluğu artırır"],a:1,e:"Əks-arqumenti qabaqcadan tanıyıb cavablandırmaq (Toulmin modeli: rebuttal) yazını birtərəfli təbliğatdan fərqləndirir, intellektual səmimiyyət göstərir",d:"hard"},
+  {q:"PISA tənqidi düşüncə çərçivəsində 'müəllifin məqsədini' müəyyənləşdirmək (informasiya vermək, inandırmaq, əyləndirmək) niyə vacibdir?",o:["Vacib deyil, məzmun əsasdır","Məqsəd mətnin necə oxunmalı olduğunu müəyyənləşdirir — inandırıcı mətn fərqli tənqidi süzgəcdən keçirilməlidir, informativ mətndən fərqli olaraq","Bütün mətnlər eyni məqsədə xidmət edir","Yalnız akademik mətnlərə aiddir"],a:1,e:"Müəllifin niyyətini (purpose) tanımaq oxu strategiyasını formalaşdırır — inandırıcı mətndə retorik texnikaları, informativ mətndə dəqiqliyi axtarmaq lazımdır",d:"expert"},
+  {q:"Bir mətndə 'tədqiqatlar göstərir ki...' deyilir, lakin hansı tədqiqat, neçə nəfər üzərində, hansı jurnalda dərc olunduğu göstərilmir. Bu, hansı tənqidi oxu probleminin nümunəsidir?",o:["Heç bir problem yoxdur","Qeyri-spesifik elmi istinad (vague scientific attribution) — sübutun yoxlanıla bilməməsi, etibarlılığın qiymətləndirilə bilməməsi","Mətn daha inandırıcıdır","Tədqiqat sözü kifayət edir"],a:1,e:"Konkret mənbə olmadan 'tədqiqatlar göstərir' ifadəsi yoxlanıla bilməz — tənqidi oxucu spesifiklik tələb etməli, qeyri-müəyyən istinadlara şübhə ilə yanaşmalıdır",d:"hard"},
+  {q:"Mətndə müəllif rəqəm təqdim edir: 'məhsulumuz 50% daha effektivdir' — amma müqayisə bazası göstərilmir (50% nədən çox?). Bu, hansı tənqidi oxu xətasını aşkarlayır?",o:["Heç bir xəta yoxdur, rəqəm aydındır","Müqayisə bazasının olmaması (missing baseline) — nisbi göstəricilər mütləq mənalı deyil, müqayisə nöqtəsi bilinmədən şərh edilə bilməz","50% həmişə yaxşı nəticədir","Rəqəmlər həmişə obyektivdir"],a:1,e:"'50% daha effektiv' — nədən çox? Köhnə versiyadan? Rəqibdən? Heç nədən? Müqayisə bazası olmadan faiz göstəricisi mənasız ola bilər — klassik marketinq statistikası manipulyasiyası",d:"expert"},
 ];
 
 // ── PISA LAB GENİŞLƏNDİRİLMİŞ ─────────────────────────
@@ -5291,16 +5533,46 @@ const _pisa=[
   {q:"PISA 2022-də riyazi savadlılığın 6 səviyyəsindən 5-6-cı səviyyə nəyi xarakterizə edir?",o:["Toplama-çıxma","Mürəkkəb sistemli düşüncə, model qurmaq, çoxperspektivli riyazi arqumentasiya","Kvadrat tənlik","Fraksiyalar"],a:1,e:"PISA math L5-6: kompleks modelləmə, kritik seçim, çoxlu qiymətləndirmə perspektivi — az şagird çatır",d:"expert"},
   {q:"PISA oxu savadlılığında 'continual text' ilə 'non-continual text' fərqi:",o:["Uzunluq fərqi","Continual: ardıcıl proza; non-continual: cədvəl, qrafik, xəritə, forma — PISA ikisini fərqli ölçür","Mövzu fərqi","Dil fərqi"],a:1,e:"PISA text format classification: narrative/expository/argumentative (continual) vs tables/graphs/forms (non-continual)",d:"hard"},
   {q:"PISA elmi savadlılığında 'scientific inquiry' (elmi araşdırma) bacarığı nəyi əhatə edir?",o:["Fakt əzbərləmək","Hipotez qurmaq, sınaqdan keçirmək, dəlillər əsasında nəticə çıxarmaq, şərh etmək","Kitabdan oxumaq","Müəllimi dinləmək"],a:1,e:"PISA science: 1) kontekst anlama, 2) elmi anlayış, 3) elmi metodologiya — inquiry cycle",d:"hard"},
+  {q:"PISA çərçivəsində 'multiple text comprehension' (çoxlu mətn anlama) bacarığı niyə müasir savadlılıq üçün vacib hesab olunur?",o:["Yalnız uzun mətnlər üçündür","Real dünyada məlumat tək mənbədən gəlmir — fərqli, bəzən ziddiyyətli mənbələri inteqrasiya etmək tələb olunur","Yalnız akademik kontekstdə lazımdır","Tək mətnlə işləmək kifayətdir"],a:1,e:"İnternet dövründə oxucular daim çoxlu, fərqli etibarlılıqda mənbədən keçir — PISA bu real-dünya bacarığını ölçür",d:"expert"},
+  {q:"PISA-da 'sahte xəbər' (misinformation) aşkar etmə bacarığı hansı geniş kateqoriyaya aiddir?",o:["Riyazi savadlılıq","Rəqəmsal/oxu savadlılığı — mənbə qiymətləndirməsi, müəllif niyyətini analiz etmə","Elmi savadlılıq","Heç birinə aid deyil"],a:1,e:"PISA 2018-dən etibarən mənbə etibarlılığını qiymətləndirmə bacarığı oxu savadlılığı çərçivəsinə daxil edilib — rəqəmsal dövrün tələbi",d:"hard"},
+  {q:"PISA-nın 'sample item' (nümunə sual) dizaynında niyə real-həyat konteksti (qəbz, reklam, sosial media post) istifadə olunur, mövzudan ayrı abstrakt sual əvəzinə?",o:["Yalnız maraqlı görünmək üçün","Bilik transferini ölçmək — şagird real situasiyada bacarığını tətbiq edə bilirmi, sadəcə əzbərləmə yox","Daha asan sual yaratmaq üçün","Tərcümə asanlığı üçün"],a:1,e:"PISA-nın əsas fəlsəfəsi: 'nə bilirsən' deyil, 'real situasiyada bunu tətbiq edə bilirsən mi' sualı — autentik kontekst transferi ölçür",d:"expert"},
+  {q:"PISA oxu mətnlərində 'mixed text' (qarışıq mətn növü) nümunəsi hansıdır?",o:["Yalnız nəsr","Bir maddi-texniki təlimatda həm izahlı mətn, həm diaqram, həm cədvəl birgə olması","Yalnız şeir","Yalnız elan"],a:1,e:"Mixed text continual və non-continual elementləri birləşdirir — real sənədlərdə (təlimatlar, hesabatlar) çox rast gəlinən format",d:"medium"},
+  {q:"PISA-nın 'reflect and evaluate' (düşün və qiymətləndir) oxu prosesi sualları niyə ən çətin hesab olunur?",o:["Ən uzun suallardır","Mətnin özündən kənara çıxıb, müəllifin etibarlılığını, məqsədini, formanı tənqidi qiymətləndirmək tələb edir","Ən qısa suallardır","Yalnız uşaqlar üçündür"],a:1,e:"Bu, ən yüksək koqnitiv tələbdir — sadə məlumat çıxarmaqdan fərqli, metakoqnitiv, tənqidi düşüncə tələb edir",d:"expert"},
+  {q:"PISA-nın elmi savadlılıq çərçivəsində 'epistemic knowledge' (epistemik bilik) nəyi bildirir?",o:["Faktları bilmək","Elmin necə işlədiyini, nəzəriyyə-dəlil əlaqəsini, elmi iddiaların necə əsaslandırıldığını anlamaq","Yalnız termin bilgisi","Laboratoriya bacarığı"],a:1,e:"Epistemik bilik 'elm necə işləyir' sualına aiddir — fərqli elm sahələrində metodların necə fərqləndiyini, nəticələrin necə doğrulandığını anlama",d:"expert"},
+  {q:"PISA-da 'situational interest' (situasion marağı) anlayışının tədris dizaynına təsiri:",o:["Heç bir təsiri yoxdur","Real, şagirdə tanış kontekstlərin istifadəsi qısa-müddətli marağı artırır, bu da öyrənmə davranışını gücləndirə bilər","Yalnız uzunmüddətli motivasiyaya aiddir","Marağın öyrənməyə təsiri yoxdur"],a:1,e:"PISA tapşırıq dizaynı situational interest nəzəriyyəsinə əsaslanır — tanış, əlaqəli kontekst diqqəti və işlənməni artırır",d:"hard"},
+  {q:"PISA-nın 'qlobal səriştə' (global competence) modulunun əlavə edilməsi hansı geniş təhsil trendini əks etdirir?",o:["Yalnız dil təhsili","Akademik biliyin yanında mədəniyyətlərarası anlama, davamlılıq, vətəndaşlıq kimi 'soft' bacarıqların ölçülməsi tələbi","Riyaziyyatın artırılması","Test formatının sadələşdirilməsi"],a:1,e:"21-ci əsr bacarıqları çərçivəsi: akademik biliklə yanaşı, qlobal vətəndaşlıq, mədəniyyətlərarası ünsiyyət kimi bacarıqlar da ölçülür",d:"hard"},
+  {q:"PISA testlərinin 'computer-based' formata keçməsinin (kağız əsaslı testdən fərqli) əsas pedaqoji əsaslandırması:",o:["Yalnız xərc qənaəti","Rəqəmsal mətnlərlə işləmə (scroll, hiperlink, çoxsaylı pəncərə) müasir oxu mühitini daha dəqiq əks etdirir","Yalnız sürət","Yalnız əlçatımlılıq"],a:1,e:"Müasir oxucular əksər mətnləri rəqəmsal mühitdə oxuyur — kağız test bu real oxu şəraitini simulyasiya etmir, CBA daha autentik ölçmə təmin edir",d:"expert"},
 ];
 
 // ── OPEN TASKS GENİŞLƏNDİRİLMİŞ ──────────────────────
 const _open_dim=[
   {q:"DİM tipli açıq tapşırıq: 'Azərbaycanda rəqəmsal transformasiya prosesini müsbət və mənfi aspektlər baxımından analiz edin.' — rubrika meyarları nədir?",o:["Yalnız dil","Məzmun dərinliyi+analiz+müqayisəli baxış+nəticə+dil keyfiyyəti","Yalnız statistika","Yalnız müsbət aspektlər"],a:1,e:"Açıq tapşırıq rubrikası: analiz dərinliyi, dəlil keyfiyyəti, arqumentasiya strukturu, dil keyfiyyəti",d:"medium"},
   {q:"'Modernizm realizmi əvəz etdi' iddiasını klassik Azərbaycan ədəbiyyatından nümunələrlə müzakirə edin' tapşırığında Bloom taksonomiyasının hansı səviyyəsi aktiv olur?",o:["Bilik","Anlama","Tətbiq","Qiymətləndirmə+Yaratma"],a:3,e:"Nümunə seçimi+dəlil+iddia qiymətləndirmə = Bloom-un Evaluate+Create zirvəsi",d:"hard"},
+  {q:"DİM açıq tapşırıqlarında 'tezis cümləsi' (thesis statement) niyə qiymətləndirmə meyarı kimi xüsusi əhəmiyyət daşıyır?",o:["Yalnız format tələbidir","Bütün esse yalnız bir mərkəzi iddia ətrafında qurulmalıdır — tezisin aydınlığı bütün strukturu müəyyən edir","Tezis yalnız girişdə lazımdır","Tezis nəticə bölməsinə aiddir"],a:1,e:"Aydın tezis cümləsi olmadan esse dağınıq görünür — bu, qiymətləndirici üçün ən tez aşkar olunan struktur problemdir",d:"medium"},
+  {q:"Açıq cavab tapşırıqlarında 'dəlil-əsaslı arqumentasiya' (evidence-based argumentation) hansı 3 komponentdən ibarətdir?",o:["Giriş, gövdə, nəticə","İddia (claim), dəlil (evidence), izah (reasoning/warrant)","Sual, cavab, izah","Mövzu, fikir, misal"],a:1,e:"CER modeli (Claim-Evidence-Reasoning): yalnız iddia kifayət deyil, onu dəstəkləyən konkret dəlil və dəlili iddiaya bağlayan izah da lazımdır",d:"hard"},
+  {q:"Müəllim DİM açıq tapşırığını qiymətləndirərkən 'halo effekti'ndən necə qaça bilər?",o:["Heç cür qaça bilməz","Hər meyarı ayrıca, əvvəlcədən təyin olunmuş rubrika ilə qiymətləndirərək, ümumi təəssüratdan təsirlənməməyə çalışaraq","Yalnız son nəticəyə baxaraq","Şagirdin adını bilmədən"],a:1,e:"Analitik rubrika istifadəsi (hər meyarın ayrıca qiymətləndirilməsi) halo effektini (bir müsbət xüsusiyyətin bütün qiymətə təsir etməsini) azaldır",d:"expert"},
+  {q:"'Tarixi sənədin tənqidi təhlili' tapşırığında şagirddən hansı bacarıq gözlənilir ki, bu, sadəcə məzmunu təkrarlamaqdan fərqlənsin?",o:["Sənədi əzbərləmək","Mənbənin perspektivini, kontekstini və potensial subyektivliyini qiymətləndirmək (source criticism)","Sənədi tərcümə etmək","Sənədi sürətlə oxumaq"],a:1,e:"Source criticism: tarixi sənədi 'kim, nə vaxt, niyə yazıb' sualları ilə tənqidi qiymətləndirmək — sadə təkrardan fərqli, analitik səviyyə",d:"hard"},
+  {q:"DİM esse qiymətləndirilməsində 'kohesiya' (cohesion) ilə 'koherensiya' (coherence) fərqi:",o:["Eynidir","Kohesiya: cümlələr arası dilçi əlaqə vasitələri (bağlayıcılar); koherensiya: bütün mətnin məntiqi ardıcıllığı","Koherensiya yalnız qrammatikaya aiddir","Kohesiya yalnız uzunluğa aiddir"],a:1,e:"Kohesiya səthi (lokal) əlaqədir — bağlayıcı sözlər, əvəzliklər; koherensiya dərin (qlobal) məntiqi vahidlikdir — hər ikisi yaxşı yazının fərqli aspektləridir",d:"expert"},
+  {q:"Açıq tapşırıqda 'qarşı-arqumentin' (counter-argument) daxil edilməsi niyə yüksək qiymətləndirilir?",o:["Yalnız uzunluğu artırır","Mövzunun mürəkkəbliyini tanımağı, tək-tərəfli olmayan, tənqidi düşüncəni nümayiş etdirir","Bu, vacib deyil","Qarşı-arqument həmişə əsas tezisi zəiflədir"],a:1,e:"Qarşı-arqumenti tanıyıb cavablandırmaq (rebuttal) yazının analitik dərinliyini göstərir — Toulmin arqumentasiya modelinin qabaqcıl elementi",d:"hard"},
+  {q:"DİM açıq tapşırığında 'ümumiləşdirmə həddindən artıq' (overgeneralization) xətası necə tanınır?",o:["Mətn çox qısa olduqda","Az sayda nümunədən bütün kateqoriya haqqında qəti iddia çıxarıldıqda","Mətn çox uzun olduqda","Heç vaxt xəta sayılmır"],a:1,e:"Overgeneralization: 'bir neçə əsərdə gördüyümə görə bütün dövr ədəbiyyatı belədir' kimi əsassız genişləndirmə — analitik yazıda ciddi çatışmazlıq",d:"hard"},
+  {q:"Esse qiymətləndirməsində 'orijinallıq' meyarı nəyi ölçür, plagiatdan fərqli olaraq?",o:["Heç nə ölçmür","Şagirdin öz müstəqil interpretasiyasını, fərqli perspektivdən yanaşmasını — hazır fikirlərin sadəcə təkrarından fərqli olaraq","Yalnız yaradıcı yazını ölçür","Orijinallıq yalnız bədii yazıda lazımdır"],a:1,e:"Orijinallıq plagiat deyil — şagirdin standart cavabı necə özünəməxsus şəkildə formalaşdırdığını, hansı əlavə bağlantı qurduğunu qiymətləndirir",d:"expert"},
+  {q:"DİM tarixi esse tapşırığında 'sinxron' (eyni dövr daxilində) və 'diaxron' (zaman üzrə dəyişmə) təhlil fərqi nədir?",o:["Eynidir","Sinxron: bir dövrün daxili xüsusiyyətlərini təhlil edir; diaxron: zaman keçdikcə dəyişikliyi izləyir","Sinxron daha çətindir","Diaxron yalnız ədəbiyyatda işlənir"],a:1,e:"Tarix metodologiyasında bu iki yanaşma fərqli sual tipləri yaradır — biri 'necə idi', digəri 'necə dəyişdi' sualına cavab axtarır",d:"expert"},
+  {q:"Açıq cavablı sualda 'mövqe sübutu' (substantiation) zəif olduqda ən çox hansı geri-bildirim verilir?",o:["Daha çox söz yazın","'Bu iddianı necə bilirsiniz?' — konkret mətn/məlumat istinadı tələb edən sual","Yazını sadəcə təkrarlayın","Heç bir geri-bildirim verilmir"],a:1,e:"Zəif sübut zamanı ən effektiv formativ feedback, şagirdi konkret dəlilə yönəltməkdir, ümumi 'daha yaxşı yazın' kimi qeyri-spesifik şərh deyil",d:"medium"},
 ];
 
 const _open_miq=[
   {q:"'Formativ qiymətləndirməni summativ prosesə inteqrasiya etmə' mövzusunda müəllim nümayiş verəcəyi sınıf situasiyasını dizayn edin.' — tapşırığın qiymətləndirmə meyarı:",o:["Uzunluq","Pedaqoji anlama dərinliyi, metodologiyanın kurikuluma uyğunluğu, praktiki tətbiq mümkünlüyü","Leksik zənginlik","Tarixə uyğunluq"],a:1,e:"MİQ açıq tapşırığı: teori bilik + tətbiq + situasiya həlli — rubrika bu 3 dimensiyanı ölçür",d:"hard"},
+  {q:"MİQ açıq tapşırığında 'sinif idarəetmə fəlsəfəsini izah edin' sualına cavabda ən vacib struktur elementi:",o:["Uzun siyahı","Konkret nəzəri çərçivəyə (məs. assertive discipline, restorative practices) istinad + real sinif nümunəsi","Yalnız qaydalar siyahısı","Yalnız şəxsi təcrübə"],a:1,e:"MİQ qiymətləndiriciləri nəzəri əsaslandırma ilə praktiki tətbiqin birləşməsini axtarır — sadəcə təcrübə kifayət deyil, elmi çərçivəyə bağlama lazımdır",d:"expert"},
+  {q:"'Differensiallaşdırılmış qiymətləndirmə' mövzusunda esse yazarkən şagird (müəllim namizədi) hansı tələ ilə qarşılaşa bilər?",o:["Çox qısa yazmaq","Diferensiasiyani 'asanlaşdırma' ilə qarışdırmaq — standartı aşağı salmaqla fərqli dəstəyi qarışdırmaq","Çox uzun yazmaq","Heç bir tələ yoxdur"],a:1,e:"Diferensiasiya standartı aşağı salmaq demək deyil — eyni öyrənmə nəticəsinə müxtəlif yollarla çatmaq deməkdir. Bu fərqi çaşdırmaq klassik konseptual xətadır",d:"expert"},
+  {q:"MİQ pedaqoji ssenari tapşırığında 'müşahidə' ilə 'mühakimə' ayrımı niyə vacibdir?",o:["Vacib deyil","Müşahidə obyektiv faktdır (şagird 3 dəfə cavab vermədi); mühakimə subyektiv yorumdur (şagird tənbəldir) — analiz obyektiv müşahidədən başlamalıdır","Mühakimə həmişə daha vacibdir","İkisi eynidir"],a:1,e:"Pedaqoji qərarlar obyektiv müşahidəyə əsaslanmalıdır, qabaqcadan formalaşmış mühakimələrə deyil — bu, ədalətli qiymətləndirmənin əsasıdır",d:"expert"},
+  {q:"'Sinif daxilində konflikt həlli strategiyası təklif edin' tapşırığında ən zəif cavablar adətən hansı xüsusiyyəti göstərir?",o:["Çox detallıdır","Tək-ölçülü həll təklif edir (yalnız cəza və ya yalnız bağışlama) — kontekstə həssas olmayan",  "Çox qısadır","Elmi termin işlədir"],a:1,e:"Zəif cavablar adətən bir-ölçülü, kontekst-həssas olmayan həll təklif edir — güclü cavab situasiyaya uyğun çoxsaylı strategiya təqdim edir",d:"hard"},
+  {q:"MİQ-də 'pedaqoji məzmun bilik' (PCK - Pedagogical Content Knowledge) anlayışını izah edən esse hansı 2 komponenti birləşdirməlidir?",o:["Yalnız fənn bilik","Fənn biliyi + bu bilyi necə öyrətmək lazım olduğu bilik (şagird səhvlərini, çətinliklərini anlama)","Yalnız tədris metodu","Yalnız qiymətləndirmə bilik"],a:1,e:"Shulman (1986) PCK konsepti: sadəcə fənni bilmək kifayət deyil, onu necə öyrətmək, hansı tipik səhvlər yarana biləcəyini bilmək lazımdır",d:"expert"},
+  {q:"'Sinifdə texnologiya inteqrasiyası' mövzusunda MİQ esse-də TPACK modelinin əhəmiyyəti:",o:["Heç bir əhəmiyyəti yoxdur","Texnologiya, pedaqogika və məzmun biliyinin kəsişməsində effektiv tədris baş verir — sadəcə texnologiya əlavə etmək kifayət deyil","Yalnız texniki bacarıq lazımdır","TPACK yalnız İT dərslərinə aiddir"],a:1,e:"TPACK (Mishra & Koehler): texnologiyanın effektiv istifadəsi onun pedaqoji məqsədə və məzmuna necə uyğunlaşdırıldığından asılıdır, özlüyündə deyil",d:"expert"},
+  {q:"MİQ açıq tapşırığında 'inklüziv tədris mühiti' təsviri yazarkən hansı geniş yayılmış səhv olur?",o:["Çox spesifik olmaq","İnklüzivliyi yalnız əlilliklə məhdudlaşdırmaq, halbuki dil, mədəniyyət, sosioiqtisadi fərqləri unutmaq","Çox geniş yazmaq","Heç bir səhv yoxdur"],a:1,e:"İnklüzivlik geniş anlayışdır — əlillik, dil baryeri, mədəni fərq, sosioiqtisadi vəziyyət hamısı inklüziv mühit dizaynına daxildir",d:"hard"},
+  {q:"'Müəllim-şagird münasibətinin akademik nəticəyə təsiri' essesi yazarkən hansı tədqiqat konsepti ən çox istinad edilməlidir?",o:["Hawthorne effekti","Pygmalion effekti (müəllim gözləntisinin şagird performansına təsiri)","Halo effekti","Dunning-Kruger effekti"],a:1,e:"Rosenthal & Jacobson (1968): müəllimin şagirddən gözləntisi (yüksək və ya aşağı) faktiki performansı formalaşdıra bilir — self-fulfilling prophecy",d:"expert"},
+  {q:"MİQ pedaqoji ssenaridə 'erkən müdaxilə' (early intervention) prinsipinin tətbiqi nə üçün vacibdir?",o:["Vacib deyil, hər zaman düzəlmə olur","Akademik/davranış problemləri vaxtında aşkar edilməzsə, çatışmazlıq Matthew effekti ilə kəskinləşir","Yalnız kiçik yaş üçündür","Erkən müdaxilə xərclidir, ona görə tövsiyə olunmur"],a:1,e:"Matthew effect: erkən kiçik fərqlər vaxtında həll olunmazsa illər keçdikcə böyüyür — erkən müdaxilə həm pedaqoji, həm iqtisadi cəhətdən daha effektivdir",d:"expert"},
+  {q:"'Sinif qaydalarının yaradılmasında şagird iştirakı' mövzusunda esse yazarkən autonomiya-dəstəkləyici (autonomy-supportive) yanaşmanın əsas arqumenti:",o:["Şagirdlər qayda yaratmağı bacarmır","Qaydaların yaradılmasında iştirak daxili motivasiyanı və qaydalara sahiblənməni artırır","Müəllim həmişə tək qərar verməlidir","Bu, vaxt itkisidir"],a:1,e:"Self-Determination Theory (Deci & Ryan): autonomiya hissinin verilməsi daxili motivasiyayı gücləndirir — tətbiq olunmuş deyil, sahiblənilmiş qaydalar daha yaxşı işləyir",d:"expert"},
+  {q:"MİQ-də 'qiymətləndirmə ədalətliliyi' (assessment fairness) mövzusunda esse yazarkən hansı 2 fərqli ədalət anlayışı ayırd edilməlidir?",o:["Eynidir","Bərabərlik (hamıya eyni) vs ekvitə (hər kəsin ehtiyacına uyğun dəstək) — fərqli fəlsəfi yanaşmalar","Yalnız bərabərlik var","Yalnız ekvitə var"],a:1,e:"Equality (hamıya eyni rəftar) və equity (ehtiyaca görə fərqli dəstək, eyni nəticəyə çatmaq üçün) fərqli fəlsəfi əsaslara malikdir — qiymətləndirmə dizaynında bu seçim vacibdir",d:"expert"},
 ];
 
 if(!QDB['brain.memory'])QDB['brain.memory']=[];
@@ -5532,6 +5804,48 @@ if(!QDB['open.dim'])QDB['open.dim']=[];
 if(!QDB['open.miq'])QDB['open.miq']=[];
 (function(){for(var _i=0;_i<_open_miq.length;_i++)QDB['open.miq'].push(_open_miq[_i]);})();
 
+// ── OPEN TASK: CAVAB NÜMUNƏLƏRİ (worked exemplars) ────
+QDB['open.samples']=[
+  {q:"NÜMUNƏ TƏHLİLİ: Aşağıdaki şagird cavabını oxuyun — 'Modernizm köhnə qaydaları rədd edir, realizm isə həyatı olduğu kimi göstərir. Bunlar fərqlidir.' Bu cavab hansı bal aralığını alardı (100 üzərindən) və niyə?",o:["90-100, mükəmməldir","30-40 — tezis var amma dəlil, müqayisə dərinliyi və konkret əsər nümunəsi yoxdur","60-70, ortadır","0, tamamilə yanlışdır"],a:1,e:"Bu cavab səthi anlama göstərir (tərif səviyyəsi) amma analiz, dəlil və konkret nümunə yoxdur — yüksək bal üçün bunlar mütləqdir",d:"hard"},
+  {q:"NÜMUNƏ TƏHLİLİ: Yüksək bal alan cavab adətən hansı struktura malikdir? ('Sovet dövründə senzura ədəbiyyata təsir etdi' tezisi üzərindən)",o:["Yalnız tezisi təkrarlamaq","Tezis → konkret tarixi/ədəbi nümunə → bu nümunənin tezisi necə dəstəklədiyinin izahı → daha geniş nəticə","Yalnız nümunələr siyahısı","Yalnız şəxsi rəy"],a:1,e:"Güclü akademik yazı strukturu: iddia, dəlil, izah (warrant), sintez — bu PEEL (Point-Evidence-Explain-Link) modelinə uyğundur",d:"medium"},
+  {q:"NÜMUNƏ TƏHLİLİ: Bir şagird riyazi məsələni düzgün həll edib amma izahını yazmayıb (yalnız ədədlər). Bu, tam bal alır mı?",o:["Bəli, cavab düzgündürsə kifayətdir","Çox vaxt yox — PISA/DİM açıq tapşırıqlarında 'mühakimə prosesinin göstərilməsi' ayrıca qiymətləndirilir","Həmişə tam bal alır","Heç vaxt bal almır"],a:1,e:"Riyazi savadlılıqda təkcə düzgün cavab kifayət deyil — mühakimə prosesinin (reasoning) göstərilməsi ayrıca meyar kimi qiymətləndirilir, çünki bu, anlama dərinliyini sübut edir",d:"hard"},
+  {q:"NÜMUNƏ TƏHLİLİ: 'Mən bu mövzuda çox fikirləşdim və nəticədə qənaətə gəldim ki...' kimi başlayan giriş cümləsinin akademik yazıda problemi:",o:["Heç bir problem yoxdur","Şəxsi proses təsviri əvəzinə, birbaşa tezisi təqdim etmək daha effektiv akademik konvensiyadır","Çox qısadır","Qrammatik xətadır"],a:1,e:"Akademik yazı konvensiyaları proses-yönümlü deyil, nəticə-yönümlü açılış tələb edir — oxucu dərhal əsas iddianı bilməlidir",d:"medium"},
+  {q:"NÜMUNƏ TƏHLİLİ: İki şagird eyni dəqiqlikdə cavab verib, amma biri 'bəlkə', 'ola bilsin' kimi hedge sözlərdən, digəri qəti dildən istifadə edib. Akademik kontekstdə fərq:",o:["Hedge sözlər həmişə zəiflikdir","Hedge düzgün yerdə (qeyri-müəyyənlik real olduqda) elmi səhihlik göstərir; lazımsız yerdə inamsızlıq kimi görünür","Qəti dil həmişə düzgündür","Fərq yoxdur"],a:1,e:"Elmi yazıda hedging (ehtiyatlı dil) həqiqi qeyri-müəyyənliyi düzgün ifadə edəndə güclüdür, amma əsl bilinən faktları da hedge etmək zəiflik kimi qiymətləndirilir",d:"expert"},
+  {q:"NÜMUNƏ TƏHLİLİ: Esse-də 'bəzi tarixçilər deyir ki...' ifadəsi işlədilib, amma heç bir tarixçi adı və ya mənbə göstərilməyib. Bu, qiymətləndirmədə hansı problemi yaradır?",o:["Heç bir problem yoxdur","Qeyri-spesifik mənbə istinadı (vague attribution) — sübut gücü zəifdir, yoxlanıla bilməz","Çox detallıdır","Qrammatik xətadır"],a:1,e:"Akademik yazıda spesifik mənbə (kim, nə vaxt) sübutun yoxlanıla bilməsini təmin edir — qeyri-müəyyən 'bəziləri deyir' arqumenti zəiflədir",d:"hard"},
+  {q:"NÜMUNƏ TƏHLİLİ: Cavabda mövzudan kənara çıxma (tangent) var — əsas sualdan uzaqlaşıb əlaqəli, amma soruşulmayan mövzuya keçilib. Bu nə üçün bal itkisinə səbəb olur?",o:["Heç vaxt bal itkisinə səbəb olmur","Fokus (relevance) meyarı — cavab birbaşa soruşulan suala xidmət etməlidir, əlaqəli olsa belə kənar mövzu diqqəti yayındırır","Əksinə bal artırır","Yalnız uzunluğa təsir edir"],a:1,e:"Relevance (uyğunluq) əksər rubrikalarda ayrıca meyardır — geniş bilik nümayişi sualın özünə cavab verməyi əvəz etmir",d:"medium"},
+  {q:"NÜMUNƏ TƏHLİLİ: Şagird düzgün terminologiya işlədir ('paradiqma', 'dialektika') amma terminləri düzgün kontekstdə istifadə etmir. Bu, hansı təsir buraxır?",o:["Bal artırır, çünki mürəkkəb sözlərdir","Səthi göstərici kimi qiymətləndirilir — termin bilgisi anlama ilə bərabər deyil, səhv istifadə əksinə anlama boşluğunu üzə çıxarır","Heç bir təsiri yoxdur","Yalnız üslub məsələsidir"],a:1,e:"Mürəkkəb terminologiya yalnız düzgün anlaşılıb tətbiq edildikdə dəyərlidir — yanlış kontekstdə istifadə, əksinə, konseptual qarışıqlığı göstərir",d:"expert"},
+  {q:"NÜMUNƏ TƏHLİLİ: Bir cavab həm 'çox güclü, mütləq' (DİM rubrikası üçün), həm 'ortabab' (beynəlxalq PISA standartı üçün) qiymətləndirilə bilərmi?",o:["Xeyr, qiymət universal olmalıdır","Bəli — fərqli rubrikalar fərqli prioritetlərə malikdir (DİM məzmun dərinliyini, PISA tətbiqi/transferi daha çox vurğulayır)","Yalnız bir sistem düzgündür","Bu, qeyri-mümkündür"],a:1,e:"Qiymətləndirmə kontekst-asılıdır — eyni cavab fərqli çərçivələrdə (yerli imtahan vs beynəlxalq standart) fərqli prioritetlərə görə fərqli qiymətləndirilə bilər",d:"expert"},
+  {q:"NÜMUNƏ TƏHLİLİ: Qiymətləndirici eyni keyfiyyətdə iki cavaba fərqli bal verib, çünki biri daha 'gözəl' yazılıb (xəttat, üslub). Bu hansı qərəzin nümunəsidir?",o:["Heç bir qərəz yoxdur, normaldır","Halo effekti — səthi keyfiyyət (üslub, xəttatlıq) məzmun keyfiyyəti haqqında mühakiməyə təsir edir","Bu, düzgün qiymətləndirmədir","Confirmation bias"],a:1,e:"Halo effekti: bir müsbət xüsusiyyət (gözəl üslub) digər, əslində ayrı meyarların (məzmun dərinliyi) qiymətinə qeyri-obyektiv təsir göstərir — buna görə analitik rubrika vacibdir",d:"expert"},
+];
+
+// ── OPEN TASK: QİYM�ƏTLƏNDİRMƏ MEYARLARI (rubric literacy) ─
+QDB['open.rubrics']=[
+  {q:"Analitik rubrikada hər meyar üçün ayrıca bal verilir. Bunun əsas üstünlüyü:",o:["Daha sürətli qiymətləndirmə","Şagirdə hansı konkret sahədə güclü/zəif olduğunu dəqiq göstərir, formativ feedback üçün daha faydalıdır","Daha az dəqiqdir","Yalnız müəllim üçün asandır"],a:1,e:"Analitik rubrika 'məzmun yaxşı, struktur zəif' kimi diaqnostik məlumat verir — holistik (tək ümumi bal) bunu etmir",d:"medium"},
+  {q:"'4-bal rubrik şkalası' (1=Başlanğıc, 2=İnkişaf edən, 3=Bacarıqlı, 4=Nümunəvi) niyə 5 və ya daha çox səviyyəli şkaladan üstün ola bilər?",o:["Həmişə üstündür","Cüt sayda səviyyə 'orta' qiyməti aradan götürür, qiymətçini daha qəti mühakiməyə vadar edir","Daha sürətlidir yalnız","Heç bir fərq yoxdur"],a:1,e:"Tək ortabab seçim (3-cü səviyyə 5-lik şkalada) qiymətçilərin 'təhlükəsiz' orta seçimə getmə tendensiyasını artırır — cüt şkala bunun qarşısını alır",d:"hard"},
+  {q:"Rubrikada 'qismən düzgün' kateqoriyasının dəqiq təsviri olmadıqda hansı problem yaranır?",o:["Heç bir problem yoxdur","İnter-rater reliability (qiymətçilər arası uyğunluq) aşağı düşür — hər qiymətçi öz subyektiv standartını tətbiq edir","Qiymətləndirmə daha sürətli olur","Şagirdlər daha yaxşı performans göstərir"],a:1,e:"Aydın olmayan kateqoriya tərifləri qiymətçilər arası fərqli interpretasiyaya səbəb olur — bu, qiymətləndirmənin etibarlılığını (reliability) azaldır",d:"expert"},
+  {q:"'Holistic rubric' (bütöv qiymətləndirmə) hansı kontekstdə analitikdən daha praktikdir?",o:["Heç vaxt","Çox böyük həcmli summativ qiymətləndirmələrdə (məs. milli imtahan), sürət vacib olduqda və ümumi keyfiyyət təəssüratı kifayət etdikdə","Həmişə formativ qiymətləndirmədə","Yalnız riyaziyyatda"],a:1,e:"Holistic rubric daha sürətlidir, böyük miqyaslı standartlaşdırılmış qiymətləndirmələr üçün praktiki ola bilər, lakin diaqnostik dəyəri azdır",d:"hard"},
+  {q:"Rubrikanın 'descriptor' (təsvir) hissəsi nə üçün konkret nümunələrlə yazılmalıdır ('yaxşı arqumentasiya' əvəzinə 'ən azı 2 konkret dəlil göstərir')?",o:["Daha gözəl görünür","Subyektivliyi azaldır, qiymətçi və şagird arasında ortaq başa düşmə yaradır","Heç bir fərqi yoxdur","Yalnız uzunluğu artırır"],a:1,e:"Konkret, ölçülə bilən descriptor-lar ('ən azı 2 dəlil') subyektiv ifadələrdən ('yaxşı') daha etibarlı və şəffaf qiymətləndirmə təmin edir",d:"medium"},
+  {q:"Bir rubrikada 'dil keyfiyyəti' meyarının çəkisi (max bal) 'məzmun dərinliyi'ndən çox olduqda hansı risk yaranır?",o:["Heç bir risk yoxdur","Səthi yazı keyfiyyəti dərin, mənalı amma az 'şlifə edilmiş' cavabdan daha yüksək qiymətləndirilə bilər — konstrukt etibarlılığı (construct validity) zədələnir","Bu, həmişə düzgündür","Yalnız ədəbiyyat dərslərinə aiddir"],a:1,e:"Construct validity: rubrika ölçmək istədiyi şeyi (məzmun bilgisi) həqiqətən ölçməlidir — yanlış çəkiləndirmə fərqli, niyyət edilməmiş bir şeyi ölçməyə səbəb olur",d:"expert"},
+  {q:"Qiymətçilərin rubrikanı tutarlı tətbiq etdiyini yoxlamaq üçün 'calibration session' (kalibrasiya iclası) nəyə xidmət edir?",o:["Vaxt itkisidir","Bir neçə nümunə cavabı birgə qiymətləndirib, fərqləri müzakirə edərək rubrikanın tətbiqini standartlaşdırmağa","Yalnız yeni qiymətçilər üçündür","Rubrikanı dəyişdirmək üçündür"],a:1,e:"Calibration: bir neçə nümunə üzərində birgə qiymətləndirmə aparıb fərqli interpretasiyaları uzlaşdırmaq — inter-rater reliability-ni artırmağın standart yoludur",d:"hard"},
+  {q:"'Single-point rubric' (tək-nöqtə rubrika, yalnız 'gözlənilən standart' təsvir edilir, aşağı/yuxarı sütun yoxdur) hansı üstünlüyə malikdir?",o:["Daha az detallıdır, ona görə zəifdir","Şagirdi əvvəlcədən 'aşağı performans' kateqoriyasına yönləndirmir, fərdiləşdirilmiş feedback yazmağa sərbəstlik verir","Yalnız müəllim rahatlığı üçündür","Heç bir üstünlüyü yoxdur"],a:1,e:"Single-point rubric standart kateqoriyalara bağlanmadan, hər şagirdin spesifik güclü/zəif tərəflərinə uyğun fərdi şərh yazmağa imkan verir — daha şəxsiləşdirilmiş feedback",d:"expert"},
+  {q:"Rubrikada 'creativity' (yaradıcılıq) meyarının obyektiv qiymətləndirilməsi niyə xüsusilə çətindir?",o:["Heç çətin deyil","Yaradıcılığın tərifi subyektivdir, amma 'gözlənilməz, lakin effektiv həll' kimi əməliyyat tərifləri (operational definition) müəyyən qədər obyektivləşdirə bilər","Yaradıcılıq qiymətləndirilə bilməz","Yalnız sənət dərslərinə aiddir"],a:1,e:"Soyut keyfiyyətlər (yaradıcılıq, orijinallıq) əməliyyat tərifi (operational definition) ilə daha ölçülə bilən hala gətirilə bilər, məsələn 'gözlənilməyən, lakin problemə uyğun həll'",d:"expert"},
+  {q:"Şagirdlərə öncədən rubrika paylaşmaq (transparency) öyrənmə nəticəsinə necə təsir edir?",o:["Heç bir təsiri yoxdur","Şagirdlər gözləntiləri anlayaraq özünütənzimləmə (self-regulation) ilə işləyə bilir, performans adətən yaxşılaşır","Şagirdləri 'sadəcə bal üçün' işləməyə vadar edir, mənfi təsir","Rubrika gizli saxlanmalıdır"],a:1,e:"Şəffaf rubrika şagirdə uğur meyarlarını əvvəlcədən göstərir — bu, özünütənzimləyici öyrənməni (self-regulated learning) dəstəkləyir",d:"medium"},
+];
+
+// ── OPEN TASK: EKSPERT YOXLAMASI (calibration tasks) ──
+QDB['open.expert']=[
+  {q:"İki qiymətçi eyni essesi fərqli qiymətləndirib (75 vs 90). Ekspert moderator kimi, fərqi həll etmək üçün ilk addımınız:",o:["Ortalamasını götürmək","Hər iki qiymətçidən öz qiymətini rubrika meyarlarına istinad edərək əsaslandırmasını istəmək, sonra fərqin mənbəyini müəyyənləşdirmək","Daha yüksək balı qəbul etmək","Üçüncü qiymətçi çağırmaq, müzakirə etmədən"],a:1,e:"Moderasiya prosesi əvvəlcə fərqin SƏBƏBİNİ anlamağa çalışır (rubrikanın fərqli interpretasiyası, yoxsa faktiki səhv) — sadəcə ortalama almaq problemi maskalayır, həll etmir",d:"expert"},
+  {q:"Bir milli imtahan miqyasında min yüzlərlə esse qiymətləndirilir. Sistemik qərəzi (bias) aşkar etmək üçün hansı statistik yoxlama aparılmalıdır?",o:["Heç bir yoxlama lazım deyil","Qiymətçi-əsaslı qiymət paylanmasını müqayisə etmək — bir qiymətçinin sistematik şəkildə həmişə yüksək/aşağı verdiyini aşkar etmək (rater severity analizi)",  "Yalnız ortalamaya baxmaq","Yalnız ən yüksək balları yoxlamaq"],a:1,e:"Rater severity/leniency analizi (məs. Many-Facet Rasch Model) hər qiymətçinin sistematik 'sərt' və ya 'yumşaq' olub-olmadığını aşkar edir — böyük miqyaslı qiymətləndirmənin ədalətliliyi üçün vacibdir",d:"expert"},
+  {q:"Ekspert qiymətçi, şagird cavabında qrammatik səhvlər çox olsa da, fikrin dərin və orijinal olduğunu görür. Hansı prinsipə əsasən qiymətləndirməlidir?",o:["Qrammatika həmişə əsas meyardır","Konstrukt-uyğun qiymətləndirmə — əgər ölçülən konstrukt 'fikrin keyfiyyəti'dirsə, dil səhvləri ayrı meyar kimi (əgər varsa) qiymətləndirilməli, məzmunu örtməməlidir","Bu cavab avtomatik aşağı bal alır","Qrammatika tamamilə nəzərə alınmır"],a:1,e:"Construct-relevant variance: əgər tapşırıq fikrin keyfiyyətini ölçürsə, dil dəqiqliyi ayrı (construct-irrelevant) faktordur, qarışdırılmamalıdır — bu, ədalətli qiymətləndirmənin əsas prinsipidir",d:"expert"},
+  {q:"Ekspert səviyyəsində 'borderline case' (sərhəd həddi cavab, məs. tam keçid balına 1 bal qalan) necə həll edilir?",o:["Həmişə aşağı qiymətləndirilir","İkinci qiymətçinin müstəqil rəyi alınır, fərq varsa üçüncü ekspert/moderator qərarı son sözü deyir","Həmişə yuxarı yuvarlaqlaşdırılır","Şagirdə yenidən test verilir"],a:1,e:"Borderline cases üçün double-marking (ikinci müstəqil qiymətləndirmə) standart praktikadır — yüksək-stake qərarlarda tək qiymətçinin mühakiməsinə etibar edilmir",d:"hard"},
+  {q:"Ekspert reviewer, AI-əsaslı avtomatik esse qiymətləndirmə sisteminin insan qiymətçi ilə 85% uyğunluq göstərdiyini aşkar edib. Bu, kifayət qədər yaxşıdır mı?",o:["Bəli, mükəmməldir","Kontekstdən asılı — aşağı-stake formativ tapşırıq üçün kifayət edə bilər, amma yüksək-stake qərar (universitetə qəbul) üçün 15% uyğunsuzluq çox riskli ola bilər",  "Xeyr, heç vaxt kifayət deyil","Faiz əhəmiyyətsizdir"],a:1,e:"Qərarın 'stakes'-i (nəticələrin ağırlığı) qəbul edilə bilən səhv həddini müəyyənləşdirir — aşağı-stake formativ təcrübədə 85% uyğunluq adekvat ola bilər, yüksək-stake qərarlarda çox risklidir",d:"expert"},
+  {q:"Ekspert qiymətçi essedə 'mükəmməl strukturlaşdırılmış, lakin səthi' cavab ilə 'dağınıq strukturlu, lakin dərin fikirli' cavab arasında seçim etməlidir (eyni ümumi bal). Hansı prinsip kömək edir?",o:["Həmişə struktur üstündür","Rubrikanın çəkiləndirilməsinə (hansı meyar daha çox bal daşıyır) qayıtmaq — şəxsi seçimə deyil, əvvəlcədən təyin olunmuş prioritetə əsaslanmaq","Həmişə fikir dərinliyi üstündür","Şəxsi zövqə əsasən qərar vermək"],a:1,e:"Ekspert qiymətləndirmə şəxsi zövqdən deyil, əvvəlcədən razılaşdırılmış rubrika çəkilərindən (weighting) çıxış etməlidir — bu, subyektivliyi minimuma endirir",d:"expert"},
+  {q:"Bir ekspert reviewer, qiymətləndirmə zamanı özündə 'fatigue effect' (uzun müddət qiymətləndirmədən sonra standartların qeyri-şüuri sərtləşməsi/yumşalması) hiss edir. Tövsiyə olunan həll:",o:["Davam etmək, fərq yoxdur","Müntəzəm fasilələr almaq, hər sessiyanın əvvəlində kalibrasiya nümunəsi yenidən qiymətləndirmək ki, drift aşkar edilsin","Daha sürətli işləmək","Yalnız son cavabları yoxdan keçirmək"],a:1,e:"Rater drift (qiymətləndirmə müddəti uzandıqca standartların sürüşməsi) bilinən fenomendir — müntəzəm kalibrasiya yoxlamaları bunun qarşısını alır",d:"expert"},
+  {q:"Ekspert səviyyəsində, bir şagirdin cavabı texniki cəhətdən rubrikaya uyğun gəlmir, amma qeyri-adi dərəcədə dərin fəlsəfi məzmun göstərir. Ən düzgün yanaşma:",o:["Rubrikaya sərt riayət edib aşağı qiymətləndirmək","Rubrikanın əhatə etmədiyi keyfiyyəti qeyd edib, moderasiya prosesinə təqdim etmək — fərdi qərar əvəzinə institutsional prosesə yönəltmək","Şəxsi mühakimə ilə yüksək bal vermək","Cavabı etibarsız hesab etmək"],a:1,e:"Rubrikanın gözləmədiyi istisna hallarda fərdi sapma əvəzinə, institutsional moderasiya prosesinə yönəltmək ədalətliliyi və şəffaflığı qoruyur",d:"expert"},
+  {q:"Ekspert qiymətçilər arasında 'severity drift' (zaman keçdikcə tələbkarlığın artması) hansı nəticəyə səbəb ola bilər?",o:["Heç bir nəticəyə","Sonradan qiymətləndirilən cavablar, əvvəl qiymətləndirilənlərlə eyni keyfiyyətdə olsa belə, sistematik aşağı bal ala bilər — ədalətsizlik yaranır","Yalnız müsbət təsiri var","Bu, normal və gözlənilən haldır, düzəliş lazım deyil"],a:1,e:"Severity drift sıralama effektini yaradır — eyni keyfiyyətli iş, qiymətləndirmə ardıcıllığında harada olmasından asılı olaraq fərqli bal ala bilər, bu, ciddi etibarlılıq problemidir",d:"expert"},
+  {q:"Ekspert reviewer kimi, bir qiymətləndirmə sistemini auditə cəlb edərkən ən vacib sual hansıdır?",o:["Sistemin nə qədər sürətli işlədiyi","Sistemin ölçmək istədiyini həqiqətən ölçüb-ölçmədiyi (validity) və ardıcıl tətbiq olunub-olunmadığı (reliability)","Sistemin neçə suala malik olduğu","Sistemin nə qədər bahalı olduğu"],a:1,e:"Validity (düzgün şeyi ölçmək) və reliability (ardıcıl ölçmək) hər qiymətləndirmə sisteminin auditinin əsas iki sütunudur — bunlar olmadan nəticələrə etibar etmək olmaz",d:"hard"},
+];
+
 // ── PISA: MALİYYƏ SAVADLILIĞI ────────────────────
 QDB['pisa.fin']=[
   {q:"Bank A: 1000 manata illik 6% sadə faiz. Bank B: 1000 manata illik 5% mürəkkəb faiz (illik kapitallaşma). 3 il sonra hansı bankda balans daha çoxdur?",o:["Bank A — sadə faiz: 1000+1000×0.06×3=1180; mürəkkəb faiz: 1000×1.05³≈1157.6 — 3 ildə Bank A öndədir","Bank B həmişə öndədir","Fərq yoxdur","Hesablamaq mümkün deyil"],a:0,e:"Sadə faiz: 1000×(1+0.06×3)=1180. Mürəkkəb faiz: 1000×1.05³≈1157.6. 3 ildə hələ sadə faiz nominalı üstündür, lakin illər artdıqca fərq azalır və sonda mürəkkəb faiz keçə bilər.",d:"hard"},
@@ -5542,6 +5856,12 @@ QDB['pisa.fin']=[
   {q:"İki investisiya: A) illik 4% sabit gəlir, risksiz; B) ortalama illik 9%, lakin illər üzrə -5% ilə +20% arasında dəyişir. 25 yaşlı, 40 il sonra pensiyaya çıxacaq investor üçün maliyyə nəzəriyyəsi nəyi göstərir?",o:["Həmişə A seçilməlidir","Uzun zaman üfüqü volatilliyi 'ortalama' imkanı verir — gənc investor üçün B ümumiyyətlə daha uyğun ola bilər","Həmişə B seçilməlidir","Yaş seçimlə əlaqəli deyil"],a:1,e:"Risk-tolerantlıq vaxt üfüqü ilə əlaqəlidir: uzun müddətdə bazar dalğalanmaları 'ortalanır', gənc investor qısamüddətli enişlərə daha çox dözə bilər — yaşla bağlı aktiv bölgüsünün əsas prinsipi.",d:"expert"},
   {q:"Kredit kartı borcu 1000 manat, illik faiz 24% (aylıq ~2%), minimum ödəniş 'borcun 3%-i'. Yalnız minimum ödəniş edən şəxsin borcu zamanla necə dəyişəcək?",o:["Sürətlə azalacaq","Çox yavaş azalacaq və ya dəyişməz qalacaq — faiz yığımı minimum ödənişin böyük hissəsini 'yeyir' (minimum payment trap)","Bir ayda sıfırlanacaq","Borc avtomatik silinəcək"],a:1,e:"1000×2%=20 manat aylıq faiz. Minimum ödəniş 3%=30 manat. Yalnız 10 manat əsas məbləğə gedir — bu, illərlə ödəyib əsas məbləği az azaltmağa səbəb olan 'minimum payment trap'dır.",d:"expert"},
   {q:"Bir şəxsin xərclərinin 60%-i sabit (icarə, abunələr), 40%-i dəyişəndir. Gəlir 15% azalarsa, büdcəni tənzimləmək üçün ən effektiv addım haradan başlamalıdır?",o:["Sabit xərclərdən, çünki böyükdür","Dəyişən xərclərdən — qısa müddətdə daha asan tənzimlənir, sabit xərclər müqavilə/öhdəlik tələb edir","İkisindən bərabər","Heç birindən, gəliri artırmaq lazımdır"],a:1,e:"Sabit xərclər (icarə, abunələr) adətən müqavilə əsasındadır və qısa müddətdə dəyişdirilməsi çətindir. Dəyişən xərclər (əyləncə, geyim) tez tənzimlənə bilər — büdcə krizisində birinci addım budur.",d:"medium"},
+  {q:"İki kredit təklifi: A) 10000 manat, 12 ay, aylıq 2% sadə faiz; B) 10000 manat, 12 ay, illik 24% APR (annual percentage rate). Hansı daha sərfəlidir?",o:["A daha sərfəlidir, faiz aşağı görünür","Hesablamaq lazımdır: A-nın illik faizi 2%×12=24%, ikisi əslində eyni nominal dərəcədədir — APR ilə aylıq faizi düzgün müqayisə etmək vacibdir","B həmişə sərfəlidir","Heç bir fərq yoxdur, hər ikisi eynidir"],a:1,e:"Maliyyə savadlılığında ən çox rast gəlinən səhv — aylıq və illik dərəcələri düzgün çevirmədən müqayisə etmək. Bu nümunədə hər ikisi 24% illik dərəcəyə bərabərdir, amma fərqli formatda təqdim olunub, çaşdırıcı görünə bilər",d:"hard"},
+  {q:"25 yaşında aylıq 100 manat pensiya fonduna yatırırsınız (illik 7% ortalama gəlir), 65 yaşına qədər. Dostunuz 45 yaşında başlayır, aylıq 300 manat yatırır. Kim daha çox pul toplayacaq?",o:["Dostunuz, çünki 3 dəfə çox yatırır","Çox güman ki siz — mürəkkəb faizin vaxt amili (40 il vs 20 il) məbləğ fərqindən daha güclü təsir göstərir","Bərabər olacaq","Hesablamaq mümkün deyil"],a:1,e:"Compound interest-in 'time value of money' prinsipi: erkən başlamaq, az məbləğlə belə, gec başlamaq və çox yatırmaqdan üstün ola bilər — uzun mürəkkəbləşmə müddəti həlledicidir",d:"expert"},
+  {q:"Sığorta şirkəti 'deductible' (özünüqarşılama məbləği) 500 manat olan poliçi təklif edir, aylıq haqq 50 manat; başqa poliçidə deductible 0, aylıq haqq 90 manat. Hansı seçim rasionaldır?",o:["Həmişə 0-deductible seçilməlidir","Riskin tezliyinə/böyüklüyünə görə dəyişir — az-tezlikli, böyük itki riski üçün yüksək deductible+aşağı haqq adətən daha sərfəlidir","Həmişə yüksək deductible seçilməlidir","Fərq əhəmiyyətsizdir"],a:1,e:"Sığorta qərarı gözlənilən xərc hesablamasına əsaslanmalıdır: aylıq fərq (40 manat) illik 480 manat edir — bu, çox vaxt 500 manatlıq deductible-dan az olur, riskdən asılı olaraq fərqli nəticə",d:"expert"},
+  {q:"Bir gənc 'buy now, pay later' (indi al, sonra ödə) xidmətindən tez-tez istifadə edir, hər alış kiçik görünür, lakin ayda 5-6 belə alış edir. Maliyyə savadlılığı nöqteyi-nəzərindən risk:",o:["Heç bir risk yoxdur, məbləğlər kiçikdir","Fraqmentləşmiş borc — kiçik öhdəliklərin cəmi nəzərdən qaça bilər, ümumi borc yükü görünməz şəkildə yığılır","Bu, qənaət üsuludur","Yalnız böyük alışlar risklidir"],a:1,e:"BNPL xidmətləri psixoloji olaraq borcu 'kiçik' göstərir, lakin çoxsaylı kiçik öhdəliklərin cəmi əhəmiyyətli məcburi xərc yaradır — 'mental accounting' xətası",d:"hard"},
+  {q:"Vergi bəyannaməsində 'progressiv vergi sistemi' nə deməkdir və 'mənfi marjinal effekt' qorxusu niyə əsassızdır (çox vaxt)?",o:["Bütün gəlirə ən yüksək nisbət tətbiq olunur","Yalnız müəyyən həddi keçən gəlir hissəsinə yüksək nisbət tətbiq olunur — daha çox qazanmaq heç vaxt 'əlinizdə az pul qalmasına' səbəb olmur","Vergi azaldıqca gəlir artır","Progressiv sistem ədalətsizdir"],a:1,e:"Marjinal vergi dərəcəsi yalnız müəyyən həddi keçən gəlir payına tətbiq olunur (bracket sistemi) — 'daha çox qazanıb daha az pul qalması' əfsanəsi vergi sisteminin necə işlədiyini anlamamaqdan qaynaqlanır",d:"expert"},
+  {q:"Bir şəxs 'dollar-cost averaging' (DCA) strategiyası ilə hər ay sabit məbləğ investisiya edir, bazar qiymətindən asılı olmayaraq. Bu strategiyanın əsas üstünlüyü:",o:["Həmişə ən yüksək gəliri təmin edir","Bazar zamanlamasını (timing) sınamağın riskini azaldır — qiymət aşağı olanda daha çox, yuxarı olanda daha az pay alınır, ortalama xərc balanslaşır","Yalnız peşəkar investorlar üçündür","Hər zaman bir-dəfəlik investisiyadan zəifdir"],a:1,e:"DCA bazarın 'düzgün' vaxtını tapmaq cəhdinin riskini azaldır — müntəzəm, sabit investisiya emosional qərar səhvlərini (qorxu/həris satış-alış) minimuma endirir",d:"hard"},
 ];
 
 // ── PISA: RƏQƏMSAL OXU ───────────────────────────
@@ -5554,6 +5874,12 @@ QDB['pisa.digital']=[
   {q:"Onlayn ensiklopediya məqaləsi 'mübahisəli' işarələnib, 'neytrallıq' bayrağı var. Tədqiqat tapşırığı üçün bu məqalədən necə istifadə etmək məqsədəuyğundur?",o:["İstifadə etməməli, tamamilə etibarsızdır","Başlanğıc nöqtəsi kimi istifadə edib, istinad olunan ilkin mənbələrə getmək, müxtəlif perspektivləri müqayisə etmək","Yalnız bir tərəfi qəbul etmək","Bayrağı görməzdən gəlmək"],a:1,e:"'Neytrallıq mübahisəsi' bayrağı mövzunun fərqli perspektivləri olduğunu bildirir — tədqiqatçı üçün ilkin mənbələrə getmək və müqayisəli oxu aparmaq siqnalıdır.",d:"hard"},
   {q:"Bir vebsaytda naviqasiya: Ana səhifə > Məqalələr > Elm > Fizika > 'Kvant kompüterləri'. Axtarış nəticəsindən birbaşa bu səhifəyə düşmüsünüz. Səhifənin etibarlılığını anlamaq üçün ƏN VACİB addım hansıdır?",o:["Yalnız mətni oxumaq","Saytın 'haqqında' bölməsinə və ümumi strukturuna baxaraq saytın növünü müəyyənləşdirmək — qeyri-xətti naviqasiyada kontekst itə bilər","Səhifəni dərhal bağlamaq","Şəkillərə baxmaq"],a:1,e:"Qeyri-xətti (hyperlinked) mühitdə oxucular birbaşa daxili səhifələrə düşür və geniş konteksti itirirlər. Saytın ümumi təbiətini (akademik/kommersiya/fərdi) müəyyən etmək tənqidi addımdır.",d:"hard"},
   {q:"E-poçt: 'Hesabınız bloklanacaq, 24 saat ərzində bu linkə klikləyib məlumatlarınızı təsdiqləyin!' Göndərici ünvanı 'support@bankk-secure.net' (əsl bank ünvanı 'bank.az'). Bu hansı təhlükəni göstərir?",o:["Normal bank bildirişi","Fişinq (phishing) cəhdi — süni təcililik, şübhəli oxşar domen adı və şəxsi məlumat tələbi klassik əlamətlərdir","Spam filteri xətası","Bankın yeni xidməti"],a:1,e:"Fişinq əlamətləri: süni təcililik ('24 saat'), oxşar lakin fərqli domen adı, şəxsi məlumat/şifrə tələbi. Rəqəmsal savadlılıq bu nümunələri tanımağı tələb edir.",d:"medium"},
+  {q:"Axtarış motorunda 'COVID vaksin' yazırsınız, ilk nəticələr reklam (sponsorlu) bağlantılardır, üzvi (organic) nəticələr aşağıdadır. Etibarlı məlumat üçün ilk növbədə nəyə diqqət edilməlidir?",o:["Yalnız ilk nəticəyə klikləmək","Sponsorlu/reklam etiketini tanımaq və rəsmi/institusional mənbələri (səhiyyə nazirliyi, akademik jurnal) prioritetləşdirmək","Bütün nəticələri açmaq","Reklamlar həmişə etibarlıdır"],a:1,e:"Axtarış motorlarında sponsorlu nəticələr ödənişlə yuxarı yerləşdirilir, bu, etibarlılıqla əlaqəli deyil — rəqəmsal savadlılıq reklam/üzvi nəticə fərqini tanımağı tələb edir",d:"medium"},
+  {q:"Bir tətbiq quraşdırarkən 'şərtlər və qaydalar' 50 səhifədir, çoxları oxumadan 'qəbul edirəm' düyməsini basır. Bu davranışın rəqəmsal savadlılıq baxımından riski:",o:["Heç bir risk yoxdur, normal təcrübədir","Şəxsi məlumatların necə istifadə olunacağı, üçüncü tərəflərlə paylaşılıb-paylaşılmayacağı barədə razılaşma şüursuz verilir","Yalnız hüquqşünaslar bunu oxumalıdır","Şərtlər həmişə istifadəçi xeyrinədir"],a:1,e:"'Consent fatigue' (razılıq yorğunluğu): uzun, mürəkkəb mətnlər istifadəçiləri oxumadan razılaşmağa vadar edir — bu, məlumatlı razılığın (informed consent) əleyhinədir",d:"hard"},
+  {q:"Sosial media alqoritmi sizin əvvəlki bəyəndiyiniz məzmuna uyğun yeni məzmun göstərir, get-gedə fərqli fikirlər az görünür. Bu fenomen necə adlanır?",o:["Təsadüfi seçim","Filter bubble (filtr qabarcığı) — alqoritmlər istifadəçinin mövcud baxışını gücləndirir, müxtəlif perspektivlərə məruz qalmasını azaldır","Bu, faydalı xüsusiyyətdir, heç bir mənfi tərəfi yoxdur","Heç bir fenomen yoxdur"],a:1,e:"Filter bubble effekti istifadəçinin informasiya mühitini daraldır — bu, qütbləşməyə töhfə verə bilər, rəqəmsal savadlı istifadəçi bunun fərqində olmalıdır",d:"hard"},
+  {q:"Bir video 'deepfake' texnologiyası ilə hazırlanıb — real görünən, lakin saxta görüntü/səs. Bunun aşkarlanması niyə getdikcə çətinləşir?",o:["Heç vaxt çətinləşmir","AI texnologiyası inkişaf etdikcə vizual/səs artefaktları azalır — ənənəvi 'gözlə görmə' aşkarlama metodları yetərsizləşir","Deepfake-ləri həmişə asanlıqla tanımaq olar","Bu, yalnız film sənayesinə aiddir"],a:1,e:"Deepfake texnologiyası sürətlə təkmilləşir — rəqəmsal savadlılıq artıq təkcə 'şübhəli görünüş' axtarmaqdan, mənbə yoxlanması və kontekstual təsdiqə keçməyi tələb edir",d:"expert"},
+  {q:"Onlayn alış-veriş saytında 'yalnız 2 ədəd qaldı!' və '47 nəfər bu məhsula baxır' kimi mesajlar görürsünüz. Bu, hansı psixoloji texnikanın nümunəsidir?",o:["Sadəcə faktiki məlumatdır","Scarcity/urgency marketing (qıtlıq/təcililik marketinqi) — qərar vermə prosesini sürətləndirmək, tənqidi düşünməyə vaxt qoymamaq üçün dizayn edilir","Heç bir texnika deyil","Bu, həmişə doğru məlumatdır"],a:1,e:"E-ticarət platformaları çox vaxt psixoloji təzyiq taktikaları istifadə edir — bunları tanımaq, real ehtiyac əsaslı qərar verməyə kömək edir",d:"medium"},
+  {q:"Bir tədqiqat nəticəsi sosial mediada 'paylaşılan' formada yayılır, lakin orijinal elmi məqaləyə keçid yoxdur, yalnız ikinci əldən izah var. Tənqidi rəqəmsal oxucu nə etməlidir?",o:["Paylaşımı olduğu kimi qəbul etmək","Orijinal mənbəni (elmi məqaləni) axtarıb tapmağa çalışmaq — ikinci əldən izahlar tez-tez sadələşdirmə zamanı dəqiqliyini itirir","Heç vaxt paylaşılan elmi məlumata etibar etməmək","Yalnız paylaşan şəxsin nüfuzuna baxmaq"],a:1,e:"'Telefon oyunu' effekti: elmi nəticə hər ötürmədə bir az təhrif olunur — orijinal mənbəyə qayıtmaq dəqiqliyi qorumağın yeganə etibarlı yoludur",d:"hard"},
 ];
 
 // ── PISA: EKOLOJİ SAVADLILIQ ─────────────────────
@@ -5566,6 +5892,12 @@ QDB['pisa.environ']=[
   {q:"Bir ölkə meşə sahəsinin 30%-ni kənd təsərrüfatı üçün təmizləyir. Qısamüddətdə məhsuldarlıq artır, 15 il sonra torpaq eroziyası və yağıntı rejimi dəyişikliyi səbəbindən məhsuldarlıq əvvəlkindən aşağı düşür. Bu hansı konseptə nümunədir?",o:["Davamlı inkişaf","Ekoloji 'gecikmiş əks-əlaqə' — qısamüddətli fayda uzunmüddətli sistemik xərclə əvəzlənir","Heç bir əlaqə yoxdur","Məhsuldarlıq həmişə artır"],a:1,e:"Sistem dinamikasında 'gecikmiş əks-əlaqə': qərarın mənfi nəticələri dərhal görünmür, illər sonra ortaya çıxır — davamlılıq qərarlarında ən çox nəzərdən qaçırılan amil.",d:"expert"},
   {q:"Plastik tullantılar okeanda yüzilliklər ərzində parçalanır, lakin 'mikroplastik' hissəciklərə bölünmə daha tez baş verir. Bu niyə 'həll' deyil, yeni problemdir?",o:["Mikroplastik daha tez yox olur","Mikroplastiklər qida zəncirinə daxil olur (planktonlar tərəfindən udulur) və bütün trofik səviyyələrə yayılır — problem 'kiçilir' amma 'genişlənir'","Mikroplastik zərərsizdir","Problem tamamilə həll olunur"],a:1,e:"Miqyas dəyişikliyi həll demək deyil: böyük plastik parçalar görünür və təmizlənə bilər, mikroplastiklər isə qida zəncirinə inteqrasiya olunaraq daha geniş, görünməz problemə çevrilir.",d:"hard"},
   {q:"Bir şəhər ictimai nəqliyyatı subsidiyalaşdırmaqla şəxsi avtomobil istifadəsini 20% azaldır. Bu hansı ekoloji 'multiplier effekt'ə səbəb ola bilər?",o:["Yalnız yanacaq qənaəti","Azalmış tıxac → azalmış emissiya + azalmış yol infrastrukturu tələbi + ictimai sahələrin yenidən istifadəsi — bir-birini gücləndirən zəncirvari təsirlər","Heç bir əlavə təsir yoxdur","Yalnız vergi gəlirləri artır"],a:1,e:"Şəhər planlaşdırmasında 'multiplier effektlər': bir müdaxilə bir-birini gücləndirən ikinci dərəcəli faydalar yaradır — sistemli düşüncənin nümunəsi.",d:"hard"},
+  {q:"Bir ekosistemdə 'açar daş növ' (keystone species) yox olduqda, populyasiya sayına nisbətdən qat-qat böyük effekt yaranır. Buna nümunə hansıdır?",o:["Hər növün effekti onun sayına bərabərdir","Canavarların bir ərazidən yox olması maral populyasiyasının nəzarətsiz artmasına, bu da bitki örtüyünün məhv olmasına səbəb olur — kiçik say, böyük struktur effekti","Yalnız böyük heyvanlar əhəmiyyətlidir","Ekosistemlər bir növün itkisindən təsirlənmir"],a:1,e:"Keystone species konsepsiyası (Yellowstone canavar nümunəsi kimi): bəzi növlər say baxımından az olsalar belə, ekosistemin strukturuna trofik kaskad vasitəsilə disproporsional təsir göstərir",d:"expert"},
+  {q:"'Karbon ayaq izi' hesablamasında uçuş səyahətinin tikinti materialından (sement) daha 'görünən' təsiri olduğu düşünülür, lakin qlobal sement istehsalı CO2 emissiyasının ~8%-ni təşkil edir. Bu nümunə nəyi göstərir?",o:["Uçuş həmişə daha çox emissiya yaradır","Görünən/fərdi davranışlar (uçuş) ilə struktur/sənaye mənbələri (sement) arasında miqyas fərqi var — fərdi diqqət böyük struktur mənbələri kölgədə qoya bilər","Sement istehsalı əhəmiyyətsizdir","Fərdi davranış heç bir rol oynamır"],a:1,e:"İqlim müzakirəsində fərdi 'görünən' davranışlar (uçuş, ət yemə) çox vurğulanır, amma struktur sənaye mənbələri (sement, polad) ümumi emissiyada daha böyük paya malikdir — miqyas anlayışı vacibdir",d:"expert"},
+  {q:"Bir akvakultur (balıq yetiştirmə) təsərrüfatı sıx şəraitdə balıq saxlayır, antibiotik istifadə edir. Tullantı su mənbəyə qarışır. Bu hansı geniş ekoloji riski yaradır?",o:["Heç bir risk yoxdur","Antibiotikə davamlı bakteriyaların (antibiotic resistance) yaranması və yayılması — bu, həm ekoloji, həm insan sağlamlığı riski yaradır","Yalnız balıqlara təsir edir","Sənaye akvakulturu həmişə təhlükəsizdir"],a:1,e:"Antibiotik həddindən artıq istifadəsi rezistent bakteriya ştammlarının yaranmasına səbəb olur — bu, 'One Health' konsepsiyasına görə ekoloji və insan sağlamlığı sistemlərini birləşdirən risk",d:"expert"},
+  {q:"Bir ölkə bərpa olunan enerjiyə keçidi sürətləndirir, lakin litium/kobalt mədənçiliyi yeni ekoloji və sosial problemlər yaradır (su istehlakı, yerli icmalara təsir). Bu vəziyyət nəyi göstərir?",o:["Bərpa olunan enerji problemsizdir","Davamlılıq həlləri öz trade-off-larına (mübadilə dəyərlərinə) malikdir — bir problemi həll edərkən yeni, fərqli problemlər yarana bilər","Bərpa olunan enerji tamamilə faydasızdır","Mədənçilik heç bir problem yaratmır"],a:1,e:"Davamlılıq qərarları nadir hallarda 'tam həll'dir — yeni texnologiyalar öz resurs və sosial xərclərini daşıyır, sistemli qiymətləndirmə bu trade-off-ları tanımalıdır",d:"expert"},
+  {q:"Bir meşədə yanğından sonra bərpa proqramı yalnız bir ağac növü əkir (monokultur), təbii müxtəlif meşə əvəzinə. Uzunmüddətli risk:",o:["Heç bir risk yoxdur, ağaclar bərpa olunur","Monokultur ekosistemlər zərərvericilərə, xəstəliklərə və iqlim stresinə qarşı daha az dayanıqlıdır — bioloji müxtəliflik təbii müdafiə mexanizmidir","Monokultur həmişə daha sürətli bərpa edir","Növ müxtəlifliyi əhəmiyyətsizdir"],a:1,e:"Ekoloji rezilyens (dayanıqlılıq) bioloji müxtəlifliklə əlaqəlidir — monokultur sistemlər struktur baxımından zəifdir, bir zərərverici/xəstəlik bütün populyasiyaya yayıla bilər",d:"hard"},
+  {q:"'Greenwashing' (yalançı yaşıl marketinq) anlayışı hansı vəziyyəti təsvir edir?",o:["Həqiqətən ekoloji məhsul istehsalı","Şirkətin faktiki ekoloji təsirini yaxşılaşdırmadan, sadəcə marketinq vasitəsilə 'yaşıl' imic yaratması","Yalnız reklam qaydası pozuntusu","Ekoloji sertifikatlaşdırma prosesi"],a:1,e:"Greenwashing: real struktur dəyişiklik olmadan, kosmetik marketinq vasitəsilə davamlılıq imici yaratmaq — istehlakçı tənqidi qiymətləndirmə bacarığı bunu aşkarlamağa kömək edir",d:"medium"},
 ];
 
 // ── PISA: QLOBAL VƏTƏNDAŞLIQ ─────────────────────
@@ -5578,6 +5910,12 @@ QDB['pisa.civic']=[
   {q:"Qrafikdə dünya əhalisinin 10%-i qlobal sərvətin 76%-nə, aşağı 50% isə cəmi 2%-ə malik olduğu göstərilir. Bu hansı konseptin illüstrasiyasıdır?",o:["Bərabər bölgü","Qlobal gəlir/sərvət bərabərsizliyi — struktur iqtisadi problemi göstərən göstərici","Orta hesab","Statistik xəta"],a:1,e:"Qlobal sərvət bərabərsizliyi məlumatları struktur iqtisadi bərabərsizliyi göstərir — qlobal vətəndaşlıq təhsilində kritik məlumat oxuma bacarığı.",d:"medium"},
   {q:"Bir ölkə qaçqınlar üçün sərhədləri bağlayır, qonşu ölkə açıq sərhəd siyasəti aparır. Hər iki siyasətin 'qısamüddətli/uzunmüddətli' və 'milli/regional' təsirlərini ayırd etmək niyə vacibdir?",o:["Vacib deyil, bir ölçü kifayətdir","Mürəkkəb siyasi məsələlər çoxölçülüdür — zaman və məkan miqyasını dəyişdirdikdə fərqli nəticələr görünür, bu sistemli düşüncənin əsasıdır","Yalnız milli təsir əhəmiyyətlidir","Uzunmüddətli təsirlər heç vaxt fərqli olmur"],a:1,e:"Mürəkkəb qlobal məsələləri qiymətləndirərkən müxtəlif zaman və məkan miqyaslarında təhlil aparmaq lazımdır — birölçülü qiymətləndirmə yanlış nəticəyə apara bilər.",d:"hard"},
   {q:"Bir şirkət inkişaf etməkdə olan ölkədə fabrik açır: yerli işsizlik azalır, lakin əmək haqqı qlobal standartlardan aşağıdır və iş şəraiti tənqid olunur. 'Etik istehlak' nöqteyi-nəzərindən bu vəziyyət necə təhlil olunur?",o:["Fabrik tamamilə müsbətdir","Müsbət (məşğulluq) və mənfi (iş şəraiti) təsirlər eyni zamanda mövcuddur — 'etik istehlak' bu gərginliyi tanıyıb kontekstual qiymətləndirmə aparır","Fabrik tamamilə mənfidir, bağlanmalıdır","Heç bir etik məsələ yoxdur"],a:1,e:"Qlobal təchizat zəncirləri mürəkkəb etik gərginliklər yaradır: yerli iqtisadi fayda ilə işçi hüquqları arasında tarazlıq axtarmaq — sadə 'yaxşı/pis' dixotomiyasından çıxmaq lazımdır.",d:"expert"},
+  {q:"BMT Davamlı İnkişaf Məqsədləri (SDGs) 17 fərqli məqsəddən ibarətdir, bəziləri bir-biri ilə gərginlik yaradır (məs. iqtisadi artım vs ekoloji qorunma). Bu, qlobal siyasət dizaynında nəyi göstərir?",o:["SDGs-lər ziddiyyətsizdir","Kompleks qlobal məqsədlər arasında trade-off-lar mövcuddur — siyasətçilər prioritetləri balanslaşdırmalı, hamısını eyni vaxtda maksimuma çatdırmaq mümkün olmaya bilər","Yalnız bir məqsəd vacibdir","SDGs-lər praktiki əhəmiyyət daşımır"],a:1,e:"Real siyasət dizaynında çoxsaylı, bəzən rəqib məqsədlər arasında prioritetləşdirmə tələb olunur — bu, qlobal vətəndaşlıq təhsilinin əsas dərslərindəndir",d:"expert"},
+  {q:"Bir ölkədə seçim sistemində 'gerrymandering' (seçki dairələrinin siyasi məqsədlə manipulyasiyası) tətbiq olunur. Bu, demokratik prinsiplərə necə zərbə vurur?",o:["Heç bir zərbə vurmur","Seçicilərin səsi süni şəkildə qruplaşdırılaraq, faktiki dəstək nisbəti ilə təmsilçilik arasında uyğunsuzluq yaradır","Bu, normal demokratik prosesdir","Yalnız kiçik ölkələrə aiddir"],a:1,e:"Gerrymandering seçki dairələrinin sərhədlərini siyasi nəticəyə görə çəkməklə, real səs payını təmsilçilikdə düzgün əks etdirməməyə səbəb olur — demokratik ədalətliliyə struktur zərbə",d:"expert"},
+  {q:"Beynəlxalq bir konfliktdə hər tərəf öz medialarında fərqli 'fakt' təqdim edir. Tənqidi qlobal vətəndaş kimi belə vəziyyəti necə qiymətləndirməlisiniz?",o:["Yalnız öz ölkənizin mediasına etibar etmək","Çoxlu, müstəqil mənbələri (beynəlxalq jurnalistika, müstəqil təşkilatlar) müqayisə edib, hər tərəfin maraqlarını nəzərə almaq","Heç bir mənbəyə etibar etməmək","Hər iki tərəfin də yalan dediyini fərz etmək"],a:1,e:"Konflikt jurnalistikasında 'hər tərəfin öz həqiqəti' var — müstəqil, çoxsaylı mənbə yoxlaması və maraq qruplarının tanınması tənqidi qlobal vətəndaşlığın əsasıdır",d:"hard"},
+  {q:"Pandemiya zamanı vaksin paylanmasında zəngin ölkələr ehtiyacdan artıq sifariş edib, kasıb ölkələr çatışmazlıq yaşayıb ('vaccine nationalism'). Bu, hansı qlobal idarəetmə problemini göstərir?",o:["Heç bir problem yoxdur, normal bazar davranışıdır","Milli maraqlar qlobal kollektiv rifahdan üstün tutulduqda, qlobal səviyyəli problemlərin (pandemiya) həlli də qeyri-bərabər və yavaş olur","Zəngin ölkələr həmişə düzgün hərəkət edir","Vaksin bölgüsü siyasi məsələ deyil"],a:1,e:"Qlobal kollektiv hərəkət problemi (collective action problem): fərdi (milli) rasional davranış kollektiv (qlobal) nəticəni pisləşdirə bilər — pandemiya kimi sərhədsiz problemlər qlobal koordinasiya tələb edir",d:"expert"},
+  {q:"Bir gənc 'mənim səsim heç nəyi dəyişməz' düşüncəsi ilə seçkidə iştirak etmir. Bu düşüncənin demokratik nəzəriyyə baxımından problemi:",o:["Düşüncə tamamilə doğrudur","Kollektiv hərəkət effekti — eyni düşüncəni paylaşan çoxlu insan iştirak etmədikdə, məhz bu, nəticəni dəyişdirən amilə çevrilir","Seçki həmişə əhəmiyyətsizdir","Yalnız iri seçicilər təsir göstərir"],a:1,e:"Fərdi səsin marjinal təsiri kiçik olsa da, eyni düşüncə çoxları tərəfindən paylaşıldıqda, kollektiv nəticəyə güclü təsir göstərir — bu, 'free-rider' məntiqinin demokratiyaya tətbiqidir",d:"hard"},
+  {q:"Beynəlxalq ticarət sazişlərində 'ekoloji dempinq' (environmental dumping) anlayışı nəyi bildirir?",o:["Tullantıları okeana atmaq","Şirkətlərin aşağı ekoloji standartlı ölkələrə istehsalı köçürərək, qlobal məsuliyyətdən yayınması","Yalnız qiymət endirimini bildirir","Heç bir əlaqəsi yoxdur"],a:1,e:"Ekoloji dempinq: zəif tənzimləmə olan ölkələrə istehsal köçürmək, ekoloji xərci 'ixrac etmək' — qlobal ədalət və davamlılıq müzakirələrində mühüm tənqid mövzusu",d:"expert"},
 ];
 
 // ── PISA: KOLLEKTİV PROBLEM HƏLLİ ────────────────
@@ -5590,6 +5928,12 @@ QDB['pisa.collab']=[
   {q:"Komanda 5 tapşırığı bölüşdürərkən, hər kəsə güclü olduğu sahədən asılı olmayaraq bərabər say tapşırıq verir. Nəticədə keyfiyyət aşağı olur. Daha effektiv yanaşma:",o:["Yenə bərabər bölgü, ədalətlidir","Bacarıq-əsaslı resurs bölgüsü — tapşırıqları üzvlərin gücləri ilə uyğunlaşdırmaq ümumi nəticə keyfiyyətini artırır","Bütün tapşırıqları bir nəfərə vermək","Tapşırıqları azaltmaq"],a:1,e:"Resurs bölgüsündə 'bərabərlik' ilə 'effektivlik' fərqli prinsiplərdir — CPS-də effektiv komandalar güclərə uyğun bölgünü, şəffaf kommunikasiya ilə, üstün tutur.",d:"hard"},
   {q:"Layihə bitdikdən sonra komanda 'retrospektiv' (post-mortem) iclas keçirir: nə yaxşı işlədi, nə işləmədi müzakirə olunur. Bu fəaliyyətin əsas faydası:",o:["Keçmişi tənqid etmək","Komanda öyrənməsini gələcək layihələrə transfer etmək — eyni səhvlərin təkrarlanmaması üçün institusional yaddaş yaratmaq","Vaxt itkisidir","Yalnız menecerlər üçün faydalıdır"],a:1,e:"Reflektiv praktika: təcrübədən öyrənmək yalnız fərdi deyil, komanda səviyyəsində də olmalıdır — 'lessons learned' gələcək performansı yaxşılaşdırır.",d:"medium"},
   {q:"Qarışıq bacarıq səviyyəli komandada ən böyük risk hansıdır və effektiv liderlik bunu necə idarə edir?",o:["Risk yoxdur, hər kəs eyni işləyir","'Sosial loafing' riski — zəif performans göstərən üzvlərin səy azaltması; effektiv liderlik fərdi məsuliyyəti aydınlaşdırır və hər kəsin töhfəsini görünən edir","Güclü üzvləri komandadan çıxarmaq","Zəif üzvləri komandadan çıxarmaq"],a:1,e:"'Sosial tənbəllik' (social loafing): qrup böyüdükcə fərdi səy azalma meylindədir, xüsusən fərdi töhfə görünməz olduqda. Fərdi məsuliyyəti şəffaflaşdırmaq bu effekti azaldır.",d:"expert"},
+  {q:"Komandanın 3 üzvündən biri uzaqdan (remote) işləyir, vaxt fərqi var. Sinxron (real-vaxt) ünsiyyət çətindir. Effektiv komandalar bu vəziyyəti necə idarə edir?",o:["Yalnız sinxron görüşlərə güvənmək","Asinxron kommunikasiya alətlərindən (yazılı sənədlər, video qeydlər) istifadə edib, qərarları sənədləşdirərək hər üzvün öz vaxtında iştirakını təmin etmək","Uzaqdan işləyən üzvü komandadan çıxarmaq","Vaxt fərqini nəzərə almamaq"],a:1,e:"Coğrafi/zaman fərqi olan komandalarda asinxron iş prosesləri (sənədləşdirmə, yazılı protokollar) sinxron toplantı asılılığını azaldır və hər üzvün effektiv iştirakını təmin edir",d:"hard"},
+  {q:"Komanda qərar qəbul edərkən 'groupthink' (qrup düşüncəsi) riskinə düşür — heç kim fərqli fikir bildirmir, çünki həmrəylik vacib görünür. Bu riskin qarşısını almaq üçün strategiya:",o:["Həmişə sürətli qərar vermək","'Devil's advocate' (şeytan vəkili) rolu təyin etmək — bir üzvün qəsdən qarşı-arqumentlər təqdim etməsi qərar keyfiyyətini yoxlayır","Fərqli fikirləri tamamilə qadağan etmək","Yalnız liderin qərar verməsi"],a:1,e:"Groupthink (Irving Janis): komanda həmrəyliyi tənqidi düşüncəni boğanda zəif qərarlar qəbul olunur. Strukturlaşdırılmış qarşı-fikir prosesi (devil's advocate) bu riski azaldır",d:"expert"},
+  {q:"Komanda üzvlərindən biri texniki bilikdə zəifdir, lakin yaradıcı ideyalar təklif edir. Effektiv komanda quruluşu bu üzvün rolunu necə müəyyənləşdirməlidir?",o:["Komandadan çıxarmaq","Onun gücünə (yaradıcılıq) uyğun rol vermək — bütün üzvlərin eyni bacarıq profilinə malik olması tələb olunmur, müxtəliflik komandanın resursdur","Texniki işə məcbur etmək","Heç bir rol verməmək"],a:1,e:"Komanda effektivliyi bacarıq müxtəlifliyindən (cognitive diversity) faydalanır — hər üzvün fərqli güclü tərəfini tanımaq və ona uyğun rol vermək ümumi performansı artırır",d:"medium"},
+  {q:"Bir komanda problemi həll edərkən 'brainstorming' mərhələsində ideyaları dərhal tənqid edir, nəticədə az ideya yaranır. Effektiv brainstorming prinsipi:",o:["Tənqid həmişə faydalıdır","İdeya yaratma (divergent) və qiymətləndirmə (convergent) mərhələlərini ayırmaq — ilk mərhələdə tənqidi təxirə salmaq daha çox ideya yaranmasına imkan verir","Yalnız bir ideya qəbul etmək","Heç bir struktur lazım deyil"],a:1,e:"Klassik brainstorming qaydası: 'tənqidi təxirə sal' (defer judgment) — erkən tənqid ideya axınını bloklayır, ideya yaratma və qiymətləndirməni ayrı mərhələlərdə aparmaq daha effektivdir",d:"hard"},
+  {q:"Komandada qərar 'konsensus' yolu ilə alınmalıdır, lakin bir üzv daim razı olmur, proses dayanır. Praktiki həll:",o:["Sonsuz müzakirəyə davam etmək","Vaxt məhdudiyyəti qoyub, 'konsensus-minus-bir' (qalan üzvlərin razılığı kifayətdir) və ya səsvermə kimi alternativ qərar mexanizminə keçmək","Razı olmayan üzvü komandadan çıxarmaq","Heç bir qərar qəbul etməmək"],a:1,e:"Tam konsensus hər zaman praktiki deyil — effektiv komandalar əvvəlcədən alternativ qərar mexanizmləri (vaxt limiti, səsvermə) müəyyənləşdirir ki, proses dayanmasın",d:"hard"},
+  {q:"Komandanın performansını qiymətləndirərkən yalnız 'son nəticəyə' (layihənin uğuruna) baxmaq, 'prosesə' (necə işlədiklərinə) baxmamaq hansı problemi yarada bilər?",o:["Heç bir problem yoxdur","Uğurlu nəticə pis proseslə (məs. bir nəfərin hamısını etməsi) əldə edilə bilər — bu, gələcək layihələr üçün davamlı olmayan, öyrənilməmiş model yaradır","Nəticə həmişə prosesi əks etdirir","Proses heç vaxt əhəmiyyətli deyil"],a:1,e:"Yalnız nəticəyə fokuslanma 'survivorship bias' yaradır — uğur təsadüfən və ya davamsız proseslə əldə edilə bilər, komandanın necə işlədiyini qiymətləndirmədən gələcək performans proqnozlaşdırıla bilməz",d:"expert"},
 ];
 
 // ── NEURO BRAIN: YARADICI TƏFƏKKÜR ───────────────
@@ -5628,6 +5972,14 @@ QDB['open.ped_scenario']=[
   {q:"Valideynlər toplantısında bir valideyn 'Niyə uşağım hər həftə fərqli çətinlikdə test alır?' deyə sual verir (adaptiv test sisteminə istinadən). Bu sualı pedaqoji prinsiplərə əsaslanaraq, valideynin başa düşəcəyi dildə necə cavablandırardınız?",rubric:[{c:'Pedaqoji anlama',max:25},{c:'Aydınlıq/sadəlik',max:30},{c:'Empatiya/münasibət',max:25},{c:'Dil',max:20}],type:'essay'},
   {q:"Formativ qiymətləndirmə zamanı topladığınız məlumatlara görə sinfin 60%-i bir konsepsiyada (kəsrlərin müqayisəsi) çətinlik çəkir. Növbəti dərsi necə yenidən planlaşdırardınız? 'Just-in-time teaching' prinsipini nəzərə alın.",rubric:[{c:'Formativ data təhlili',max:25},{c:'Yenidən planlaşdırma strategiyası',max:35},{c:'Diferensasiya',max:25},{c:'Dil',max:15}],type:'essay'},
   {q:"Bir şagirddə disleksiya əlamətləri (hərf qarışdırma, sətir atlama) müşahidə edirsiniz, lakin rəsmi diaqnoz yoxdur. Valideynlə bu mövzunu necə müzakirə edərdiniz və sinifdə hansı dərhal tətbiq oluna biləcək dəstəkləri tətbiq edərdiniz?",rubric:[{c:'Həssaslıq/etik yanaşma',max:25},{c:'Praktiki sinif dəstəkləri',max:35},{c:'Valideynlə əməkdaşlıq planı',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Sinifinizdə iki istedadlı şagird tapşırıqları çox tez bitirib darıxır, davranış problemləri yaratmağa başlayır. Bu vəziyyəti 'enrichment' (zənginləşdirmə) prinsipləri çərçivəsində necə həll edərdiniz? Konkret tapşırıq tipləri təklif edin.",rubric:[{c:'İstedad pedaqogikası anlayışı',max:25},{c:'Konkret zənginləşdirmə tapşırıqları',max:35},{c:'Sinif idarəetməsi strategiyası',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Distant/hibrid tədris formatında bir şagird kameranı daim söndürür və iştirak etmir, lakin yazılı tapşırıqları vaxtında təqdim edir. Bu vəziyyəti necə qiymətləndirərdiniz və hansı alternativ iştirak formalarını təklif edərdiniz?",rubric:[{c:'Vəziyyətin düzgün diaqnozu',max:25},{c:'Alternativ iştirak strategiyaları',max:35},{c:'Empatik ünsiyyət planı',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Sinif daxilində mədəni müxtəliflik mövcuddur (fərqli etnik/dil mənşəli şagirdlər). Mədəniyyətə həssas pedaqogika (culturally responsive teaching) prinsiplərini tətbiq edərək bir ədəbiyyat dərsini necə planlaşdırardınız?",rubric:[{c:'CRT nəzəriyyəsinin anlaşılması',max:25},{c:'Material seçimi/uyğunlaşdırma',max:35},{c:'İnklüziv qiymətləndirmə',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Bir şagird mütəmadi olaraq imtahan günü 'xəstələnir' və test günlərini buraxır, lakin başqa günlər tamamilə sağlamdır. Test anksiyetesi (test anxiety) çərçivəsindən bu nümunəni təhlil edib, sinifdə tətbiq oluna biləcək konkret müdaxilələr təklif edin.",rubric:[{c:'Test anxiety nəzəriyyəsi',max:25},{c:'Praktiki müdaxilə addımları',max:35},{c:'Uzunmüddətli dəstək planı',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Komanda işi tapşırığında bir şagird daim 'sürücü' rolunu üzərinə götürür, digərlərinə iştirak imkanı vermir. Əməkdaşlıqlı öyrənmə (cooperative learning) struktur prinsiplərindən istifadə edərək bu dinamikanı necə dəyişdirərdiniz?",rubric:[{c:'Əməkdaşlıq nəzəriyyəsi',max:25},{c:'Struktur həll (rol bölgüsü, norm)',max:35},{c:'Davamlı monitorinq planı',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Müəllim kimi, bir şagirdin yazılı işində plagiat (başqasının mətnindən köçürmə) aşkarladınız. Bu vəziyyəti həm tərbiyəvi, həm akademik bütövlük prinsiplərini qoruyaraq necə həll edərdiniz? Addım-addım planınızı izah edin.",rubric:[{c:'Akademik bütövlük anlayışı',max:25},{c:'Tərbiyəvi yanaşma',max:35},{c:'Profilaktik tədbirlər',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Sinifdə bullying (zorakılıq) hadisəsi baş verib — bir şagird daim ələ salınır. Restorativ ədalət (restorative justice) prinsiplərinə əsaslanaraq bu vəziyyəti necə həll edərdiniz, yalnız cəzalandırıcı tədbirlərdən fərqli olaraq?",rubric:[{c:'Restorativ ədalət anlayışı',max:25},{c:'Konkret proses addımları',max:35},{c:'Bütün tərəflərin ehtiyacının nəzərə alınması',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Yeni tədris ilinin əvvəlində sinifinizdə yüksək səviyyəli narahatlıq (post-pandemiya öyrənmə boşluğu) müşahidə edirsiniz. İlk ay üçün akademik və emosional bərpa planı necə qurardınız?",rubric:[{c:'Diaqnostik yanaşma',max:25},{c:'Akademik bərpa strategiyası',max:35},{c:'Emosional dəstək komponenti',max:25},{c:'Dil',max:15}],type:'essay'},
 ];
 
 // ── OPEN TASK: PISA GENİŞ CAVAB ──────────────────
@@ -5638,6 +5990,12 @@ QDB['open.pisa_open']=[
   {q:"Kollektiv problem həlli kontekstində: Komandanız 4 nəfərdən ibarətdir və bir layihəni 2 həftəyə tamamlamalısınız. İlk gündən başlayaraq hansı addımları (rollar, ünsiyyət, monitorinq) atacağınızı izah edin və hər mərhələdə yarana biləcək riskləri qeyd edin.",rubric:[{c:'Plan strukturu',max:30},{c:'Risk identifikasiyası',max:30},{c:'Realistik addımlar',max:25},{c:'Dil',max:15}],type:'essay'},
   {q:"Qlobal vətəndaşlıq kontekstində: Beynəlxalq şirkət sizin ölkənizdə fabrik açmaq istəyir — bu, iş yerləri yaradacaq, lakin ətraf mühitə təsir edə bilər. Yerli bələdiyyə şurasının üzvü kimi, bu qərarı qiymətləndirmək üçün hansı sualları verərdiniz və qərarı necə formalaşdırardınız?",rubric:[{c:'Maraqlı tərəflərin tanınması',max:25},{c:'Sualların keyfiyyəti',max:35},{c:'Balanslaşdırılmış nəticə',max:25},{c:'Dil',max:15}],type:'essay'},
   {q:"Ekoloji savadlılıq kontekstində: Bir kənd su qıtlığı ilə üzləşir. İki həll təklif olunur: A) bahalı, lakin uzunmüddətli (su təmizləmə zavodu); B) ucuz, lakin qısamüddətli (su idxalı). Hər iki həllin uzunmüddətli sistemli nəticələrini müqayisə edib öz tövsiyənizi əsaslandırın.",rubric:[{c:'Sistemli təhlil',max:30},{c:'Müqayisə keyfiyyəti',max:30},{c:'Əsaslandırılmış tövsiyə',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Maliyyə savadlılığı kontekstində: Bir gənc 18 yaşında ilk dəfə kredit kartı təklifi alır — 'illik faiz 0%, lakin yalnız ilk 6 ay'. Bu təklifin uzunmüddətli risklərini izah edin və gəncə hansı sualları verməyi məsləhət görərdiniz?",rubric:[{c:'Maliyyə anlayışlarının dərinliyi',max:30},{c:'Risk identifikasiyası',max:30},{c:'Praktiki tövsiyələr',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Rəqəmsal savadlılıq kontekstində: Sosial mediada gördüyünüz bir xəbər çox şok edici və sürətlə yayılır, lakin mənbə qeyri-müəyyəndir. Bu xəbərin etibarlılığını yoxlamaq üçün addım-addım proses təklif edin və hansı xəbərdarlıq əlamətlərinə diqqət edəcəyinizi izah edin.",rubric:[{c:'Yoxlama prosesinin sistematikliyi',max:30},{c:'Xəbərdarlıq əlamətlərinin tanınması',max:30},{c:'Tənqidi düşüncə',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"PISA elmi savadlılıq kontekstində: Bir tədqiqat 'gündə bir fincan qəhvə xərçəng riskini azaldır' nəticəsinə gəlib, amma tədqiqat yalnız 50 nəfər üzərində aparılıb. Bu nəticəyə nə dərəcədə etibar etmək olar? Elmi metodun məhdudiyyətlərini izah edin.",rubric:[{c:'Nümunə ölçüsü anlayışı',max:30},{c:'Elmi metodun tənqidi qiymətləndirilməsi',max:30},{c:'Ehtiyatlı nəticə çıxarma',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Qlobal vətəndaşlıq kontekstində: Sizin şəhərinizdə qaçqın ailələr üçün yeni məktəb açılması planlaşdırılır, lakin bəzi yerli sakinlər narahatdır. Hər iki tərəfin perspektivini nəzərə alaraq, ictimai müzakirədə hansı arqumentləri təqdim edərdiniz?",rubric:[{c:'Çoxtərəfli perspektiv',max:30},{c:'Empatik arqumentasiya',max:30},{c:'Konstruktiv həll təklifi',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"PISA riyazi savadlılıq kontekstində: Bir mağaza 'hər şeydə 50% endirim, sonra əlavə 20% endirim' elan edir. Bu, ümumi 70% endirim deməkdirmi? Riyazi əsaslandırma ilə izah edin və mağazanın bu reklam üslubunun niyə çaşdırıcı ola biləcəyini müzakirə edin.",rubric:[{c:'Riyazi düzgünlük',max:30},{c:'İzahın aydınlığı',max:30},{c:'Tənqidi qiymətləndirmə',max:25},{c:'Dil',max:15}],type:'essay'},
+  {q:"Kollektiv problem həlli kontekstində: Komandanızda bir üzv daim son dəqiqəyə qədər öz hissəsini təqdim etmir, bu da bütün komandanın gecikməsinə səbəb olur. Bu vəziyyəti komandanın münasibətini qorumaqla necə həll edərdiniz?",rubric:[{c:'Vəziyyətin diaqnozu',max:25},{c:'Konstruktiv həll strategiyası',max:35},{c:'Komanda dinamikasının qorunması',max:25},{c:'Dil',max:15}],type:'essay'},
 ];
 
 console.log('[QDB] Expert Center expansion: +9 keys, +72 items (PISA fin/digital/environ/civic/collab, Brain creative/emotional, Open ped_scenario/pisa_open)');
@@ -5898,195 +6256,6 @@ function renderStreakModal(streak){
   }
 }
 
-
-// ════════════════════════════════════════════════
-//  YENİ EVENT HANDLERS — 3-cü listener bloku
-// ════════════════════════════════════════════════
-
-document.addEventListener('click',function(e3){
-  const el=e3.target.closest('[data-action]');
-  if(!el)return;
-  const act=el.dataset.action;
-
-  // ── AI TEST GENERATOR ─────────────────────────
-  if(act==='ai-generate-test'){
-    var topic=((document.getElementById('tg-topic')||{}).value||'').trim();
-    var count=(document.getElementById('tg-count')||{value:'5'}).value||'5';
-    var diff=(document.getElementById('tg-diff')||{value:'hard'}).value||'hard';
-    var type=(document.getElementById('tg-type')||{value:'dim'}).value||'dim';
-    if(!topic){toast('Mövzu daxil edin','err');return;}
-    const btn=document.getElementById('tg-btn');
-    const result=document.getElementById('tg-result');
-    if(btn){btn.textContent='⌛ Yaradılır...';btn.disabled=true;}
-    const prompt=`${type.toUpperCase()} imtahanı üçün "${topic}" mövzusunda ${count} ədəd ${diff} səviyyəli sual yarat.
-
-Formatı: hər sual üçün
-Sual: [sual mətni]
-A) [variant]  B) [variant]  C) [variant]  D) [variant]
-Düzgün cavab: [hərfi]
-İzahat: [qısa izahat]
-
-Suallar primitiv 'X nədir?' tipli olmasın. Analiz, müqayisə, tətbiq, nəticə çıxarma tələb etsin.
-Azərbaycanca yaz.`;
-    callAI(prompt).then(reply=>{
-      if(btn){btn.textContent='✨ Test Yarat';btn.disabled=false;}
-      if(result){
-        result.innerHTML=`<div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
-          <div style="font-size:12px;font-weight:700;color:var(--t3);margin-bottom:10px;text-transform:uppercase">AI Yaradılmış Test</div>
-          <div style="font-size:13px;color:var(--t1);line-height:1.8;white-space:pre-line">${reply}</div>
-        </div>`;
-      }
-      addXP(20,'ai_teacher','ai.generate');
-      toast('Test hazırdır! ✨','ok');
-    });
-    e3.stopImmediatePropagation();
-  }
-
-  // ── AI STUDY PLAN ─────────────────────────────
-  if(act==='ai-gen-plan'){
-    var duration=(document.getElementById('sp-duration')||{value:'1ay'}).value||'1ay';
-    var exam=(document.getElementById('sp-exam')||{value:'DİM'}).value||'DİM';
-    const st=getStats();
-    const weak=Object.entries(st.topics||{})
-      .filter(([k,v])=>v.done>=2&&v.correct/v.done<0.6)
-      .map(([k,v])=>`${k}(${Math.round(v.correct/v.done*100)}%)`)
-      .join(', ')||'(hələ məlumat yoxdur)';
-    const btn=document.getElementById('sp-btn');
-    const result=document.getElementById('sp-result');
-    if(btn){btn.textContent='⌛ Plan yaradılır...';btn.disabled=true;}
-    const prompt=`${exam} imtahanına ${duration} ərzində hazırlaşmaq üçün fərdi öyrənmə planı yarat.
-
-Şagirdin zəif mövzuları: ${weak}
-Cəmi tapşırıq sayı: ${st.done||0}
-XP: ${st.xp||0}
-Seriya: ${st.streak||0} gün
-
-Plan həftə-həftə (günlük hədəflər, mövzular, resurslar) olsun.
-Realistische, motivasiyalandırıcı, spesifik ol.
-Azərbaycanca yaz.`;
-    callAI(prompt).then(reply=>{
-      if(btn){btn.textContent='📋 Plan Yarat';btn.disabled=false;}
-      if(result){
-        result.innerHTML=`<div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
-          <div style="font-size:12px;font-weight:700;color:var(--t3);margin-bottom:10px;text-transform:uppercase">Fərdi Tədris Planın</div>
-          <div style="font-size:13px;color:var(--t1);line-height:1.8;white-space:pre-line">${reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>
-        </div>`;
-      }
-      toast('Plan hazırdır! 📋','ok');
-    });
-    e3.stopImmediatePropagation();
-  }
-
-  // ── AI DYSLEXIA FEEDBACK ──────────────────────
-  if(act==='ai-dyslexia-feedback'){
-    const el2=e3.target;
-    el2.textContent='⌛...';el2.disabled=true;
-    const st=getStats();
-    const errors=(st.errors||[]).filter(e=>e.center==='dyslexia');
-    const fb=document.getElementById('dys-ai-fb');
-    const summary=errors.slice(0,5).map(e=>`- ${e.topic||'?'}: ${e.giv} → ${e.cor}`).join('\n')||'(hələ xəta yoxdur)';
-    const prompt=`Disleksiya öyrənən şagirdin xəta analizi:
-${summary}
-
-Azərbaycanca:
-1. Xətaların nümayiş etdirdiyi spesifik çətinlik
-2. Orton-Gillingham əsaslı 3 konkret məşq tövsiyəsi
-3. Evdə tətbiq edilə bilən 2 praktik strategiya`;
-    callAI(prompt).then(reply=>{
-      el2.textContent='🤖 AI Disleksiya Tövsiyəsi Al';el2.disabled=false;
-      if(fb){
-        fb.innerHTML=`<div class="quiz-explain" style="margin-top:12px"><strong>🤖 AI Tövsiyəsi:</strong><br><br>${reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
-      }
-    });
-    e3.stopImmediatePropagation();
-  }
-
-  // ── SUBITIZING DRILL ──────────────────────────
-  if(act==='subit-show'){
-    const count=Math.floor(Math.random()*9)+1;
-    const dots='●'.repeat(count);
-    const disp=document.getElementById('subit-display');
-    const opts=document.getElementById('subit-opts');
-    const fb=document.getElementById('subit-fb');
-    if(disp){disp.textContent=dots;}
-    // Gizlə 500ms sonra
-    setTimeout(()=>{
-      if(disp)disp.textContent='?';
-      // Cavab seçimləri göstər
-      const options=[count];
-      while(options.length<4){
-        const n=Math.max(1,count+Math.floor(Math.random()*5)-2);
-        if(!options.includes(n))options.push(n);
-      }
-      options.sort(()=>Math.random()-.5);
-      if(opts){
-        opts.style.display='flex';
-        opts.innerHTML=options.map(o=>`
-          <button style="width:60px;height:60px;border-radius:12px;border:2px solid var(--b);background:var(--bg);font-size:22px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .13s" 
-            data-action="subit-ans" data-n="${o}" data-correct="${count}">${o}</button>`).join('');
-      }
-      if(fb)fb.innerHTML='';
-    },500);
-    e3.stopImmediatePropagation();
-  }
-
-  if(act==='subit-ans'){
-    const n=parseInt(el.dataset.n);
-    const correct=parseInt(el.dataset.correct);
-    const fb=document.getElementById('subit-fb');
-    const opts=document.getElementById('subit-opts');
-    if(n===correct){
-      el.style.borderColor='#059669';el.style.background='rgba(5,150,105,.1)';
-      if(fb)fb.innerHTML='<div class="task-feedback feedback-ok" style="margin-top:10px">✅ Düzgün! Sürətlə cavab verdin!</div>';
-      addXP(5,'dyscalculia','dysc.subit');
-    }else{
-      el.style.borderColor='#dc2626';
-      var btns=opts&&opts.querySelectorAll?opts.querySelectorAll('[data-action="subit-ans"]'):null;
-      if(btns&&btns.forEach)btns.forEach(function(b){if(parseInt(b.dataset.n)===correct)b.style.borderColor='#059669';});
-      if(fb)fb.innerHTML=`<div class="task-feedback feedback-fail" style="margin-top:10px">❌ Doğru: ${correct}</div>`;
-    }
-    setTimeout(()=>{
-      const disp=document.getElementById('subit-display');
-      if(disp){disp.textContent='Növbəti';disp.dataset.action='subit-show';}
-      if(opts)opts.style.display='none';
-    },1500);
-    e3.stopImmediatePropagation();
-  }
-
-  // ── AI SECTION ROUTING ──────────────────────
-  if(act==='ai-nav'){
-    const sub=el.dataset.sub;
-    S.center='ai_teacher';S.section=null;
-    if(sub==='test-gen'){
-      // override render
-      const main=document.getElementById('nd-main');
-      if(main){
-        main.innerHTML=renderAITestGenerator();
-        postRender();
-      }
-    } else if(sub==='study-plan'){
-      const main=document.getElementById('nd-main');
-      if(main){
-        main.innerHTML=renderAIStudyPlan();
-        postRender();
-      }
-    } else if(sub==='dys-adaptive'){
-      const main=document.getElementById('nd-main');
-      if(main){
-        main.innerHTML=renderDyslexiaAdaptive();
-        postRender();
-      }
-    } else if(sub==='dc-numbers'){
-      const main=document.getElementById('nd-main');
-      if(main){
-        main.innerHTML=renderDyscalculiaNumberSense();
-        postRender();
-      }
-    }
-    e3.stopImmediatePropagation();
-  }
-
-});
 
 // ── Streak Modal Check ─────────────────────────────
 (function checkStreak(){
