@@ -916,23 +916,24 @@ function shuffle(a){
 }
 
 // ── AI CALL ───────────────────────────────────────
-// ── GEMINI AI ─────────────────────────────────────
-const GEMINI_API_KEY = "BURAYA_API_KEY";
-const GEMINI_MODEL   = "gemini-2.5-flash";
+// Bütün AI sorğuları Vercel backend-i üzərindən gedir.
+// API açarları yalnız backend-də (Vercel Environment Variables) saxlanılır,
+// frontend-də heç bir açar yoxdur.
+const AI_BACKEND_URL = 'https://neuro-code-rs1q.vercel.app/api/ai';
 
 async function callAI(prompt, system=''){
   try{
-    const body = {
-      contents: [{ role:'user', parts:[{ text: system ? system+'\n\n'+prompt : prompt }] }]
-    };
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
-      { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) }
-    );
-    if(!r.ok){ const t=await r.text(); console.warn('Gemini HTTP',r.status,t.slice(0,200)); return 'AI xidməti müvəqqəti əlçatan deyil.'; }
-    const d = await r.json();
-    const text = (d?.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');
-    return text || 'Cavab alınmadı.';
+    const body={prompt:prompt};
+    if(system)body.system=system;
+    const r=await fetch(AI_BACKEND_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body),
+    });
+    if(!r.ok){ console.warn('AI backend HTTP',r.status); return 'AI xidməti müvəqqəti əlçatan deyil.'; }
+    const d=await r.json();
+    if(d&&d.ok&&d.text)return d.text;
+    return 'Cavab alınmadı.';
   }catch(e){
     console.warn('callAI error:',e.message);
     return 'Bağlantı xətası. İnternet bağlantınızı yoxlayın.';
