@@ -298,6 +298,31 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 .why-name{font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--t1);margin-bottom:8px}
 .why-desc{font-size:12px;color:var(--t3);line-height:1.75}
 
+/* Testimonials */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--b);border:1px solid var(--b);margin-top:36px}
+.testi-card{background:var(--bg);padding:26px 24px;display:flex;flex-direction:column;transition:background .2s}
+.testi-card:hover{background:var(--glass)}
+.testi-stars{color:#f59e0b;font-size:13px;letter-spacing:2px;margin-bottom:14px}
+.testi-quote{font-size:13px;color:var(--t2);line-height:1.8;flex:1;margin-bottom:18px}
+.testi-person{display:flex;align-items:center;gap:11px}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
+.testi-name{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--t1)}
+.testi-role{font-size:11px;color:var(--t4);margin-top:1px}
+
+/* Secondary CTA (pricing-yönümlü) */
+.cta-pricing{
+  background:var(--grad);border-radius:var(--r,22px);padding:48px 40px;text-align:center;
+  margin:0 24px;max-width:1132px;margin-left:auto;margin-right:auto;
+}
+.cta-pricing h2{font-family:var(--font-display);font-size:clamp(22px,3vw,32px);font-weight:800;color:#fff;letter-spacing:-.4px}
+.cta-pricing p{font-size:14px;color:rgba(255,255,255,.88);margin-top:10px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7}
+.cta-pricing-btns{display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+.cta-pricing .btn-on-grad{background:#fff;color:var(--blue,#2563eb);border:none}
+.cta-pricing .btn-on-grad:hover{filter:brightness(.96)}
+.cta-pricing .btn-ghost-on-grad{background:rgba(255,255,255,.14);color:#fff;border:1.5px solid rgba(255,255,255,.35)}
+.cta-pricing .btn-ghost-on-grad:hover{background:rgba(255,255,255,.22)}
+@media(max-width:600px){.cta-pricing{padding:36px 22px;margin:0 14px}}
+
 /* Free Demo page */
 .demo-q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:32px}
 .demo-q-card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--b);border-radius:var(--r2);padding:20px}
@@ -551,7 +576,7 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 <div id="toast-root"></div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   const firebaseConfig = {
     apiKey: "PASTE_YOUR_API_KEY_HERE",
     authDomain: "neurocode-class.firebaseapp.com",
@@ -568,6 +593,17 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
       addDoc(collection(db,'results'), {...data, ts: serverTimestamp()})
         .catch(function(e){ console.warn('[NeuroCode/Firestore] write failed:', e.message); });
     }catch(e){ console.warn('[NeuroCode/Firestore] init failed:', e.message); }
+  };
+  // ── SUBSCRIPTION: Firebase-ə abunəlik statusunu yazan, ncSendResult-a
+  // paralel, ona TOXUNMAYAN ayrı funksiya. 'subscriptions' kolleksiyasında,
+  // istifadəçi id-sinə görə sənəd kimi saxlanılır (hər istifadəçi üçün 1 sənəd,
+  // yenilənəndə üzərinə yazılır — addDoc kimi hər dəfə yeni sənəd yaratmır).
+  window.ncSetSubscription = function(data){
+    try{
+      if(!data||!data.userId)return;
+      setDoc(doc(db,'subscriptions',data.userId), {...data, updatedAt: serverTimestamp()}, {merge:true})
+        .catch(function(e){ console.warn('[NeuroCode/Firestore] subscription write failed:', e.message); });
+    }catch(e){ console.warn('[NeuroCode/Firestore] subscription init failed:', e.message); }
   };
 </script>
 <script>
@@ -846,6 +882,134 @@ const LEVELS=[
 function calcLv(xp){let lv=LEVELS[0];for(const l of LEVELS)if(xp>=l.xp)lv=l;return lv;}
 
 const XP_EASY=5,XP_MED=10,XP_HARD=18,XP_EXPERT=25,XP_TASK=15;
+
+// ════════════════════════════════════════════════
+//  SUBSCRIPTION / PLAN INFRASTRUCTURE
+//  Bu bölmə tamamilə əlavə (additive) xarakterlidir —
+//  mövcud heç bir funksiyanı, dəyişəni və ya render
+//  axınını dəyişdirmir. Yalnız yeni, müstəqil köməkçi
+//  funksiyalar təqdim edir.
+// ════════════════════════════════════════════════
+
+// Premium-only mərkəzlər. Genişləndirmək üçün sadəcə bu
+// massivə yeni mərkəz id-si əlavə etmək kifayətdir —
+// heç bir başqa yerə toxunmaq lazım deyil.
+const PREMIUM_CENTERS=['dim','miq','open'];
+
+// Free planda gündəlik məhdudiyyətlər.
+const FREE_AI_DAILY_LIMIT=5;
+const FREE_TEST_DAILY_LIMIT=10;
+
+// İstifadəçinin planını oxuyur. S.user yoxdursa (giriş edilməyib)
+// 'free' qaytarır ki, heç bir çağıran yerdə əlavə null-check lazım olmasın.
+function getUserPlan(){
+  return (S.user&&S.user.plan)||'free';
+}
+function isPremium(){
+  return getUserPlan()==='premium';
+}
+
+// Gündəlik kvota sayğacları — localStorage-da, tarixə görə sıfırlanan
+// sadə bir strukturda saxlanılır: {date:'2026-06-20', aiCount:3, testCount:7}
+function getTodayKey(){
+  return new Date().toISOString().slice(0,10);
+}
+function getUsageToday(){
+  const u=DB.get('usage_today',{date:'',aiCount:0,testCount:0});
+  const today=getTodayKey();
+  if(u.date!==today)return{date:today,aiCount:0,testCount:0};
+  return u;
+}
+function saveUsageToday(u){
+  DB.set('usage_today',u);
+}
+function incAIUsage(){
+  const u=getUsageToday();
+  u.aiCount=(u.aiCount||0)+1;
+  saveUsageToday(u);
+  return u.aiCount;
+}
+function incTestUsage(){
+  const u=getUsageToday();
+  u.testCount=(u.testCount||0)+1;
+  saveUsageToday(u);
+  return u.testCount;
+}
+
+// AI Müəllimdən istifadə icazəsini yoxlayır. Premium istifadəçilər üçün
+// həmişə true. Free istifadəçilər üçün gündəlik limiti yoxlayır.
+// Çağıran yer (handler) bu funksiyanı callAI()-dan ƏVVƏL çağırmalıdır —
+// callAI() özü dəyişdirilmir, bu, ayrıca bir "gate" funksiyasıdır.
+function canUseAI(){
+  if(isPremium())return{ok:true};
+  const u=getUsageToday();
+  if((u.aiCount||0)>=FREE_AI_DAILY_LIMIT){
+    return{ok:false,reason:'ai-limit',used:u.aiCount,limit:FREE_AI_DAILY_LIMIT};
+  }
+  return{ok:true,used:u.aiCount||0,limit:FREE_AI_DAILY_LIMIT};
+}
+
+function canStartTest(){
+  if(isPremium())return{ok:true};
+  const u=getUsageToday();
+  if((u.testCount||0)>=FREE_TEST_DAILY_LIMIT){
+    return{ok:false,reason:'test-limit',used:u.testCount,limit:FREE_TEST_DAILY_LIMIT};
+  }
+  return{ok:true,used:u.testCount||0,limit:FREE_TEST_DAILY_LIMIT};
+}
+
+// Mərkəzin Free planda kilidli olub-olmadığını yoxlayır.
+function isCenterLocked(centerId){
+  if(isPremium())return false;
+  return PREMIUM_CENTERS.indexOf(centerId)!==-1;
+}
+
+// Firebase-ə (mövcud window.ncSendResult-a TOXUNMADAN, paralel) abunəlik
+// statusunu yazan funksiya. Index.html-dəki Firebase <script type="module">
+// bloku bunu window.ncSetSubscription kimi expose edəcək (bax: aşağıdakı
+// HTML dəyişikliyi). Funksiya mövcud deyilsə (məs. Firebase hələ init
+// olmayıbsa) səssizcə heç nə etmir — heç vaxt xəta atmır.
+function syncSubscriptionToFirebase(plan){
+  try{
+    if(window.ncSetSubscription){
+      window.ncSetSubscription({
+        userId:(S.user&&S.user.id)||'',
+        userName:(S.user&&S.user.name)||'',
+        email:(S.user&&S.user.email)||'',
+        plan:plan,
+      });
+    }
+  }catch(e){
+    console.warn('[NeuroCode/Subscription] Firebase sync failed:',e.message);
+  }
+}
+
+// İstifadəçinin planını dəyişdirir (hazırda yalnız development/test məqsədli
+// — real dəyişiklik Paddle webhook-u vasitəsilə backend-dən gələcək).
+// localStorage-dakı user-i yeniləyir və Firebase-ə sync edir.
+function setUserPlan(plan){
+  if(!S.user)return;
+  S.user={...S.user,plan:plan};
+  DB.set('user',S.user);
+  syncSubscriptionToFirebase(plan);
+}
+
+// Kilid ekranı üçün ümumi HTML komponenti. Mövcud .section-card.locked
+// vizual dilini (151-154-cü sətirlərdəki CSS) əsas götürür, amma tam
+// səhifə əvəzləyici kart kimi istifadə olunur.
+function renderUpgradeLock(opts){
+  opts=opts||{};
+  const title=opts.title||'Bu funksiya Premium plana aiddir';
+  const desc=opts.desc||'Free planda bu bölmə kilidlidir. Pro-ya keçərək tam girişi aç.';
+  const icon=opts.icon||'🔒';
+  return `<div style="max-width:480px;margin:60px auto;text-align:center;background:var(--glass);border:1.5px solid var(--b);border-radius:var(--r);padding:40px 32px">
+    <div style="font-size:44px;margin-bottom:18px">${icon}</div>
+    <div style="font-family:var(--font-display);font-size:19px;font-weight:800;color:var(--t1);margin-bottom:10px">${title}</div>
+    <div style="font-size:13.5px;color:var(--t3);line-height:1.7;margin-bottom:26px">${desc}</div>
+    <a href="/pricing.html" target="_blank" rel="noopener" class="btn btn-primary btn-xl" style="width:100%">💎 Premium-a keç</a>
+    <div style="font-size:11px;color:var(--t4);margin-top:14px">7 günlük pulun geri qaytarılması zəmanəti ilə</div>
+  </div>`;
+}
 
 // ── STATS ─────────────────────────────────────────
 function getStats(){
@@ -2227,10 +2391,29 @@ function renderLanding(){
     {q:'Disleksiya/Diskalkuli mərhələləri niyə kilidlidir?',a:'Bu mərkəzlər Orton-Gillingham və CRA (Konkret-Təsviri-Abstrakt) metodologiyasına əsaslanan ardıcıl proqramdır — hər mərhələ əvvəlkinin üzərində qurulur, ona görə ardıcıl açılır.'},
     {q:'Sertifikatı necə əldə edirəm?',a:'Ekspert Mərkəzi səhifəsində istənilən mərkəzin detalına keç — irəliləyiş statistikana əsaslanan sertifikat avtomatik generasiya olunur və "Çap et / PDF" düyməsi ilə yüklənir.'},
     {q:'Məlumatlarım haradadır, məxfilikdir?',a:'Bütün irəliləyiş, XP və tarixçə brauzerinin yaddaşında (localStorage) saxlanılır — yalnız sənin cihazında qalır.'},
+    {q:'Pulsuz planla nə qədər istifadə edə bilərəm?',a:'Free planda gündə 5 AI Müəllim sualı və əsas testlərə tam giriş var — kredit kartı tələb olunmur. İstədiyin vaxt Pro-ya keçə bilərsən.'},
+    {q:'Pro plandan istənilən vaxt imtina edə bilərəmmi?',a:'Bəli. Pro abunəliyini Profil bölməsindən bir kliklə ləğv edə bilərsən, cari ödəniş dövrünün sonuna qədər giriş davam edir. Ətraflı şərtlər üçün Qiymət planları səhifəsinə bax.'},
   ].map(f=>`<details class="faq-item">
     <summary>${f.q}</summary>
     <div class="faq-ans">${f.a}</div>
   </details>`).join('');
+
+  const testimonials=[
+    {n:'Aynur Quliyeva',r:'11-ci sinif şagirdi · DİM hazırlığı',q:'Adaptiv sistem həqiqətən zəif olduğum mövzulara daha çox sual verir. 2 ay ərzində riyaziyyatda səhv faizim əhəmiyyətli azaldı.',i:'AQ'},
+    {n:'Rəşad Məmmədov',r:'Tarix müəllimi · MİQ namizədi',q:'AI Müəllim funksiyası gecə-gündüz sual verə bildiyim bir köməkçi kimidir. Pedaqoji metodika sualları xüsusən faydalı oldu.',i:'RM'},
+    {n:'Səbinə Əliyeva',r:'Valideyn · Disleksiya proqramı',q:'Oğlumun oxu çətinliyi üçün Neuro Dyslexia bölməsi addım-addım irəliləyiş göstərdi. Mərhələli struktur çox doğru fikirləşilib.',i:'SƏ'},
+  ].map(t=>`<div class="testi-card">
+    <div class="testi-stars">★★★★★</div>
+    <div class="testi-quote">"${t.q}"</div>
+    <div class="testi-person">
+      <div class="testi-avatar">${t.i}</div>
+      <div>
+        <div class="testi-name">${t.n}</div>
+        <div class="testi-role">${t.r}</div>
+      </div>
+    </div>
+  </div>`).join('');
+
 
   return `<div class="landing">
 <nav class="landing-nav">
@@ -2287,6 +2470,24 @@ function renderLanding(){
 </section>
 
 <section class="land-section">
+  <div class="land-eyebrow">Rəylər</div>
+  <h2 class="land-title">İstifadəçilərimiz nə deyir</h2>
+  <p class="land-sub">Şagirdlər, müəllimlər və valideynlər NeuroCode-u necə istifadə edir.</p>
+  <div class="testi-grid">${testimonials}</div>
+</section>
+
+<section class="land-section">
+  <div class="cta-pricing">
+    <h2>Pulsuzdan başla, istədiyin vaxt yüksəl</h2>
+    <p>Free planla bu gün başla — gündə 5 AI sualı, əsas testlər. Limitsiz AI Müəllim, bütün sual bankları və Open Task üçün Pro-ya keç.</p>
+    <div class="cta-pricing-btns">
+      <a href="/pricing" class="btn btn-xl btn-on-grad">💎 Qiymət planlarına bax</a>
+      <button class="btn btn-xl btn-ghost-on-grad" data-action="go-auth" data-val="register">🚀 Pulsuz Başla</button>
+    </div>
+  </div>
+</section>
+
+<section class="land-section" id="faq-section">
   <div class="land-eyebrow">FAQ</div>
   <h2 class="land-title">Tez-tez verilən suallar</h2>
   <div class="faq-wrap">${faqs}</div>
@@ -2506,6 +2707,7 @@ function renderShell(){
 
   const platformPages=[
     {id:'dashboard',n:'Ana Səhifə',ic:'🏠'},
+    {id:'student-dashboard',n:'Mənim Statistikam',ic:'📊'},
     {id:'courses',n:'Mərkəzlər',ic:'🧩'},
     {id:'ai_teacher',n:'AI Müəllim',ic:'🤖',center:'ai_teacher'},
     {id:'blog',n:'Bloq',ic:'📰'},
@@ -2629,6 +2831,7 @@ function renderMain(){
     // ── MODULE/Quiz ──────────────────────────────────────────────
     if(S.screen==='quiz')return renderQuiz();
     // ── PLATFORM PAGES (Courses/Blog/Contact/Expert Center) ───────
+    if(S.page==='student-dashboard')return renderStudentDashboard();
     if(S.page==='courses')return renderCourses();
     if(S.page==='blog')return S.blogPost?renderBlogPost():renderBlog();
     if(S.page==='contact')return renderContact();
@@ -2636,6 +2839,16 @@ function renderMain(){
     if(!S.center)return renderDash();
     const c=CENTERS[S.center];
     if(!c)return renderDash();
+    // ── SUBSCRIPTION: Premium-only mərkəz kilidi ──────────────────
+    // Mərkəzin özü görünür (naviqasiyada), lakin məzmununa giriş
+    // Free istifadəçilər üçün kilid ekranı ilə əvəzlənir.
+    if(isCenterLocked(S.center)){
+      return renderUpgradeLock({
+        icon:c.icon,
+        title:`${c.name} — Premium funksiyadır`,
+        desc:`${c.name} mərkəzinin tam sual bankı və tapşırıqları Pro abunəlik üçün açıqdır. Free planda yalnız əsas mərkəzlərə (Neuro Brain, Disleksiya, Diskalkuli, Text Analysis, PISA Lab) giriş mövcuddur.`
+      });
+    }
     // ── MODULE/Analytics ─────────────────────────────────────────
     if(S.center==='analytics')return S.section?renderAnalyticsSec():renderCenterHome();
     // ── MODULE/DIM ───────────────────────────────────────────────
@@ -2980,6 +3193,14 @@ function recordRecentlyShown(topicKey, qs){
 }
 
 function startQuiz(qs,ck,tk){
+  // ── SUBSCRIPTION: Free plan gündəlik test limiti ──────
+  const gate=canStartTest();
+  if(!gate.ok){
+    toast(`Gündəlik pulsuz test limitiniz (${gate.limit}) bitdi. Limitsiz testlər üçün Premium-a keçin.`,'err');
+    window.open('/pricing.html','_blank');
+    return;
+  }
+  incTestUsage();
   // Level filter (Beginner/Standard/Expert/Olympiad): if the user picked a
   // specific level, restrict the pool to that difficulty only. Falls back
   // to the full pool if the chosen level has zero questions in this bank,
@@ -3795,6 +4016,203 @@ function renderDashEnhancement(){
 }
 
 
+// ════════════════════════════════════════════════
+//  STUDENT DASHBOARD — yeni, ayrı komponent
+//  Mövcud renderDash()/renderDashEnhancement()-ə
+//  TOXUNMUR. Yalnız getStats()-dan oxuyur (read-only),
+//  heç bir mövcud state-i dəyişmir.
+// ════════════════════════════════════════════════
+
+// AI Müəllim sessiyalarının yüngül, davamlı logu.
+// AIM massivinə (mövcud, müvəqqəti chat state) toxunmur —
+// paralel, ayrı bir DB açarına yazır ki, AI Müəllim-in
+// hazırkı davranışı (səhifə yenilənəndə sıfırlanması daxil)
+// dəyişməsin.
+function logAISession(topic,preview){
+  try{
+    const log=DB.get('ai_session_log',[]);
+    log.unshift({topic:topic||'Ümumi sual',preview:(preview||'').slice(0,80),ts:Date.now()});
+    DB.set('ai_session_log',log.slice(0,30));
+  }catch(e){
+    console.warn('[StudentDashboard] logAISession:',e.message);
+  }
+}
+
+function getWeakStrongTopics(st){
+  const topics=st.topics||{};
+  const rows=Object.entries(topics)
+    .filter(([,v])=>v&&v.done>=2)
+    .map(([k,v])=>({key:k,done:v.done,correct:v.correct||0,pct:v.done?Math.round((v.correct||0)/v.done*100):0}));
+  const strong=rows.filter(r=>r.pct>=70).sort((a,b)=>b.pct-a.pct).slice(0,5);
+  const weak=rows.filter(r=>r.pct<70).sort((a,b)=>a.pct-b.pct).slice(0,5);
+  return {strong,weak};
+}
+
+function topicLabel(key){
+  try{
+    const [ck,sk]=String(key).split('.');
+    const c=CENTERS[ck];
+    if(c&&c.sections&&c.sections[sk])return c.sections[sk].n;
+    if(c)return c.name;
+    return key;
+  }catch(e){return key;}
+}
+
+function renderStudentDashboard(){
+  try{
+
+  const st=getStats();
+  const lv=calcLv(st.xp||0);
+  const nxt=LEVELS.find(l=>l.xp>(st.xp||0))||lv;
+  const xpPct=nxt.xp>lv.xp?Math.min(100,Math.round(((st.xp||0)-lv.xp)/(nxt.xp-lv.xp)*100)):100;
+  const {strong,weak}=getWeakStrongTopics(st);
+  const recentErrors=(st.errors||[]).slice(0,6);
+  const aiLog=DB.get('ai_session_log',[]).slice(0,6);
+  const totalDone=st.done||0;
+  const totalCenters=Object.values(st.centers||{});
+  const overallAcc=totalCenters.length?Math.round(totalCenters.reduce((s,c)=>s+(c.correct||0),0)/Math.max(1,totalCenters.reduce((s,c)=>s+(c.done||0),0))*100):0;
+
+  const fmtDate=ts=>{
+    if(!ts)return '';
+    const d=new Date(ts), now=new Date();
+    const sameDay=d.toDateString()===now.toDateString();
+    if(sameDay)return d.toLocaleTimeString('az-AZ',{hour:'2-digit',minute:'2-digit'});
+    return d.toLocaleDateString('az-AZ',{day:'2-digit',month:'2-digit'});
+  };
+
+  const profileCard=`
+  <div style="background:var(--grad);border-radius:var(--r2);padding:20px;color:#fff;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+    <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">${lv.ic}</div>
+    <div style="flex:1;min-width:180px">
+      <div style="font-family:var(--font-display);font-size:19px;font-weight:800">${(S.user&&S.user.name)||'Öyrənən'}</div>
+      <div style="font-size:12px;opacity:.85;margin-top:2px">LVL ${lv.l} · ${lv.n} · ${st.xp||0} XP</div>
+      <div style="height:5px;background:rgba(255,255,255,.22);border-radius:3px;margin-top:8px;overflow:hidden;max-width:280px">
+        <div style="height:100%;background:#fff;border-radius:3px;width:${xpPct}%"></div>
+      </div>
+      <div style="font-size:10px;opacity:.75;margin-top:3px">${nxt.xp>lv.xp?`Növbəti səviyyəyə ${nxt.xp-(st.xp||0)} XP`:'Maksimum səviyyə'}</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div style="text-align:center;background:rgba(255,255,255,.12);border-radius:var(--r2);padding:10px 14px">
+        <div style="font-size:16px;font-weight:800">${totalDone}</div>
+        <div style="font-size:9px;opacity:.8">Tapşırıq</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,.12);border-radius:var(--r2);padding:10px 14px">
+        <div style="font-size:16px;font-weight:800">${st.streak||0}🔥</div>
+        <div style="font-size:9px;opacity:.8">Seriya</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,.12);border-radius:var(--r2);padding:10px 14px">
+        <div style="font-size:16px;font-weight:800">${overallAcc}%</div>
+        <div style="font-size:9px;opacity:.8">Dəqiqlik</div>
+      </div>
+    </div>
+  </div>`;
+
+  // ── SUBSCRIPTION: Plan statusu kartı ──────────────────────
+  const planIsPremium=isPremium();
+  const usage=getUsageToday();
+  const planCard=planIsPremium
+    ? `<div style="background:var(--glass);border:1.5px solid rgba(16,185,129,.35);border-radius:var(--r2);padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:22px">💎</span>
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:13px;font-weight:700;color:var(--t1)">Premium Plan Aktivdir</div>
+          <div style="font-size:11.5px;color:var(--t3);margin-top:2px">Limitsiz AI Müəllim, bütün sual bankları, Open Task — tam giriş</div>
+        </div>
+      </div>`
+    : `<div style="background:var(--glass);border:1.5px solid var(--b);border-radius:var(--r2);padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <span style="font-size:22px">🌱</span>
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:13px;font-weight:700;color:var(--t1)">Free Plan</div>
+          <div style="font-size:11.5px;color:var(--t3);margin-top:2px">Bu gün: ${usage.aiCount||0}/${FREE_AI_DAILY_LIMIT} AI sualı · ${usage.testCount||0}/${FREE_TEST_DAILY_LIMIT} test</div>
+        </div>
+        <a href="/pricing.html" target="_blank" rel="noopener" class="btn btn-primary btn-sm">💎 Premium-a keç</a>
+      </div>`;
+
+  const progressGrid=`
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:16px">
+    ${Object.values(CENTERS).map(c=>{
+      const cnt=(st.centers&&st.centers[c.id])?st.centers[c.id]:{done:0,correct:0};
+      const pct=cnt.done?Math.round((cnt.correct||0)/cnt.done*100):0;
+      return `<div style="background:var(--bg2);border:1.5px solid var(--b);border-radius:var(--r2);padding:12px">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+          <span style="font-size:16px">${c.icon}</span>
+          <span style="font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</span>
+        </div>
+        <div style="font-size:10px;color:var(--t4);margin-bottom:4px">${cnt.done} tapşırıq · ${pct}% dəqiqlik</div>
+        <div style="height:4px;background:var(--bg3);border-radius:2px;overflow:hidden">
+          <div style="height:100%;background:${c.color};border-radius:2px;width:${Math.min(100,pct)}%"></div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>`;
+
+  const topicListHtml=(rows,emptyMsg,kind)=>{
+    if(!rows.length)return `<div style="font-size:12px;color:var(--t4);padding:10px 0">${emptyMsg}</div>`;
+    return rows.map(r=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bg3)">
+        <span style="font-size:12px;color:var(--t2)">${topicLabel(r.key)}</span>
+        <span style="font-size:11px;font-weight:700;color:${kind==='strong'?'#10b981':'#ef4444'}">${r.pct}%</span>
+      </div>`).join('');
+  };
+
+  const strongWeakRow=`
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:16px">
+    <div style="background:var(--bg2);border:1.5px solid var(--b);border-radius:var(--r2);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px">💪 Güclü mövzular</div>
+      ${topicListHtml(strong,'Hələ kifayət qədər məlumat yoxdur — daha çox tapşırıq həll edin.','strong')}
+    </div>
+    <div style="background:var(--bg2);border:1.5px solid var(--b);border-radius:var(--r2);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px">📌 Zəif mövzular</div>
+      ${topicListHtml(weak,'Hələ kifayət qədər məlumat yoxdur — daha çox tapşırıq həll edin.','weak')}
+    </div>
+  </div>`;
+
+  const recentActivityHtml=!recentErrors.length
+    ? `<div style="font-size:12px;color:var(--t4);padding:10px 0">Hələ heç bir fəaliyyət qeydə alınmayıb.</div>`
+    : recentErrors.map(e=>`
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bg3)">
+        <span style="font-size:12px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%">${topicLabel(e.topic)}</span>
+        <span style="font-size:10px;color:var(--t4)">${fmtDate(e.ts)}</span>
+      </div>`).join('');
+
+  const aiSessionsHtml=!aiLog.length
+    ? `<div style="font-size:12px;color:var(--t4);padding:10px 0">Hələ AI Müəllimlə sual-cavab tarixçəsi yoxdur.</div>`
+    : aiLog.map(a=>`
+      <div style="padding:8px 0;border-bottom:1px solid var(--bg3)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px;font-weight:600;color:var(--t2)">🤖 ${a.topic}</span>
+          <span style="font-size:10px;color:var(--t4)">${fmtDate(a.ts)}</span>
+        </div>
+        ${a.preview?`<div style="font-size:11px;color:var(--t4);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${a.preview}</div>`:''}
+      </div>`).join('');
+
+  return `
+  <div style="margin-bottom:16px">
+    <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--t1)">📊 Mənim Statistikam</div>
+    <div style="font-size:12px;color:var(--t3);margin-top:2px">Profilin, irəliləyişin və AI Müəllim tarixçən bir yerdə</div>
+  </div>
+  ${profileCard}
+  ${planCard}
+  <div style="font-size:13px;font-weight:700;color:var(--t1);margin:18px 0 8px">📈 Mərkəzlər üzrə irəliləyiş</div>
+  ${progressGrid}
+  ${strongWeakRow}
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
+    <div style="background:var(--bg2);border:1.5px solid var(--b);border-radius:var(--r2);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px">🕐 Son fəaliyyətlər</div>
+      ${recentActivityHtml}
+    </div>
+    <div style="background:var(--bg2);border:1.5px solid var(--b);border-radius:var(--r2);padding:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px">🤖 Son AI Müəllim sessiyaları</div>
+      ${aiSessionsHtml}
+    </div>
+  </div>`;
+
+  }catch(_me){
+    console.error('[NeuroCode/MODULE/StudentDashboard] '+_me.message);
+    return errorFallback('MODULE/StudentDashboard', _me);
+  }
+}
+
+
 // ── AI CENTER ─────────────────────────────────────
 const AIM=[]; // AI messages
 let AIL=false; // AI loading
@@ -4293,16 +4711,18 @@ document.addEventListener('click',function(e){
     if(!name){toast('Ad daxil edin','err');return;}
     if(!email||!email.includes('@')){toast('Düzgün e-mail daxil edin','err');return;}
     if(pass.length<6){toast('Şifrə ən az 6 simvol olmalıdır','err');return;}
-    const u={id:'u'+Date.now(),name,className:className||'Sinif yoxdur',email,xp:0,joined:Date.now()};
+    const u={id:'u'+Date.now(),name,className:className||'Sinif yoxdur',email,xp:0,joined:Date.now(),plan:'free'};
     DB.set('user',u);S.user=u;
     S.screen='app';S.center=null;S.section=null;S.page=null;
+    syncSubscriptionToFirebase('free');
     toast('Xoş gəldin, '+name+'! 👋','ok');render();break;}
 
   case 'do-login':{
     const email=((document.getElementById('f-email')||{}).value||'').trim();
     const u=DB.get('user');
     if(u&&u.email===email){
-      S.user=u;S.screen='app';S.center=null;S.section=null;S.page=null;
+      if(!u.plan)u.plan='free'; // köhnə hesablar üçün geriyə uyğunluq
+      S.user=u;DB.set('user',u);S.screen='app';S.center=null;S.section=null;S.page=null;
       toast('Xoş gəldin, '+u.name+'! 👋','ok');render();
     }else{
       toast('E-mail tapılmadı — qeydiyyatdan keç','err');
@@ -4790,8 +5210,17 @@ async function handleAISend(){
   if(!inp)return;
   const msg=inp.value.trim();
   if(!msg||AIL)return;
+  // ── SUBSCRIPTION: Free plan gündəlik AI limiti ──────
+  const gate=canUseAI();
+  if(!gate.ok){
+    toast(`Gündəlik pulsuz AI limitiniz (${gate.limit} sual) bitdi. Limitsiz AI Müəllim üçün Premium-a keçin.`,'err');
+    AIM.push({r:'ai',t:`⚠️ Gündəlik pulsuz limitiniz (${gate.limit} sual) bitdi. Sabah sıfırlanacaq, ya da limitsiz AI Müəllim üçün <a href="/pricing.html" target="_blank" rel="noopener" style="color:var(--blue2);font-weight:700">Premium-a keçin →</a>`});
+    render();
+    return;
+  }
   inp.value='';inp.style.height='auto';
   AIM.push({r:'user',t:msg});
+  incAIUsage();
   await fetchAIReply(msg);
 }
 
@@ -4813,6 +5242,7 @@ Cavablar HƏMIŞƏ:
   const reply=await callAI(msg,sys);
   AIL=false;
   AIM.push({r:'ai',t:reply});
+  logAISession(msg.slice(0,40),reply);
   render();
   const chat2=document.getElementById('ai-chat');
   if(chat2)setTimeout(()=>chat2.scrollTop=chat2.scrollHeight,50);
