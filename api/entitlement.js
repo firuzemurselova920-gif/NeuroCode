@@ -1,25 +1,211 @@
-const admin = require('firebase-admin');
+const admin = require("firebase-admin");
+
 const TRIAL_MS = 72 * 60 * 60 * 1000;
-function init() { if (admin.apps.length) return admin.app(); const sa = process.env.FIREBASE_SERVICE_ACCOUNT; if (!sa) return null; return admin.initializeApp({ credential: admin.credential.cert(JSON.parse(sa)) }); }
-module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'POST' });
+
+function initFirebase() {
+  if (admin.apps.length) {
+    return admin.app();
+  }
+
+  const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
+
+  if (!raw) {
+    throw new Error("FIREBASE_SERVICE_ACCOUNT yoxdur");
+  }
+
+  let serviceAccount;
+
   try {
-    if (!init()) return res.json({ plan: 'free', status: 'free' });
-    const { idToken } = req.body || {};
-    if (!idToken) return res.json({ plan: 'free', status: 'free' });
-    const dec = await admin.auth().verifyIdToken(idToken);
+    serviceAccount = JSON.parse(raw);
+  } catch (error) {
+    throw new Error("FIREBASE_SERVICE_ACCOUNT JSON formatı yanlışdır");
+  }
+
+  return admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
+
+module.exports = async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      ok: false,
+      error: "Yalnız POST sorğusu qəbul edilir"
+    });
+  }
+
+  try {
+    initFirebase();
+
+    const body =
+      typeof req.body === "string"
+        ? JSON.parse(req.body)
+        : req.body || {};
+
+    const idToken = String(body.idToken || "").trim();
+
+    if (!idToken) {
+      return res.status(401).json({
+        ok: false,
+        plan: "free",
+        status: "unauthenticated",
+        error: "idToken yoxdur"
+      });
+    }
+
+    let decoded;
+
+    try {
+      decoded = await admin.auth().verifyIdToken(idToken);
+    } catch (error) {
+      return res.status(401).json({
+        ok: false,
+        plan: "free",
+        status: "unauthenticated",
+        error: "Firebase token etibarsızdır"
+      });
+    }
+
+    const uid = decoded.uid;
+
     const db = admin.firestore();
-    const [eSnap, uRec] = await Promise.all([ db.doc('entitlements/' + dec.uid).get(), admin.auth().getUser(dec.uid) ]);
-    const ent = eSnap.exists ? eSnap.data() : {};
-    const plan = ent.plan || 'free';
-    if (plan === 'blocked') return res.json({ plan: 'blocked', status: 'blocked' });
-    if (plan === 'active' || plan === 'premium' || plan === 'go') return res.json({ plan, status: 'active' });
-    const created = uRec.metadata?.creationTime ? Date.parse(uRec.metadata.creationTime) : 0;
-    const elapsed = created ? Date.now() - created : 0;
-    if (created && elapsed > TRIAL_MS) return res.json({ plan: 'free', status: 'trial_expired' });
-    return res.json({ plan: 'free', status: 'free', trialRemaining: Math.max(0, TRIAL_MS - elapsed) });
-  } catch (e) { console.error('[entitlement]', e.message); return res.status(401).json({ plan: 'free', status: 'free' }); }
+
+    const [entitlementSnapshot, userRecord] =
+      await Promise.all([
+        db.doc(`entitlements/${uid}`).get(),
+        admin.auth().getUser(uid)
+      ]);
+
+    const entitlement =
+      entitlementSnapshot.exists
+        ? entitlementSnapshot.data()
+        : {};
+
+    const plan =
+      String(entitlement?.plan || "free").toLowerCase();
+
+    /*
+    ==============================
+    BLOKLANMIŞ İSTİFADƏÇİ
+    ==============================
+    */
+
+    if (plan === "blocked") {
+      return res.status(200).json({
+        ok: true,
+        plan: "blocked",
+        status: "blocked",
+        access: false,
+        trialRemaining: 0
+      });
+    }
+
+    /*
+    ==============================
+    ADMIN TƏRƏFİNDƏN AKTİV EDİLİB
+    ==============================
+    */
+
+    if (
+      plan === "active" ||
+      plan === "premium" ||
+      plan === "go"
+    ) {
+      return res.status(200).json({
+        ok: true,
+        plan,
+        status: "active",
+        access: true,
+        trialRemaining: null
+      });
+    }
+
+    /*
+    ==============================
+    72 SAATLIQ TRIAL
+    ==============================
+    */
+
+    const createdAt =
+      userRecord.metadata?.creationTime
+        ? Date.parse(userRecord.metadata.creationTime)
+        : 0;
+
+    if (!createdAt) {
+      return res.status(200).json({
+        ok: true,
+        plan: "free",
+        status: "trial",
+        access: true,
+        trialRemaining: TRIAL_MS
+      });
+    }
+
+    const now = Date.now();
+
+    const trialEnd =
+      createdAt + TRIAL_MS;
+
+    const trialRemaining =
+      Math.max(0, trialEnd - now);
+
+    /*
+    ==============================
+    TRIAL BİTİB
+    ==============================
+    */
+
+    if (trialRemaining <= 0) {
+      return res.status(200).json({
+        ok: true,
+        plan: "free",
+        status: "trial_expired",
+        access: false,
+        trialRemaining: 0,
+        trialEnd
+      });
+    }
+
+    /*
+    ==============================
+    TRIAL DAVAM EDİR
+    ==============================
+    */
+
+    return res.status(200).json({
+      ok: true,
+      plan: "free",
+      status: "trial",
+      access: true,
+      trialRemaining,
+      trialEnd
+    });
+
+  } catch (error) {
+    console.error(
+      "[ENTITLEMENT ERROR]",
+      error
+    );
+
+    return res.status(500).json({
+      ok: false,
+      plan: "free",
+      status: "error",
+      access: false,
+      error:
+        error?.message ||
+        "Entitlement server xətası"
+    });
+  }
 };
