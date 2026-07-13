@@ -1,7 +1,10 @@
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();
@@ -10,96 +13,171 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
       ok: false,
-      error: "POST only"
+      error: "Yalnız POST sorğusu qəbul edilir"
     });
   }
 
   try {
-    const { prompt, system } = req.body || {};
+    const body =
+      typeof req.body === "string"
+        ? JSON.parse(req.body)
+        : req.body || {};
 
-    if (!prompt || typeof prompt !== "string") {
+    const prompt = String(body.prompt || "").trim();
+    const system = String(body.system || "").trim();
+
+    if (!prompt) {
       return res.status(400).json({
         ok: false,
-        error: "Prompt tələb olunur"
+        error: "Sual boş ola bilməz"
       });
     }
 
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
+      console.error("[AI ERROR] GEMINI_API_KEY yoxdur");
+
       return res.status(500).json({
         ok: false,
-        error: "GEMINI_API_KEY tapılmadı"
+        error: "AI xidməti konfiqurasiya edilməyib"
       });
     }
 
-    const body = {
+    const systemInstruction =
+      system ||
+      `
+Sən NeuroCode platformasının AI Müəllimisən.
+
+Sənin vəzifən:
+- istifadəçinin sualını düzgün anlamaq;
+- Azərbaycan dilində aydın cavab vermək;
+- riyaziyyat, Azərbaycan dili, ingilis dili, tarix və digər təhsil mövzularında kömək etmək;
+- cavabı istifadəçinin səviyyəsinə uyğun izah etmək;
+- lazım olduqda mərhələli izah vermək;
+- yanlış məlumat verməmək;
+- istifadəçinin səhvini aşkar etdikdə düzgün həlli izah etmək.
+
+Cavabların aydın, faydalı və tədris yönümlü olsun.
+`;
+
+    const requestBody = {
+      system_instruction: {
+        parts: [
+          {
+            text: systemInstruction
+          }
+        ]
+      },
+
       contents: [
         {
           role: "user",
           parts: [
             {
-              text: system
-                ? `${system}\n\nİstifadəçinin sualı:\n${prompt}`
-                : prompt
+              text: prompt
             }
           ]
         }
       ],
+
       generationConfig: {
-        temperature: 0.7,
+        temperature: 0.4,
         maxOutputTokens: 2048
       }
     };
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      }
-    );
+    const model =
+      process.env.GEMINI_MODEL ||
+      "gemini-2.0-flash";
 
-    const data = await response.json();
+    const url =
+      "https://generativelanguage.googleapis.com/v1beta/models/" +
+      encodeURIComponent(model) +
+      ":generateContent?key=" +
+      encodeURIComponent(apiKey);
 
-    if (!response.ok) {
-      console.error("[AI GEMINI ERROR]", data);
+    const response = await fetch(url, {
+      method: "POST",
 
-      return res.status(response.status).json({
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify(requestBody)
+    });
+
+    const rawText = await response.text();
+
+    let data;
+
+    try {
+      data = JSON.parse(rawText);
+    } catch (error) {
+      console.error(
+        "[AI JSON ERROR]",
+        rawText.slice(0, 500)
+      );
+
+      return res.status(502).json({
         ok: false,
-        error:
-          data?.error?.message ||
-          `Gemini API xətası: ${response.status}`
+        error: "AI serverindən düzgün cavab alınmadı"
       });
     }
 
-    const text =
-      data?.candidates?.[0]?.content?.parts
-        ?.map(part => part.text || "")
-        .join("")
-        .trim() || "";
+    if (!response.ok) {
+      console.error(
+        "[GEMINI ERROR]",
+        response.status,
+        JSON.stringify(data)
+      );
 
-    if (!text) {
+      const geminiMessage =
+        data?.error?.message ||
+        "Gemini API xətası";
+
+      return res.status(response.status).json({
+        ok: false,
+        error: geminiMessage
+      });
+    }
+
+    const parts =
+      data?.candidates?.[0]?.content?.parts || [];
+
+    const answer = parts
+      .map(part => part?.text || "")
+      .join("\n")
+      .trim();
+
+    if (!answer) {
+      console.error(
+        "[AI EMPTY RESPONSE]",
+        JSON.stringify(data)
+      );
+
       return res.status(502).json({
         ok: false,
-        error: "Gemini boş cavab qaytardı"
+        error: "AI cavab yaratmadı. Yenidən cəhd edin."
       });
     }
 
     return res.status(200).json({
       ok: true,
-      text
+      text: answer
     });
 
   } catch (error) {
-    console.error("[AI SERVER ERROR]", error);
+    console.error(
+      "[AI SERVER ERROR]",
+      error
+    );
 
     return res.status(500).json({
       ok: false,
-      error: error.message || "AI server xətası"
+      error:
+        error?.message ||
+        "AI Müəllim server xətası"
     });
   }
 };
