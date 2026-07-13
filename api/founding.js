@@ -1,88 +1,716 @@
-// NeuroCode — Founding 100 proqramı (atomik, unikal, server-səlahiyyətli)
-// GET  (açarsız)              → {count, closed}                    — public sayğac
-// GET  + Authorization: Bearer <owner idToken> → {count, closed, members} — YALNIZ owner
-// POST {idToken, name}        → {number, count} | {closed:true}    — yer iddiası
-// Env: FIREBASE_SERVICE_ACCOUNT (mövcud), OWNER_EMAIL (superadmin e-maili)
-//
-// QAYDA (bir sətirdə dəyişilə bilər, aşağıda işarələnib): ilk 100 üzvə
-// entitlements/{uid} = {plan:'premium', source:'founding'} yazılır —
-// yəni Founding üzvləri paywall-dan ömürlük azaddır.
-const admin = require('firebase-admin');
+const admin = require("firebase-admin");
 
-function initAdmin() {
-  if (admin.apps.length) return admin.app();
-  const sa = process.env.FIREBASE_SERVICE_ACCOUNT;
-  if (!sa) return null;
-  return admin.initializeApp({ credential: admin.credential.cert(JSON.parse(sa)) });
+const FOUNDING_LIMIT = 100;
+
+/* =========================================================
+   FIREBASE ADMIN INIT
+========================================================= */
+
+function initFirebase() {
+  if (admin.apps.length) {
+    return admin.app();
+  }
+
+  const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
+
+  if (!raw) {
+    throw new Error("FIREBASE_SERVICE_ACCOUNT yoxdur");
+  }
+
+  let serviceAccount;
+
+  try {
+    serviceAccount = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(
+      "FIREBASE_SERVICE_ACCOUNT JSON formatı yanlışdır"
+    );
+  }
+
+  return admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
 }
 
-module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  try {
-    if (!initAdmin()) return res.status(501).json({ error: 'FIREBASE_SERVICE_ACCOUNT konfiqurasiya edilməyib' });
-    const db = admin.firestore();
-    const counterRef = db.doc('counters/founding');
 
-    if (req.method === 'GET') {
-      const snap = await counterRef.get();
-      const count = (snap.exists && snap.data().count) || 0;
-      const base = { count: Math.min(count, 100), closed: count >= 100 };
-      // ── SUPERADMIN/OWNER İCAZƏSİ (server tərəfində, YEGANƏ yol) ──
-      // Yalnız Firebase Auth idToken-i doğrulanmış və e-maili env OWNER_EMAIL-ə
-      // DƏQİQ bərabər olan hesab siyahını ala bilər. Paylaşılan açar/parol yolu
-      // YOXDUR; gizli URL qoruma sayılmır — data yalnız bu yoxlamadan keçənə verilir.
-      let isAdmin = false;
-      const bearer = (req.headers['authorization'] || '').replace(/^Bearer\s+/i, '');
-      const owner = String(process.env.OWNER_EMAIL || '').trim().toLowerCase();
-      if (bearer && owner) {
-        try {
-          const dec = await admin.auth().verifyIdToken(bearer);
-          if (dec.email && dec.email.toLowerCase() === owner) isAdmin = true;
-        } catch (e) { /* etibarsız token → owner deyil */ }
-      }
-      if (isAdmin) {
-        const q = await db.collection('founding_members').orderBy('number').get();
-        // Hər üzvün REAL planı/statusu entitlements-dən (server mənbəli)
-        const refs = q.docs.map(d => db.doc('entitlements/' + (d.data().uid || d.id)));
-        const ents = refs.length ? await db.getAll(...refs) : [];
-        base.members = q.docs.map((d, i) => {
-          const m = d.data();
-          const e = (ents[i] && ents[i].exists) ? ents[i].data() : null;
-          const plan = (e && e.plan) || 'free';
-          const status = (e && e.source === 'founding') ? 'Founding üzvü'
-                        : (plan !== 'free' ? 'Ödənişli üzv' : 'Aktiv');
-          return { number: m.number, name: m.name || '', email: m.email || '',
-                   date: m.date || 0, plan: plan, status: status };
-        });
-      }
-      return res.status(200).json(base);
+/* =========================================================
+   BODY PARSER
+========================================================= */
+
+function getBody(req) {
+  if (!req.body) {
+    return {};
+  }
+
+  if (typeof req.body === "string") {
+    try {
+      return JSON.parse(req.body);
+    } catch (error) {
+      return {};
+    }
+  }
+
+  return req.body;
+}
+
+
+/* =========================================================
+   OWNER YOXLAMASI
+========================================================= */
+
+async function getOwner(req) {
+  const authorization = String(
+    req.headers.authorization || ""
+  ).trim();
+
+  const token = authorization.replace(
+    /^Bearer\s+/i,
+    ""
+  );
+
+  if (!token) {
+    return null;
+  }
+
+  const ownerEmail = String(
+    process.env.OWNER_EMAIL || ""
+  )
+    .trim()
+    .toLowerCase();
+
+  if (!ownerEmail) {
+    return null;
+  }
+
+  try {
+    const decoded = await admin
+      .auth()
+      .verifyIdToken(token);
+
+    const email = String(
+      decoded.email || ""
+    )
+      .trim()
+      .toLowerCase();
+
+    if (email !== ownerEmail) {
+      return null;
     }
 
-    if (req.method !== 'POST') return res.status(405).json({ error: 'GET/POST only' });
-    const { idToken, name } = req.body || {};
-    if (!idToken) return res.status(400).json({ error: 'idToken tələb olunur' });
-    const decoded = await admin.auth().verifyIdToken(idToken);
-    const uid = decoded.uid;
-    const memberRef = db.doc('founding_members/' + uid);
-    const entRef = db.doc('entitlements/' + uid);
+    return decoded;
 
-    const result = await db.runTransaction(async (tx) => {
-      const [cSnap, mSnap] = await Promise.all([tx.get(counterRef), tx.get(memberRef)]);
-      if (mSnap.exists) return { number: mSnap.data().number, count: (cSnap.exists && cSnap.data().count) || 0, existing: true };
-      const count = (cSnap.exists && cSnap.data().count) || 0;
-      if (count >= 100) return { closed: true, count: 100 };
-      const number = count + 1;
-      tx.set(memberRef, { number, name: String(name || '').slice(0, 80), email: decoded.email || '', date: Date.now(), uid });
-      tx.set(counterRef, { count: number }, { merge: true });
-      // ↓ FOUNDING PERK QAYDASI — dəyişmək istəsəniz yalnız bu sətri redaktə edin
-      tx.set(entRef, { plan: 'premium', source: 'founding', expiryTimeMillis: null, updatedAt: Date.now() }, { merge: true });
-      return { number, count: number };
+  } catch (error) {
+    return null;
+  }
+}
+
+
+/* =========================================================
+   STATUS HESABLANMASI
+========================================================= */
+
+function getMemberStatus(entitlement) {
+  const plan = String(
+    entitlement?.plan || "free"
+  ).toLowerCase();
+
+  if (plan === "blocked") {
+    return {
+      plan,
+      status: "Bloklanıb",
+      limitStatus: "BLOCKED"
+    };
+  }
+
+  if (
+    plan === "premium" ||
+    plan === "active" ||
+    plan === "go"
+  ) {
+    return {
+      plan,
+      status:
+        entitlement?.source === "founding"
+          ? "Founding üzvü"
+          : "Aktiv üzv",
+
+      limitStatus: "ACTIVE"
+    };
+  }
+
+  return {
+    plan: "free",
+    status: "Pulsuz",
+    limitStatus: "FREE"
+  };
+}
+
+
+/* =========================================================
+   MAIN HANDLER
+========================================================= */
+
+module.exports = async function handler(req, res) {
+
+  /* =======================================================
+     CORS
+  ======================================================= */
+
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "*"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "no-store"
+  );
+
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+
+  try {
+
+    initFirebase();
+
+    const db = admin.firestore();
+
+    const counterRef =
+      db.doc("counters/founding");
+
+
+    /* =====================================================
+       GET
+    ===================================================== */
+
+    if (req.method === "GET") {
+
+      const counterSnapshot =
+        await counterRef.get();
+
+      const rawCount =
+        counterSnapshot.exists
+          ? Number(
+              counterSnapshot.data()?.count || 0
+            )
+          : 0;
+
+      const count =
+        Math.min(
+          rawCount,
+          FOUNDING_LIMIT
+        );
+
+      const response = {
+        ok: true,
+
+        count,
+
+        remaining:
+          Math.max(
+            0,
+            FOUNDING_LIMIT - count
+          ),
+
+        closed:
+          count >= FOUNDING_LIMIT
+      };
+
+
+      /* ===================================================
+         OWNER CHECK
+      =================================================== */
+
+      const owner =
+        await getOwner(req);
+
+
+      /*
+      Adi istifadəçiyə yalnız public məlumat qaytarılır.
+      */
+
+      if (!owner) {
+        return res
+          .status(200)
+          .json(response);
+      }
+
+
+      /* ===================================================
+         FOUNDING MEMBERS
+      =================================================== */
+
+      const membersSnapshot =
+        await db
+          .collection("founding_members")
+          .orderBy("number", "asc")
+          .get();
+
+
+      if (membersSnapshot.empty) {
+
+        response.members = [];
+
+        return res
+          .status(200)
+          .json(response);
+      }
+
+
+      /* ===================================================
+         ENTITLEMENT REFS
+      =================================================== */
+
+      const entitlementRefs =
+        membersSnapshot.docs.map(doc => {
+
+          const member =
+            doc.data();
+
+          const uid =
+            member.uid ||
+            doc.id;
+
+          return db.doc(
+            `entitlements/${uid}`
+          );
+        });
+
+
+      const entitlementSnapshots =
+        await db.getAll(
+          ...entitlementRefs
+        );
+
+
+      /* ===================================================
+         REAL MEMBER DATA
+      =================================================== */
+
+      response.members =
+        membersSnapshot.docs.map(
+          (doc, index) => {
+
+            const member =
+              doc.data() || {};
+
+            const entitlementSnapshot =
+              entitlementSnapshots[index];
+
+            const entitlement =
+              entitlementSnapshot?.exists
+                ? entitlementSnapshot.data()
+                : {};
+
+            const memberStatus =
+              getMemberStatus(
+                entitlement
+              );
+
+            return {
+
+              uid:
+                member.uid ||
+                doc.id,
+
+              number:
+                Number(
+                  member.number || 0
+                ),
+
+              name:
+                String(
+                  member.name || ""
+                ),
+
+              email:
+                String(
+                  member.email || ""
+                ),
+
+              date:
+                Number(
+                  member.date || 0
+                ),
+
+              plan:
+                memberStatus.plan,
+
+              status:
+                memberStatus.status,
+
+              limitStatus:
+                memberStatus.limitStatus
+            };
+          }
+        );
+
+
+      return res
+        .status(200)
+        .json(response);
+    }
+
+
+    /* =====================================================
+       METHOD CHECK
+    ===================================================== */
+
+    if (req.method !== "POST") {
+
+      return res.status(405).json({
+        ok: false,
+        error:
+          "Yalnız GET və POST qəbul edilir"
+      });
+    }
+
+
+    /* =====================================================
+       POST BODY
+    ===================================================== */
+
+    const body =
+      getBody(req);
+
+    const idToken =
+      String(
+        body.idToken || ""
+      ).trim();
+
+    const name =
+      String(
+        body.name || ""
+      )
+        .trim()
+        .slice(0, 80);
+
+
+    if (!idToken) {
+
+      return res.status(401).json({
+        ok: false,
+        error:
+          "Firebase idToken tələb olunur"
+      });
+    }
+
+
+    /* =====================================================
+       TOKEN VERIFY
+    ===================================================== */
+
+    let decoded;
+
+    try {
+
+      decoded =
+        await admin
+          .auth()
+          .verifyIdToken(
+            idToken
+          );
+
+    } catch (error) {
+
+      return res.status(401).json({
+        ok: false,
+        error:
+          "Firebase token etibarsızdır"
+      });
+    }
+
+
+    const uid =
+      decoded.uid;
+
+    const email =
+      String(
+        decoded.email || ""
+      );
+
+
+    /* =====================================================
+       REFERENCES
+    ===================================================== */
+
+    const memberRef =
+      db.doc(
+        `founding_members/${uid}`
+      );
+
+    const entitlementRef =
+      db.doc(
+        `entitlements/${uid}`
+      );
+
+    const activityRef =
+      db.doc(
+        `activity/${uid}`
+      );
+
+
+    /* =====================================================
+       ATOMIC TRANSACTION
+    ===================================================== */
+
+    const result =
+      await db.runTransaction(
+        async transaction => {
+
+          const [
+            counterSnapshot,
+            memberSnapshot
+          ] =
+            await Promise.all([
+
+              transaction.get(
+                counterRef
+              ),
+
+              transaction.get(
+                memberRef
+              )
+
+            ]);
+
+
+          /* ===============================================
+             İSTİFADƏÇİ ARTIQ FOUNDING ÜZVÜDÜR
+          =============================================== */
+
+          if (memberSnapshot.exists) {
+
+            const existingMember =
+              memberSnapshot.data();
+
+            return {
+
+              ok: true,
+
+              existing: true,
+
+              number:
+                Number(
+                  existingMember.number || 0
+                ),
+
+              count:
+                counterSnapshot.exists
+                  ? Number(
+                      counterSnapshot.data()?.count || 0
+                    )
+                  : 0
+            };
+          }
+
+
+          /* ===============================================
+             CURRENT COUNT
+          =============================================== */
+
+          const currentCount =
+            counterSnapshot.exists
+              ? Number(
+                  counterSnapshot.data()?.count || 0
+                )
+              : 0;
+
+
+          /* ===============================================
+             FOUNDING CLOSED
+          =============================================== */
+
+          if (
+            currentCount >=
+            FOUNDING_LIMIT
+          ) {
+
+            return {
+
+              ok: false,
+
+              closed: true,
+
+              count:
+                FOUNDING_LIMIT
+            };
+          }
+
+
+          /* ===============================================
+             NEW NUMBER
+          =============================================== */
+
+          const number =
+            currentCount + 1;
+
+          const now =
+            Date.now();
+
+
+          /* ===============================================
+             FOUNDING MEMBER CREATE
+          =============================================== */
+
+          transaction.set(
+
+            memberRef,
+
+            {
+              uid,
+
+              number,
+
+              name,
+
+              email,
+
+              date: now
+            },
+
+            {
+              merge: true
+            }
+          );
+
+
+          /* ===============================================
+             COUNTER UPDATE
+          =============================================== */
+
+          transaction.set(
+
+            counterRef,
+
+            {
+              count: number,
+
+              updatedAt: now
+            },
+
+            {
+              merge: true
+            }
+          );
+
+
+          /* ===============================================
+             PREMIUM ACCESS
+          =============================================== */
+
+          transaction.set(
+
+            entitlementRef,
+
+            {
+              plan: "premium",
+
+              source: "founding",
+
+              expiryTimeMillis: null,
+
+              activatedAt: now,
+
+              updatedAt: now
+            },
+
+            {
+              merge: true
+            }
+          );
+
+
+          /*
+          ÇOX VACİB DÜZƏLİŞ:
+
+          İstifadəçi Founding proqramına daxil olduqda
+          activity sənədi də yaradılır.
+
+          Beləliklə Admin Panel istifadəçinin
+          adını, emailini və rolunu görə bilir.
+          */
+
+
+          transaction.set(
+
+            activityRef,
+
+            {
+              uid,
+
+              name:
+                name ||
+                decoded.name ||
+                "",
+
+              email,
+
+              role: "student",
+
+              registeredAt: now,
+
+              lastSeen: now
+            },
+
+            {
+              merge: true
+            }
+          );
+
+
+          return {
+
+            ok: true,
+
+            existing: false,
+
+            number,
+
+            count: number,
+
+            plan: "premium",
+
+            status: "active"
+          };
+        }
+      );
+
+
+    return res
+      .status(200)
+      .json(result);
+
+
+  } catch (error) {
+
+    console.error(
+      "[FOUNDING ERROR]",
+      error
+    );
+
+
+    return res.status(500).json({
+
+      ok: false,
+
+      error:
+        error?.message ||
+        "Founding server xətası"
+
     });
-    return res.status(200).json(result);
-  } catch (e) {
-    console.error('[founding]', e.message);
-    return res.status(400).json({ error: 'sorğu emal olunmadı' });
   }
 };
